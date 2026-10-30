@@ -1,0 +1,15 @@
+{
+  "description": "Editor: the screens are switched off, so nothing new shows on them for now.",
+  "base": "editor-screens-changed",
+  "statusPatch": [
+    {
+      "op": "replace",
+      "path": "/screens",
+      "value": "off"
+    }
+  ],
+  "preview": null,
+  "ui": {
+    "page": "editor"
+  }
+}

@@ -1,0 +1,696 @@
+[
+  {
+    "name": "abyss",
+    "about": "Abyss: deep ocean bioluminescence, teal, cyan and electric blue glowing out of inky navy (pairs with the Omarchy cyanotype desktop theme). Original art generated 2026-09-24 (src/ holds prompts, imagegen sidecars and animate.py, which rebuilds every loop): a pulsing jellyfish with rising marine snow and an anglerfish whose lure breathes and whose eye glints on the fans, a drifting deep-sea trench with shimmering light shafts and out-of-step glowing creatures on the pump, and underwater light rays with jellyfish and rising particles on the 8.8\" screen, with the time and date on the dark left, CPU temperature and download rate on the dark right. LEDs: teal inner / electric-blue outer fans, rising teal-cyan-blue Strimer bubbles, cyan rings, teal-to-blue GPU and a teal-to-blue gradient running across both RAM sticks. Overheating turns the Lian Li gear red-orange.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": true,
+    "omarchy_slugs": [
+      "cyanotype"
+    ],
+    "colors": {
+      "fans_top": [
+        "#00ffd0"
+      ],
+      "fans_bottom": [
+        "#0038ff"
+      ],
+      "rings": [
+        "#00c8ff"
+      ],
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "#00ffd0",
+          "#00c8ff",
+          "#0050ff",
+          "#00ffaa",
+          "#40e0ff",
+          "#0028ff"
+        ]
+      },
+      "gpu": [
+        "#00ffd0",
+        "#0030ff"
+      ],
+      "board": [
+        "#0050ff"
+      ],
+      "ram": [
+        "#00ffd0",
+        "#00a0ff",
+        "#0020ff"
+      ],
+      "alert": "#ff3a00"
+    },
+    "preview": "previews/abyss.webp",
+    "preview_mtime": 1790230000,
+    "preview_stale": false,
+    "swatch": [
+      "#00ffd0",
+      "#0038ff",
+      "#00c8ff",
+      "#0050ff",
+      "#00ffaa",
+      "#40e0ff"
+    ]
+  },
+  {
+    "name": "arctic",
+    "about": "Arctic: frozen, clean and bright - ice blue and white, paired with the Omarchy glass-white / nord desktop. Original art generated 2026-09-24 (src/ holds prompts, imagegen sidecars and the frame scripts), animated into seamless 12 s loops: a hoarfrost snowflake mandala turning 60 degrees per loop (one six-fold symmetry step) with drifting snow and sparkling glints, an aurora swirling inside a frosted ice sphere, and a glacier panorama under a shimmering aurora drifting slowly on the pump. The 8.8\" screen shows the time and date in thin Noto Sans on the calm midnight-blue left of a frozen aurora landscape, with outside temperature and memory in a frosted panel top-right. Lighting is pale ice-white inside the fans, bright ice blue on the outer bars, falling snow on the Strimers.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": false,
+    "omarchy_slugs": [
+      "glass-white",
+      "nord"
+    ],
+    "colors": {
+      "fans_top": [
+        "#d8f4ff"
+      ],
+      "fans_bottom": [
+        "#3aa0ff"
+      ],
+      "rings": [
+        "#8fd8ff"
+      ],
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "#ffffff",
+          "#8fd8ff",
+          "#3aa0ff",
+          "#e6f8ff",
+          "#2a7fff",
+          "#b8ecff"
+        ]
+      },
+      "gpu": [
+        "#ffffff",
+        "#2a7fff"
+      ],
+      "board": [
+        "#4aa8ff"
+      ],
+      "ram": [
+        "#ffffff",
+        "#8fd8ff",
+        "#2a7fff"
+      ],
+      "alert": "#ff4a00"
+    },
+    "preview": "previews/arctic.webp",
+    "preview_mtime": 1790230000,
+    "preview_stale": false,
+    "swatch": [
+      "#d8f4ff",
+      "#3aa0ff",
+      "#8fd8ff",
+      "#ffffff",
+      "#e6f8ff",
+      "#2a7fff"
+    ]
+  },
+  {
+    "name": "cyberpunk",
+    "about": "The whole example-desktop look as of 2026-09-24: lighting (confirmed by photo 2026-09-23, reference-windows.png) + what every LCD shows (ported from Windows L-Connect). Colours are hex RGB.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": false,
+    "omarchy_slugs": [
+      "tokyo-night"
+    ],
+    "colors": {
+      "fans_top": [
+        "#00ffaa"
+      ],
+      "fans_bottom": [
+        "#650370"
+      ],
+      "rings": [
+        "#aa00ff"
+      ],
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "#8700ff",
+          "#00ff55",
+          "#8700ff",
+          "#00ff55",
+          "#8700ff",
+          "#00ff55"
+        ]
+      },
+      "gpu": [
+        "#0df0a9",
+        "#ff00ff"
+      ],
+      "board": [
+        "#ce00ff"
+      ],
+      "ram": [
+        "#ce00ff"
+      ],
+      "alert": "#ff0000"
+    },
+    "preview": "previews/cyberpunk.webp",
+    "preview_mtime": 1790230000,
+    "preview_stale": false,
+    "swatch": [
+      "#00ffaa",
+      "#650370",
+      "#aa00ff",
+      "#8700ff",
+      "#00ff55",
+      "#0df0a9"
+    ]
+  },
+  {
+    "name": "deep-orange",
+    "about": "Deep orange / molten ember: amber-hot inner fan edges glowing into blood-orange bars, Strimers as falling sparks, molten GPU, lava-planet and lantern-hall fan screens, the Edgerunners art ember-graded (black -> deep orange -> warm white) on the pump and 8.8\" screen. Created 2026-09-24.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": false,
+    "omarchy_slugs": [],
+    "colors": {
+      "fans_top": [
+        "#ffa000"
+      ],
+      "fans_bottom": [
+        "#ff2a00"
+      ],
+      "rings": [
+        "#ff5a00"
+      ],
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "#ff4500",
+          "#ffb000",
+          "#ff2200",
+          "#ff7a00",
+          "#ffd27a",
+          "#ff3a00"
+        ]
+      },
+      "gpu": [
+        "#ffb000",
+        "#ff2000"
+      ],
+      "board": [
+        "#ff4000"
+      ],
+      "ram": [
+        "#ffd27a",
+        "#ff7a00",
+        "#ff2a00"
+      ],
+      "alert": "#ff0000"
+    },
+    "preview": "previews/deep-orange.webp",
+    "preview_mtime": 1790230000,
+    "preview_stale": false,
+    "swatch": [
+      "#ffa000",
+      "#ff2a00",
+      "#ff5a00",
+      "#ff4500",
+      "#ffb000",
+      "#ff2200"
+    ]
+  },
+  {
+    "name": "gilded-noir",
+    "about": "Gilded Noir: art-deco gold on black lacquer, Gatsby-era luxury, paired with the Omarchy gilded-noir desktop (#D4AF37 on #0B0B0C). LEDs are warm gold inside, amber-bronze outside, with a slow champagne/gold/bronze Strimer wave. Original art generated 2026-09-24 (src/ holds prompts, imagegen sidecars and animate.py to regenerate), animated into seamless 12 s loops: a jewelled sunburst medallion turning once per loop and a filigree compass rose breathing and swaying on the fans, each with a light glint sweeping across the gold every 6 s; a gilded art-deco skyline drifting over a shimmering reflection on the pump; black 8.8\" panel with gold line-work, Abril Fatface clock, date and CPU/GPU temperatures.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": true,
+    "omarchy_slugs": [
+      "gilded-noir"
+    ],
+    "colors": {
+      "fans_top": [
+        "#ff9a30"
+      ],
+      "fans_bottom": [
+        "#ff6a00"
+      ],
+      "rings": [
+        "#ff7a10"
+      ],
+      "strimers": {
+        "mode": "Wave",
+        "colors": [
+          "#ff8a1a",
+          "#ff5a00",
+          "#ffa640",
+          "#ff6a00",
+          "#ff8a1a",
+          "#ff5a00"
+        ]
+      },
+      "gpu": [
+        "#ffa640",
+        "#c04000"
+      ],
+      "board": [
+        "#ff6a00"
+      ],
+      "ram": [
+        "#ffb060",
+        "#ff7a10",
+        "#c03a00"
+      ],
+      "alert": "#ff0018"
+    },
+    "preview": "previews/gilded-noir.webp",
+    "preview_mtime": 1790230000,
+    "preview_stale": false,
+    "swatch": [
+      "#ff9a30",
+      "#ff6a00",
+      "#ff7a10",
+      "#ff8a1a",
+      "#ff5a00",
+      "#ffa640"
+    ]
+  },
+  {
+    "name": "hellfire",
+    "about": "Hellfire: blood-red and crimson on black with white-hot fire highlights. Original art generated 2026-09-24 (src/ holds prompts + imagegen sidecars to regenerate), animated with ffmpeg into seamless 12 s loops: turning rune sigil + breathing demon eye on the fans, drifting lava canyon on the pump, flame wall banner with a smoked stats panel on the 8.8\".",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": false,
+    "omarchy_slugs": [
+      "blackfire"
+    ],
+    "colors": {
+      "fans_top": [
+        "#ff2400"
+      ],
+      "fans_bottom": [
+        "#a0000a"
+      ],
+      "rings": [
+        "#d40000"
+      ],
+      "strimers": {
+        "mode": "Meteor",
+        "colors": [
+          "#ff1a00",
+          "#ff6a00",
+          "#b00000",
+          "#ff3000",
+          "#ffae00",
+          "#8b0000"
+        ]
+      },
+      "gpu": [
+        "#ff5a00",
+        "#8b0000"
+      ],
+      "board": [
+        "#b00000"
+      ],
+      "ram": [
+        "#ffae00",
+        "#ff2400",
+        "#8b0000"
+      ],
+      "alert": "#ff0000"
+    },
+    "preview": "previews/hellfire.webp",
+    "preview_mtime": 1790230000,
+    "preview_stale": false,
+    "swatch": [
+      "#ff2400",
+      "#a0000a",
+      "#d40000",
+      "#ff1a00",
+      "#ff6a00",
+      "#b00000"
+    ]
+  },
+  {
+    "name": "matrix",
+    "about": "Matrix: phosphor-green code rain on black, paired with Omarchy hackerman. Everything is procedural (src/matrix_rain.py, mirrored half-width katakana + digits from Noto Sans Mono CJK, three parallax depth layers with bloom; no imagegen). Fan LCDs alternate a classic rain porthole (fan-a) and a spiralling code tunnel pouring out of a dark well (fan-b); the pump runs wide parallax rain; the 8.8\" plays the rain as a live 20 fps video widget behind two framed terminal HUD panels (time + date, CPU %, RAM %, uptime hours). LEDs: bright phosphor green with pale-green highlights, red when hot.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": true,
+    "omarchy_slugs": [
+      "hackerman"
+    ],
+    "colors": {
+      "fans_top": [
+        "#b4ffb4",
+        "#00ff41",
+        "#00c030"
+      ],
+      "fans_bottom": [
+        "#00e03a",
+        "#008a1e",
+        "#003f0c"
+      ],
+      "rings": [
+        "#00ff41"
+      ],
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "#b4ffb4",
+          "#00ff41",
+          "#00c030",
+          "#b4ffb4",
+          "#00ff41",
+          "#008a1c"
+        ]
+      },
+      "gpu": [
+        "#b4ffb4",
+        "#00ff41",
+        "#007a10"
+      ],
+      "board": [
+        "#00c030"
+      ],
+      "ram": [
+        "#b4ffb4",
+        "#00ff41",
+        "#007a10"
+      ],
+      "alert": "#ff0000"
+    },
+    "preview": "previews/matrix.webp",
+    "preview_mtime": 1790230000,
+    "preview_stale": false,
+    "swatch": [
+      "#b4ffb4",
+      "#00ff41",
+      "#00c030",
+      "#00e03a",
+      "#008a1e",
+      "#003f0c"
+    ]
+  },
+  {
+    "name": "sakura",
+    "about": "Sakura: a calm cherry-blossom night in soft pinks and white with a touch of plum on near-black, paired with Omarchy rose-pine. Original art generated 2026-09-24 with imagegen (src/ holds prompts, renders and sidecars) and animated procedurally by src/animate.py into seamless 12 s loops: a blossom branch swaying before a full moon with falling petals, two koi circling a moonlit pond with petals floating on the current, a torii garden drifting under falling petals on the pump, and a lantern-hung branch with falling petals behind a script clock, date and weather on the 8.8\".",
+    "active": true,
+    "day": true,
+    "night": false,
+    "auto": false,
+    "known_good": false,
+    "omarchy_slugs": [
+      "rose-pine",
+      "sakura",
+      "sakura-light"
+    ],
+    "colors": {
+      "fans_top": [
+        "#ff4a9a"
+      ],
+      "fans_bottom": [
+        "#ff1a70"
+      ],
+      "rings": [
+        "#ff3a8a"
+      ],
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "#ff4a9a",
+          "#ff1a70",
+          "#ff7ab6",
+          "#ff2a80",
+          "#ff4a9a",
+          "#d4106a"
+        ]
+      },
+      "gpu": [
+        "#ff6aa8",
+        "#e0106a"
+      ],
+      "board": [
+        "#ff2a80"
+      ],
+      "ram": [
+        "#ff7ab6",
+        "#ff3a8a",
+        "#c0105a"
+      ],
+      "alert": "#ff0000"
+    },
+    "preview": "previews/sakura.webp",
+    "preview_mtime": 1790230000,
+    "preview_stale": false,
+    "swatch": [
+      "#ff4a9a",
+      "#ff1a70",
+      "#ff3a8a",
+      "#ff7ab6",
+      "#ff2a80",
+      "#d4106a"
+    ]
+  },
+  {
+    "name": "stealth",
+    "about": "Stealth: near-dark night theme for movies and late nights, paired with Omarchy glass-black / vantablack / matte-black (accent 7C93AC). All media is procedural (src/gen_media.py, no imagegen): the fan LCDs show a thin steel halo breathing once per 12 s with a slow orbiting glint (A) and faint dust motes drifting up inside a hairline ring (B), at brightness 25; the pump shows a black planet limb with a thin steel horizon and a slow light pulse gliding across; the 8.8\" screen is black with only a large muted-steel clock and a small date above a faint horizon line. LEDs are deliberately dim steel blue with black outer bars, board and lower RAM.",
+    "active": false,
+    "day": false,
+    "night": true,
+    "auto": false,
+    "known_good": false,
+    "omarchy_slugs": [
+      "glass-black",
+      "vantablack",
+      "matte-black"
+    ],
+    "colors": {
+      "fans_top": [
+        "#0c1a2c"
+      ],
+      "fans_bottom": [
+        "#000000"
+      ],
+      "rings": [
+        "#0a1624"
+      ],
+      "strimers": {
+        "mode": "Breathing",
+        "colors": [
+          "#10202e",
+          "#081018",
+          "#10202e",
+          "#081018",
+          "#10202e",
+          "#081018"
+        ]
+      },
+      "gpu": [
+        "#0c1a2c",
+        "#000000"
+      ],
+      "board": [
+        "#000000"
+      ],
+      "ram": [
+        "#16283c",
+        "#000000"
+      ],
+      "alert": "#ff0000"
+    },
+    "preview": "previews/stealth.webp",
+    "preview_mtime": 1790230000,
+    "preview_stale": false,
+    "swatch": [
+      "#0c1a2c",
+      "#000000",
+      "#0a1624",
+      "#10202e",
+      "#081018"
+    ]
+  },
+  {
+    "name": "synthwave",
+    "about": "Synthwave: Outrun night drive in hot magenta, cyan and violet (pairs with Omarchy retro-82). Original art generated 2026-09-24 (src/ holds prompts + imagegen sidecars and the Python generators), animated procedurally into seamless 12 s loops: a neon sun whose retro stripes slide down and thicken on fan A, chrome palms over a rippling sunset sea on fan B, and on the pump a sunset with mountains over a glowing perspective grid that scrolls toward you. The 8.8\" shows the sun-on-grid horizon with the time and BTC price on the smoked left third and GPU temp/load in a neon-edged panel, all in L-Connect's Hyperspace Race italic.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": true,
+    "omarchy_slugs": [
+      "retro-82"
+    ],
+    "colors": {
+      "fans_top": [
+        "#ff1a8c"
+      ],
+      "fans_bottom": [
+        "#00e5ff"
+      ],
+      "rings": [
+        "#ff2bd6"
+      ],
+      "strimers": {
+        "mode": "Wave",
+        "colors": [
+          "#ff2bd6",
+          "#9000ff",
+          "#00e5ff",
+          "#ff2bd6",
+          "#9000ff",
+          "#00e5ff"
+        ]
+      },
+      "gpu": [
+        "#00e5ff",
+        "#ff2bd6"
+      ],
+      "board": [
+        "#9000ff"
+      ],
+      "ram": [
+        "#ff2bd6",
+        "#7a00ff",
+        "#00e5ff"
+      ],
+      "alert": "#ffe600"
+    },
+    "preview": "previews/synthwave.webp",
+    "preview_mtime": 1790230000,
+    "preview_stale": false,
+    "swatch": [
+      "#ff1a8c",
+      "#00e5ff",
+      "#ff2bd6",
+      "#9000ff"
+    ]
+  },
+  {
+    "name": "toxic",
+    "about": "Toxic: acid green and sickly yellow on black, a harsher biohazard cousin of hellfire, paired with Omarchy osaka-jade. Original art generated 2026-09-24 with imagegen (prompts + sidecars in src/), animated in Python/OpenCV into seamless 12 s loops (scripts in src/scripts/): a symmetrised biohazard sigil turning 120 degrees per loop with a light racing round its containment ring and a shock-wave every 3 s; bubbling radioactive slime behind a riveted porthole with swelling, popping bubbles; a drifting toxic wasteland with shimmer flowing down a glowing river; all with a neon flicker that stutters twice per loop. The 8.8\" screen shows an 'exposure clock' on black and a smoked hazard-striped readout panel (CPU/GPU temp, CPU load with range-coloured bars) over toxic haze.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": false,
+    "omarchy_slugs": [
+      "osaka-jade"
+    ],
+    "colors": {
+      "fans_top": [
+        "#a6ff00"
+      ],
+      "fans_bottom": [
+        "#20c000"
+      ],
+      "rings": [
+        "#80ff00"
+      ],
+      "strimers": {
+        "mode": "Meteor",
+        "colors": [
+          "#a6ff00",
+          "#3cff00",
+          "#e8ff3a",
+          "#20c000",
+          "#a6ff00",
+          "#e8ff3a"
+        ]
+      },
+      "gpu": [
+        "#e8ff3a",
+        "#20c000"
+      ],
+      "board": [
+        "#5aff00"
+      ],
+      "ram": [
+        "#e8ff3a",
+        "#3cff00",
+        "#20c000"
+      ],
+      "alert": "#ff00a0"
+    },
+    "preview": "previews/toxic.webp",
+    "preview_mtime": 1790230000,
+    "preview_stale": false,
+    "swatch": [
+      "#a6ff00",
+      "#20c000",
+      "#80ff00",
+      "#3cff00",
+      "#e8ff3a"
+    ]
+  },
+  {
+    "name": "omarchy-oxblood-parchment",
+    "about": "Omarchy Oxblood Parchment: generated by auto-theme on 2026-09-24 from the Omarchy theme 'oxblood-parchment' (light; /home/user/.config/omarchy/themes/oxblood-parchment). LEDs: primary from accent #63130b -> ff1700, secondary from yellow #7c3c10 -> ff6800 (hue kept, saturation/value maxed for the LEDs). The fan screens are slow seamless 12 s Ken Burns loops of two detailed regions of a_red_and_orange_sky_with_clouds.png, vignetted to black, the pump a slow pan across it (bright art, so fan-a, fan-b, pump, us88 are toned down: gain/gamma in src/source.json), and the 8.8\" screen a banner crop with smoked scrims under the time, date, CPU temp and RAM usage. Rebuilt automatically when the Omarchy theme's colors or wallpapers change (unless theme.json is edited by hand); force with: auto-theme oxblood-parchment --force.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": true,
+    "known_good": false,
+    "omarchy_slugs": [],
+    "colors": {
+      "fans_top": [
+        "#ff1700"
+      ],
+      "fans_bottom": [
+        "#ff6800"
+      ],
+      "rings": [
+        "#ff1700"
+      ],
+      "strimers": {
+        "mode": "Wave",
+        "colors": [
+          "#ff1700",
+          "#ff6800",
+          "#ff4000",
+          "#ff4d54",
+          "#ff9200",
+          "#ff4b26"
+        ]
+      },
+      "gpu": [
+        "#ff1700",
+        "#ff6800"
+      ],
+      "board": [
+        "#ff1700"
+      ],
+      "ram": [
+        "#ff1700",
+        "#ff6800"
+      ],
+      "alert": "#00d0ff"
+    },
+    "preview": "previews/omarchy-oxblood-parchment.webp",
+    "preview_mtime": 1790230000,
+    "preview_stale": false,
+    "swatch": [
+      "#ff1700",
+      "#ff6800",
+      "#ff4000",
+      "#ff4d54",
+      "#ff9200",
+      "#ff4b26"
+    ]
+  }
+]

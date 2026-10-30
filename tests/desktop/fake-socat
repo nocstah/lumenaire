@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# fake-socat — stands in for socat in tests/desktop (desktop watch reads
+# Hyprland's event socket through it): records its arguments in
+# $HOME/socat.log, runs $HOME/socat-script when there is one (a test's
+# events: it may change $HOME/monitors.json first, then print event lines),
+# then ends the stream. Nothing connects anywhere.
+printf '%s\n' "$*" >>"$HOME/socat.log"
+if [[ -f $HOME/socat-script ]]; then bash "$HOME/socat-script"; fi
+exit 0

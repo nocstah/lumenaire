@@ -1,0 +1,21 @@
+{
+  "description": "Editor: picker on the right fan column's inner ring at ffc048; calibration turns it into ff4d1d on the fan frames, still a touch too green: warm hint, Use ff4d1d. Keyboard on the SV square.",
+  "base": "editor-role-override",
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "expanded": [
+        "@fans",
+        "fans.side"
+      ],
+      "picker": "field:fans.side:inner",
+      "pickerOriginal": "ff4a9a",
+      "cursor": "field:fans.side:inner",
+      "keyFocus": true,
+      "pickerPart": 0,
+      "more": [
+        "@fans"
+      ]
+    }
+  }
+}

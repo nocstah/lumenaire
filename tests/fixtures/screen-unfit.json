@@ -1,0 +1,49 @@
+{
+  "description": "Screen page: Fan 1's video was made for another shape (a 16:9 file): \"Doesn't fit this screen\", Crop to fit.",
+  "base": "editor-screens",
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/0/media/probe/w",
+      "value": 1920
+    },
+    {
+      "op": "replace",
+      "path": "/screens/0/media/probe/h",
+      "value": 1080
+    },
+    {
+      "op": "replace",
+      "path": "/screens/0/media/thumb",
+      "value": "../ui/thumbs/photo-wide-synthwave.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/0/media/fit",
+      "value": {
+        "state": "poor",
+        "keep": 0.5625,
+        "scale": 1,
+        "score": 0.42,
+        "note": null
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/screens/0/problems",
+      "value": [
+        {
+          "code": "unfit-media",
+          "level": "warn",
+          "message": "the video is 16:9, the screen is square"
+        }
+      ]
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan1"
+    }
+  }
+}

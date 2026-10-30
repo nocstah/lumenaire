@@ -1,0 +1,8 @@
+[Unit]
+Description=pc-lights: cache live numbers (BTC/ETH, outside temperature) for LCD template widgets
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/pc-lights-feeds

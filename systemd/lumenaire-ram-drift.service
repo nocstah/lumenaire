@@ -1,0 +1,20 @@
+[Unit]
+Description=Lumenaire: slide the theme's RAM gradient along the sticks (RAM drift)
+Documentation=file://%h/.config/omarchy/plugins/io.github.nocstah.lumenaire/docs/THEMES.md
+# Never enabled: the engine starts it after an apply of a theme whose ram has
+# "drift" (lights on) and stops it before every OpenRGB call it makes. It runs
+# a private OpenRGB server that detects only the ENE DRAM sticks and holds
+# ~/.cache/pc-lights/openrgb.lock while it runs.
+StartLimitIntervalSec=10min
+StartLimitBurst=3
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/pc-lights ram-drift run
+Restart=on-failure
+RestartSec=20s
+TimeoutStopSec=15s
+KillMode=control-group
+Nice=10
+CPUWeight=20
+MemoryMax=512M

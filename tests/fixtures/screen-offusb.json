@@ -1,0 +1,38 @@
+{
+  "description": "Screen page: Fan 3 isn't answering on USB (the preview's telemetry): \"Not connected\".",
+  "base": "screen-fan",
+  "previewFile": "preview.screens.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.fan2/state",
+      "value": "ready"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.fan2/error",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.pump/state",
+      "value": "ready"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/failed",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.fan3/state",
+      "value": "off-usb"
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3"
+    }
+  }
+}

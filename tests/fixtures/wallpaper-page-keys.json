@@ -1,0 +1,22 @@
+{
+  "description": "Keyboard: the cursor walked down to Resume after (j j j).",
+  "base": "wallpaper-row",
+  "desktopFile": "desktop.current.json",
+  "ui": {
+    "page": "wallpaper",
+    "wallpaper": {
+      "theme": "sakura",
+      "keys": [
+        {
+          "text": "j"
+        },
+        {
+          "text": "j"
+        },
+        {
+          "text": "j"
+        }
+      ]
+    }
+  }
+}

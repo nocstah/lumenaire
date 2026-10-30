@@ -1,0 +1,7 @@
+{
+  "v": 3,
+  "_about": "Aurora: northern lights over a dark sky. Electric green on the inner edges, violet on the outer bars, teal between them, and a slow wave down the cables. Palette only, so it works on any PC: pc-lights derives every light from these colours and leaves the screens alone.",
+  "_led_note": "All stops are fully saturated: LEDs show green much brighter than a monitor, so the green is pulled towards teal (00ff8a, not 7aff9a) and the violet keeps red low so it doesn't turn pink.",
+  "palette": {"primary": "00ff8a", "secondary": "7a1aff", "accent": "00d8ff", "alert": "ff2a00"},
+  "motion": {"mode": "Wave", "speed": 1, "direction": "Clockwise"}
+}

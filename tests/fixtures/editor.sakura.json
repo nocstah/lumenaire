@@ -1,0 +1,941 @@
+{
+  "v": 1,
+  "name": "sakura-2",
+  "mode": "duplicate",
+  "from": "sakura",
+  "rev": 3,
+  "draft": true,
+  "dirty": true,
+  "created": 1790000000,
+  "updated": 1790000400,
+  "saved": {
+    "exists": false,
+    "sha256": null,
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "mapped_slugs": []
+  },
+  "base_sha256": null,
+  "conflict": false,
+  "auto": false,
+  "machine": "example-desktop",
+  "media_root": "/home/you/.config/pc-lights/themes/sakura",
+  "calibration": {
+    "enabled": true,
+    "applies": true,
+    "reason": "on",
+    "calibrated_for": null,
+    "machine": "example-desktop",
+    "path": "/led/calibrated_for",
+    "classes": {
+      "tl_fan": {
+        "warm_gr_max": 0.3,
+        "pink_gr_max": 0.4,
+        "pink_br_max": 0.6
+      },
+      "strimer": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "ring": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "gpu": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "ram": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "board": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      }
+    },
+    "fix_classes": {
+      "tl_fan": {
+        "warm_gr_max": 0.3,
+        "pink_gr_max": 0.4,
+        "pink_br_max": 0.6
+      },
+      "strimer": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "ring": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "gpu": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "ram": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "board": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      }
+    }
+  },
+  "about": {
+    "path": "/_about",
+    "value": "Sakura: a calm cherry-blossom night in soft pinks and white with a touch of plum on near-black, paired with Omarchy rose-pine. Original art generated 2026-09-24 with imagegen (src/ holds prompts, renders and sidecars) and animated procedurally by src/animate.py into seamless 12 s loops: a blossom branch swaying before a full moon with falling petals, two koi circling a moonlit pond with petals floating on the current, a torii garden drifting under falling petals on the pump, and a lantern-hung branch with falling petals behind a script clock, date and weather on the 8.8\"."
+  },
+  "theme": {
+    "v": 3,
+    "_about": "Sakura: a calm cherry-blossom night in soft pinks and white with a touch of plum on near-black, paired with Omarchy rose-pine. Original art generated 2026-09-24 with imagegen (src/ holds prompts, renders and sidecars) and animated procedurally by src/animate.py into seamless 12 s loops: a blossom branch swaying before a full moon with falling petals, two koi circling a moonlit pond with petals floating on the current, a torii garden drifting under falling petals on the pump, and a lantern-hung branch with falling petals behind a script clock, date and weather on the 8.8\".",
+    "_led_note": "2026-09-24: first pass (pale pinks ffd0e6/fff0f6, white stops) read too white on the LEDs per the user; pinks need low green (G/R <~0.4)",
+    "palette": {
+      "primary": "ffd0e6",
+      "secondary": "ff1a70",
+      "accent": "ff3a8a",
+      "alert": "ff0000"
+    },
+    "roles": {
+      "fans": {
+        "inner": "ff4a9a",
+        "outer": "ff1a70",
+        "_note": "top = inner octagon edges (LEDs 0-12), bottom = outer bars (13-25)"
+      },
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "ff4a9a",
+          "ff1a70",
+          "ff7ab6",
+          "ff2a80",
+          "ff4a9a",
+          "d4106a"
+        ],
+        "speed": 1,
+        "direction": "Clockwise"
+      },
+      "rings": "ff3a8a",
+      "gpu": {
+        "gradient": [
+          "ff6aa8",
+          "e0106a"
+        ]
+      },
+      "board": "ff2a80",
+      "ram": {
+        "gradient": [
+          "ff7ab6",
+          "ff3a8a",
+          "c0105a"
+        ],
+        "span": "across"
+      },
+      "fans.side": {
+        "inner": "ffc048"
+      },
+      "fans.top": {
+        "outer": "ff2bd6"
+      }
+    },
+    "alert": {
+      "color": "ff0000"
+    },
+    "screens": {
+      "screen.fan": [
+        {
+          "type": "video",
+          "path": "media/fan-a.mp4",
+          "model": "TlFlexLcd"
+        },
+        {
+          "type": "video",
+          "path": "media/fan-c.mp4",
+          "model": "TlFlexLcd"
+        },
+        {
+          "type": "video",
+          "path": "media/fan-e.mp4",
+          "model": "TlFlexLcd"
+        },
+        {
+          "type": "video",
+          "path": "media/fan-b.mp4",
+          "model": "TlFlexLcd"
+        },
+        {
+          "type": "video",
+          "path": "media/fan-d.mp4",
+          "model": "TlFlexLcd"
+        }
+      ],
+      "screen.pump": {
+        "type": "video",
+        "path": "media/pump.mp4",
+        "clips": [
+          "media/pump"
+        ],
+        "rotate": 300,
+        "model": "HydroShift2OledCurveLcd"
+      },
+      "screen.main": {
+        "type": "custom",
+        "template_id": "us88-sakura",
+        "model": "UniversalScreen"
+      }
+    },
+    "templates": [
+      "us88/us88-sakura.template.json"
+    ]
+  },
+  "palette": {
+    "primary": {
+      "path": "/palette/primary",
+      "value": "ffd0e6",
+      "set": true,
+      "from": null,
+      "derived_use": "ff0077",
+      "shows": {
+        "tl_fan": "ff0077",
+        "strimer": "ff0077",
+        "ring": "ff0077",
+        "gpu": "ff0077",
+        "board": "ff0077",
+        "ram": "ff0077"
+      },
+      "hints": [
+        {
+          "code": "led_safe",
+          "level": "info",
+          "text": "Derived lights use ff0077 (made LED-safe).",
+          "fix": null
+        }
+      ]
+    },
+    "secondary": {
+      "path": "/palette/secondary",
+      "value": "ff1a70",
+      "set": true,
+      "from": null,
+      "derived_use": "ff0060",
+      "shows": {
+        "tl_fan": "ff0060",
+        "strimer": "ff0060",
+        "ring": "ff0060",
+        "gpu": "ff0060",
+        "board": "ff0060",
+        "ram": "ff0060"
+      },
+      "hints": [
+        {
+          "code": "led_safe",
+          "level": "info",
+          "text": "Derived lights use ff0060 (made LED-safe).",
+          "fix": null
+        }
+      ]
+    },
+    "accent": {
+      "path": "/palette/accent",
+      "value": "ff3a8a",
+      "set": true,
+      "from": null,
+      "derived_use": "ff0068",
+      "shows": {
+        "tl_fan": "ff0068",
+        "strimer": "ff0068",
+        "ring": "ff0068",
+        "gpu": "ff0068",
+        "board": "ff0068",
+        "ram": "ff0068"
+      },
+      "hints": [
+        {
+          "code": "led_safe",
+          "level": "info",
+          "text": "Derived lights use ff0068 (made LED-safe).",
+          "fix": null
+        }
+      ]
+    },
+    "alert": {
+      "path": "/palette/alert",
+      "value": "ff0000",
+      "set": true,
+      "from": null,
+      "hints": []
+    },
+    "led_safe": {
+      "path": "/palette/led_safe",
+      "value": true,
+      "set": false
+    }
+  },
+  "groups": [
+    {
+      "group": "fans",
+      "kind": "fan",
+      "roles": [
+        "fans.side",
+        "fans.bottom",
+        "fans.top"
+      ],
+      "set": true,
+      "path": "/roles/fans",
+      "value": {
+        "inner": "ff4a9a",
+        "outer": "ff1a70",
+        "_note": "top = inner octagon edges (LEDs 0-12), bottom = outer bars (13-25)"
+      }
+    },
+    {
+      "group": "strimers",
+      "kind": "strimer",
+      "roles": [
+        "strimer.atx24",
+        "strimer.gpu"
+      ],
+      "set": true,
+      "path": "/roles/strimers",
+      "value": {
+        "mode": "Drizzling",
+        "colors": [
+          "ff4a9a",
+          "ff1a70",
+          "ff7ab6",
+          "ff2a80",
+          "ff4a9a",
+          "d4106a"
+        ],
+        "speed": 1,
+        "direction": "Clockwise"
+      }
+    },
+    {
+      "group": "rings",
+      "kind": "ring",
+      "roles": [
+        "pump.ring",
+        "screen.main.ring"
+      ],
+      "set": true,
+      "path": "/roles/rings",
+      "value": "ff3a8a"
+    }
+  ],
+  "roles": [
+    {
+      "role": "fans.side",
+      "kind": "fan",
+      "group": "fans",
+      "label": "Right 3-fan LCD column",
+      "device": "lianli:mac:02:00:00:00:01:01",
+      "name": "UNI FAN TL V3 Wireless LCD",
+      "present": true,
+      "managed": true,
+      "backend": "lianli",
+      "class": "tl_fan",
+      "source": "role",
+      "form": "fan",
+      "editable": true,
+      "readonly_reason": null,
+      "fields": {
+        "inner": {
+          "path": "/roles/fans.side/inner",
+          "value": "ffc048",
+          "source": "role",
+          "source_path": "/roles/fans.side/inner",
+          "shows": "ff4d1d",
+          "changed": true,
+          "hints": [
+            {
+              "code": "warm_green",
+              "level": "info",
+              "text": "Calibration corrects this on this PC: the LEDs get ff4d1d.",
+              "fix": "ff4d1d"
+            }
+          ]
+        },
+        "outer": {
+          "path": "/roles/fans.side/outer",
+          "value": "ff1a70",
+          "source": "group",
+          "source_path": "/roles/fans/outer",
+          "shows": "ff1a70",
+          "changed": false,
+          "hints": []
+        }
+      }
+    },
+    {
+      "role": "fans.bottom",
+      "kind": "fan",
+      "group": "fans",
+      "label": "3-fan group",
+      "device": "lianli:mac:02:00:00:00:01:02",
+      "name": "UNI FAN TL V3 Wireless",
+      "present": true,
+      "managed": true,
+      "backend": "lianli",
+      "class": "tl_fan",
+      "source": "group",
+      "form": "fan",
+      "editable": true,
+      "readonly_reason": null,
+      "fields": {
+        "inner": {
+          "path": "/roles/fans.bottom/inner",
+          "value": "ff4a9a",
+          "source": "group",
+          "source_path": "/roles/fans/inner",
+          "shows": "ff4a9a",
+          "changed": false,
+          "hints": []
+        },
+        "outer": {
+          "path": "/roles/fans.bottom/outer",
+          "value": "ff1a70",
+          "source": "group",
+          "source_path": "/roles/fans/outer",
+          "shows": "ff1a70",
+          "changed": false,
+          "hints": []
+        }
+      }
+    },
+    {
+      "role": "fans.top",
+      "kind": "fan",
+      "group": "fans",
+      "label": "2-fan LCD group",
+      "device": "lianli:mac:02:00:00:00:01:03",
+      "name": "UNI FAN TL V3 Wireless LCD",
+      "present": true,
+      "managed": true,
+      "backend": "lianli",
+      "class": "tl_fan",
+      "source": "role",
+      "form": "fan",
+      "editable": true,
+      "readonly_reason": null,
+      "fields": {
+        "inner": {
+          "path": "/roles/fans.top/inner",
+          "value": "ff4a9a",
+          "source": "group",
+          "source_path": "/roles/fans/inner",
+          "shows": "ff4a9a",
+          "changed": false,
+          "hints": []
+        },
+        "outer": {
+          "path": "/roles/fans.top/outer",
+          "value": "ff2bd6",
+          "source": "role",
+          "source_path": "/roles/fans.top/outer",
+          "shows": "ff2bd6",
+          "changed": false,
+          "hints": [
+            {
+              "code": "violet_magenta",
+              "level": "warn",
+              "text": "Magenta leans violet on fans; for hot pink add red and drop blue (ff1a8c).",
+              "fix": "ff1a8c"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "role": "strimer.atx24",
+      "kind": "strimer",
+      "group": "strimers",
+      "label": "24-pin Strimer",
+      "device": "lianli:mac:02:00:00:00:02:01",
+      "name": "Strimer Plus Wireless",
+      "present": true,
+      "managed": true,
+      "backend": "lianli",
+      "class": "strimer",
+      "source": "group",
+      "form": "strimer",
+      "editable": true,
+      "readonly_reason": null,
+      "fields": {
+        "mode": {
+          "path": "/roles/strimer.atx24/mode",
+          "value": "Drizzling",
+          "source": "group",
+          "source_path": "/roles/strimers/mode"
+        },
+        "speed": {
+          "path": "/roles/strimer.atx24/speed",
+          "value": 1,
+          "source": "group",
+          "source_path": "/roles/strimers/speed"
+        },
+        "direction": {
+          "path": "/roles/strimer.atx24/direction",
+          "value": "Clockwise",
+          "source": "group",
+          "source_path": "/roles/strimers/direction"
+        },
+        "colors": {
+          "path": "/roles/strimer.atx24/colors",
+          "value": [
+            "ff4a9a",
+            "ff1a70",
+            "ff7ab6",
+            "ff2a80",
+            "ff4a9a",
+            "d4106a"
+          ],
+          "source": "group",
+          "source_path": "/roles/strimers/colors",
+          "shows": [
+            "ff4a9a",
+            "ff1a70",
+            "ff66b6",
+            "ff2a80",
+            "ff4a9a",
+            "d4106a"
+          ],
+          "changed": true,
+          "hints": [
+            [],
+            [],
+            [
+              {
+                "code": "pink_green",
+                "level": "info",
+                "text": "Calibration corrects this on this PC: the LEDs get ff66b6.",
+                "fix": "ff66b6"
+              }
+            ],
+            [],
+            [],
+            []
+          ]
+        }
+      }
+    },
+    {
+      "role": "strimer.gpu",
+      "kind": "strimer",
+      "group": "strimers",
+      "label": "GPU Strimer",
+      "device": "lianli:mac:02:00:00:00:02:02",
+      "name": "Strimer Plus Wireless",
+      "present": true,
+      "managed": true,
+      "backend": "lianli",
+      "class": "strimer",
+      "source": "group",
+      "form": "strimer",
+      "editable": true,
+      "readonly_reason": null,
+      "fields": {
+        "mode": {
+          "path": "/roles/strimer.gpu/mode",
+          "value": "Drizzling",
+          "source": "group",
+          "source_path": "/roles/strimers/mode"
+        },
+        "speed": {
+          "path": "/roles/strimer.gpu/speed",
+          "value": 1,
+          "source": "group",
+          "source_path": "/roles/strimers/speed"
+        },
+        "direction": {
+          "path": "/roles/strimer.gpu/direction",
+          "value": "Clockwise",
+          "source": "group",
+          "source_path": "/roles/strimers/direction"
+        },
+        "colors": {
+          "path": "/roles/strimer.gpu/colors",
+          "value": [
+            "ff4a9a",
+            "ff1a70",
+            "ff7ab6",
+            "ff2a80",
+            "ff4a9a",
+            "d4106a"
+          ],
+          "source": "group",
+          "source_path": "/roles/strimers/colors",
+          "shows": [
+            "ff4a9a",
+            "ff1a70",
+            "ff66b6",
+            "ff2a80",
+            "ff4a9a",
+            "d4106a"
+          ],
+          "changed": true,
+          "hints": [
+            [],
+            [],
+            [
+              {
+                "code": "pink_green",
+                "level": "info",
+                "text": "Calibration corrects this on this PC: the LEDs get ff66b6.",
+                "fix": "ff66b6"
+              }
+            ],
+            [],
+            [],
+            []
+          ]
+        }
+      }
+    },
+    {
+      "role": "pump.ring",
+      "kind": "ring",
+      "group": "rings",
+      "label": "HydroShift II pump ring",
+      "device": "lianli:serial:0000c0ffee",
+      "name": "HydroShift II OLED Curve LED",
+      "present": true,
+      "managed": true,
+      "backend": "lianli",
+      "class": "ring",
+      "source": "group",
+      "form": "colour",
+      "editable": true,
+      "readonly_reason": null,
+      "fields": {
+        "colour": {
+          "path": "/roles/pump.ring",
+          "value": "ff3a8a",
+          "source": "group",
+          "source_path": "/roles/rings",
+          "shows": "ff3a8a",
+          "changed": false,
+          "hints": []
+        }
+      }
+    },
+    {
+      "role": "screen.main.ring",
+      "kind": "ring",
+      "group": "rings",
+      "label": "8.8\" screen ring",
+      "device": "lianli:family:UniversalScreenLighting",
+      "name": "Universal Screen 8.8\" LED Ring",
+      "present": true,
+      "managed": true,
+      "backend": "lianli",
+      "class": "ring",
+      "source": "group",
+      "form": "colour",
+      "editable": true,
+      "readonly_reason": null,
+      "fields": {
+        "colour": {
+          "path": "/roles/screen.main.ring",
+          "value": "ff3a8a",
+          "source": "group",
+          "source_path": "/roles/rings",
+          "shows": "ff3a8a",
+          "changed": false,
+          "hints": []
+        }
+      }
+    },
+    {
+      "role": "gpu",
+      "kind": "gpu",
+      "group": null,
+      "label": null,
+      "device": "openrgb:ASUS ROG ASTRAL GeForce RTX 5090 OC#0",
+      "name": "ASUS ROG ASTRAL GeForce RTX 5090 OC",
+      "present": true,
+      "managed": true,
+      "backend": "openrgb",
+      "class": "gpu",
+      "source": "role",
+      "form": "gradient",
+      "editable": true,
+      "readonly_reason": null,
+      "fields": {
+        "shape": {
+          "path": "/roles/gpu",
+          "value": "gradient"
+        },
+        "stops": {
+          "path": "/roles/gpu/gradient",
+          "value": [
+            "ff6aa8",
+            "e0106a"
+          ],
+          "source": "role",
+          "source_path": "/roles/gpu/gradient",
+          "shows": [
+            "ff66a8",
+            "e0106a"
+          ],
+          "changed": true,
+          "hints": [
+            [
+              {
+                "code": "pink_green",
+                "level": "info",
+                "text": "Calibration corrects this on this PC: the LEDs get ff66a8.",
+                "fix": "ff66a8"
+              }
+            ],
+            []
+          ]
+        }
+      }
+    },
+    {
+      "role": "board",
+      "kind": "board",
+      "group": null,
+      "label": null,
+      "device": "openrgb:X870E AORUS MASTER X3D#0",
+      "name": "X870E AORUS MASTER X3D",
+      "present": true,
+      "managed": true,
+      "backend": "openrgb",
+      "class": "board",
+      "source": "role",
+      "form": "colour",
+      "editable": true,
+      "readonly_reason": null,
+      "fields": {
+        "colour": {
+          "path": "/roles/board",
+          "value": "ff2a80",
+          "source": "role",
+          "source_path": "/roles/board",
+          "shows": "ff2a80",
+          "changed": false,
+          "hints": []
+        }
+      }
+    },
+    {
+      "role": "board.argb",
+      "kind": "board",
+      "group": "board",
+      "label": null,
+      "device": "openrgb:X870E AORUS MASTER X3D#0",
+      "name": "X870E AORUS MASTER X3D",
+      "present": true,
+      "managed": true,
+      "backend": "openrgb",
+      "class": "board",
+      "source": "group",
+      "form": "colour",
+      "editable": true,
+      "readonly_reason": null,
+      "fields": {
+        "colour": {
+          "path": "/roles/board.argb",
+          "value": "ff2a80",
+          "source": "group",
+          "source_path": "/roles/board",
+          "shows": "ff2a80",
+          "changed": false,
+          "hints": []
+        }
+      }
+    },
+    {
+      "role": "ram",
+      "kind": "ram",
+      "group": null,
+      "label": null,
+      "device": "openrgb:ENE DRAM#0",
+      "name": "ENE DRAM",
+      "present": true,
+      "managed": true,
+      "backend": "openrgb",
+      "class": "ram",
+      "source": "role",
+      "form": "gradient",
+      "editable": true,
+      "readonly_reason": null,
+      "fields": {
+        "shape": {
+          "path": "/roles/ram",
+          "value": "gradient"
+        },
+        "stops": {
+          "path": "/roles/ram/gradient",
+          "value": [
+            "ff7ab6",
+            "ff3a8a",
+            "c0105a"
+          ],
+          "source": "role",
+          "source_path": "/roles/ram/gradient",
+          "shows": [
+            "ff66b6",
+            "ff3a8a",
+            "c0105a"
+          ],
+          "changed": true,
+          "hints": [
+            [
+              {
+                "code": "pink_green",
+                "level": "info",
+                "text": "Calibration corrects this on this PC: the LEDs get ff66b6.",
+                "fix": "ff66b6"
+              }
+            ],
+            [],
+            []
+          ]
+        },
+        "span": {
+          "path": "/roles/ram/span",
+          "value": "across",
+          "source": "role",
+          "source_path": "/roles/ram/span"
+        }
+      }
+    }
+  ],
+  "screens": {
+    "editable": true,
+    "sig": "3d6d9a9953d190dd",
+    "coverage": "full",
+    "entries": 3,
+    "templates": 1,
+    "summary": "5 fan videos, pump video, main template (from sakura)"
+  },
+  "problems": [],
+  "limits": {
+    "strimer_modes": [
+      "Off",
+      "Direct",
+      "Static",
+      "Rainbow",
+      "RainbowMorph",
+      "Breathing",
+      "Runway",
+      "Meteor",
+      "ColorCycle",
+      "Staggered",
+      "Tide",
+      "Mixing",
+      "Voice",
+      "Door",
+      "Render",
+      "Ripple",
+      "Reflect",
+      "TailChasing",
+      "Paint",
+      "PingPong",
+      "Stack",
+      "StackMulti",
+      "Neon",
+      "CoverCycle",
+      "Wave",
+      "Racing",
+      "Lottery",
+      "Intertwine",
+      "MeteorShower",
+      "Collide",
+      "ElectricCurrent",
+      "Kaleidoscope",
+      "BigBang",
+      "Vortex",
+      "Pump",
+      "ColorsMorph",
+      "TaiChi",
+      "CrossingOver",
+      "ColorfulStarryNight",
+      "StaticStarryNight",
+      "Bounce",
+      "TickerTape",
+      "Fluctuation",
+      "Transmit",
+      "Burst",
+      "MopUp",
+      "PacMan",
+      "MeteorRainbow",
+      "Spring",
+      "Scan",
+      "Contest",
+      "Warning",
+      "SpanningTeacups",
+      "Tornado",
+      "DoubleMeteor",
+      "MeteorContest",
+      "MeteorMix",
+      "ReturnArc",
+      "DoubleArc",
+      "HeartBeat",
+      "HeartBeatRunway",
+      "Disco",
+      "SeaFlow",
+      "Echo",
+      "ColorfulCity",
+      "Twinkle",
+      "Groove",
+      "Tunnel",
+      "BreathingRainbow",
+      "StaticColorful",
+      "BreathingColorful",
+      "Snooker",
+      "BlowUp",
+      "ShockWave",
+      "BulletStack",
+      "Drizzling",
+      "FadeOut",
+      "ColorTransfer",
+      "CrossOver",
+      "Parallel",
+      "Endless",
+      "River",
+      "Duel",
+      "Hourglass",
+      "Pioneer",
+      "ShuttleRun",
+      "GradientRibbon",
+      "RainbowWave",
+      "ColorfulMeteor",
+      "Wing",
+      "Drumming",
+      "Boomerang",
+      "CandyBox",
+      "Transformation"
+    ],
+    "directions": [
+      "Clockwise",
+      "CounterClockwise"
+    ],
+    "speed": [
+      0,
+      4
+    ],
+    "gradient_stops": {
+      "gpu": [
+        2,
+        8
+      ],
+      "ram": [
+        2,
+        8
+      ]
+    },
+    "ram_spans": [
+      "across",
+      "stick"
+    ],
+    "fan_list_max": 4,
+    "name_pattern": "^[a-z0-9][a-z0-9._-]{0,47}$"
+  },
+  "preview": null
+}

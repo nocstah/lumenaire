@@ -1,0 +1,28 @@
+{
+  "v": 1,
+  "machine": {
+    "name": "bare-box",
+    "hostname": "bare-box",
+    "detected_at": "2026-09-24T16:00:00+02:00",
+    "detect_version": 1
+  },
+  "backends": {
+    "lianli": {
+      "enabled": true,
+      "state": "absent",
+      "message": "lian-li-linux is not installed"
+    },
+    "openrgb": {
+      "enabled": true,
+      "state": "absent",
+      "message": "openrgb is not installed"
+    }
+  },
+  "devices": {},
+  "roles": {},
+  "screens": {
+    "expected": 0
+  },
+  "sensors": {},
+  "workarounds": {}
+}

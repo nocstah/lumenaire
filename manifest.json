@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.nocstah.lumenaire",
+  "name": "Lumenaire for Omarchy",
+  "version": "0.1.0",
+  "author": "Nocstah",
+  "license": "MIT",
+  "description": "Pick and edit your PC case lighting themes and what their LCD screens show, switch lights and screens, and watch pump, coolant, CPU and GPU readings from the bar. Fronts the Lumenaire engine, the Lian Li daemon and OpenRGB.",
+  "kinds": ["service", "bar-widget"],
+  "entryPoints": { "service": "Service.qml", "barWidget": "BarWidget.qml" },
+  "barWidget": {
+    "displayName": "Lumenaire",
+    "description": "Shows coolant temperature (CPU on a PC without a pump) and tints the icon with the case theme; click for themes, lights, screens and clips, middle-click for the next clip.",
+    "category": "System",
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": { "show": "auto", "coolantWarn": 40, "showGpu": true, "rightClick": "panel", "showDot": true, "previewIdleMinutes": 10 },
+    "schema": [
+      { "key": "show", "type": "string", "label": "Bar readout", "description": "auto, coolant, pump, both, cpu or none. What the bar shows next to the icon; auto is coolant when the PC has a pump, otherwise CPU.", "defaultValue": "auto" },
+      { "key": "coolantWarn", "type": "integer", "label": "Coolant warning (°C)", "description": "The readout turns red at or above this coolant temperature.", "defaultValue": 40, "min": 30, "max": 60, "step": 1 },
+      { "key": "showGpu", "type": "boolean", "label": "Show GPU temperature", "description": "Reads the GPU sensor while the panel is open.", "defaultValue": true },
+      { "key": "rightClick", "type": "string", "label": "Right click", "description": "panel opens the panel; lights toggles every light (takes about 20 s).", "defaultValue": "panel" },
+      { "key": "showDot", "type": "boolean", "label": "Case colour icon", "description": "Tints the bar icon with the case theme's lead colour.", "defaultValue": true },
+      { "key": "previewIdleMinutes", "type": "integer", "label": "Theme preview idle end (minutes)", "description": "A live theme preview on the case ends, and the saved look comes back, after this many minutes without an edit.", "defaultValue": 10, "min": 2, "max": 30, "step": 1 }
+    ]
+  },
+  "homepage": "https://github.com/nocstah/lumenaire",
+  "repository": "https://github.com/nocstah/lumenaire"
+}

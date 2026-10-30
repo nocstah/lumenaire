@@ -1,0 +1,42 @@
+{
+  "description": "Screen page: the pump with one video: its picture, Change…, Remove, and Add clip to make it take turns.",
+  "base": "editor-screens",
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/5/clips/items",
+      "value": [
+        {
+          "i": 0,
+          "rel": "media/pump.mp4",
+          "from": "path",
+          "where": "root",
+          "title": "pump",
+          "thumb": "../ui/thumbs/sakura-pump.webp",
+          "thumb_state": "ready",
+          "duration": 12
+        }
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/screens/5/clips/rotate",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/5/entry",
+      "value": {
+        "type": "video",
+        "path": "media/pump.mp4",
+        "model": "HydroShift2OledCurveLcd"
+      }
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.pump"
+    }
+  }
+}

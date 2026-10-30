@@ -1,0 +1,4 @@
+hwmon0	name	nvme
+hwmon0	device	/sys/devices/pci0000:00/0000:00:1d.0/0000:3d:00.0/nvme/nvme0
+hwmon0	temp1_label	Composite
+hwmon0	temp1_input	33850

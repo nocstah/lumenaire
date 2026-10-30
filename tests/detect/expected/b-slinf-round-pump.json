@@ -1,0 +1,151 @@
+{
+  "v": 1,
+  "machine": {
+    "name": "slinf-box",
+    "hostname": "slinf-box",
+    "detected_at": "2026-09-24T16:00:00+02:00",
+    "detect_version": 1
+  },
+  "backends": {
+    "lianli": {
+      "enabled": true,
+      "state": "ok",
+      "version": "1.1.2"
+    },
+    "openrgb": {
+      "enabled": true,
+      "state": "absent",
+      "message": "openrgb is not installed"
+    }
+  },
+  "devices": {
+    "lianli:mac:02:00:00:00:03:02": {
+      "backend": "lianli",
+      "present": true,
+      "name": "UNI FAN SL-INF Wireless",
+      "family": "SlInf",
+      "kind": "fan_group",
+      "fans": 4,
+      "leds": 176,
+      "regions": [
+        "outer"
+      ],
+      "match": {
+        "mac": "02:00:00:00:03:02",
+        "device_id": "wireless:02:00:00:00:03:02"
+      }
+    },
+    "lianli:mac:02:00:00:00:03:01": {
+      "backend": "lianli",
+      "present": true,
+      "name": "UNI FAN SL-INF Wireless",
+      "family": "SlInf",
+      "kind": "fan_group",
+      "fans": 3,
+      "leds": 132,
+      "regions": [
+        "outer"
+      ],
+      "match": {
+        "mac": "02:00:00:00:03:01",
+        "device_id": "wireless:02:00:00:00:03:01"
+      }
+    },
+    "lianli:serial:d0d0d0d000000001": {
+      "backend": "lianli",
+      "present": true,
+      "name": "HydroShift LCD",
+      "family": "HydroShiftLcd",
+      "kind": "ring",
+      "leds": 24,
+      "has_pump": true,
+      "seen_id": "hid:0416:7398:3-4",
+      "match": {
+        "serial": "d0d0d0d000000001",
+        "family": "HydroShiftLcd"
+      }
+    },
+    "lianli:lcd:d0d0d0d000000001": {
+      "backend": "lianli",
+      "present": true,
+      "name": "HydroShift LCD",
+      "family": "HydroShiftLcd",
+      "kind": "lcd",
+      "panel": [
+        480,
+        480
+      ],
+      "usb": "0416:7398",
+      "seen_id": "hid:0416:7398:3-4",
+      "match": {
+        "usb_serial": "d0d0d0d000000001"
+      }
+    }
+  },
+  "roles": {
+    "fans.bottom": {
+      "device": "lianli:mac:02:00:00:00:03:02",
+      "label": "4-fan group",
+      "source": "detect",
+      "confidence": "guess"
+    },
+    "fans.1": {
+      "device": "lianli:mac:02:00:00:00:03:01",
+      "label": "3-fan group",
+      "source": "detect",
+      "confidence": "guess"
+    },
+    "pump.ring": {
+      "device": "lianli:serial:d0d0d0d000000001",
+      "label": "HydroShift LCD pump ring",
+      "source": "detect",
+      "confidence": "sure"
+    },
+    "screen.pump": {
+      "device": "lianli:lcd:d0d0d0d000000001",
+      "mount": 0,
+      "label": "HydroShift LCD pump",
+      "source": "detect",
+      "confidence": "sure"
+    }
+  },
+  "screens": {
+    "expected": 1
+  },
+  "sensors": {
+    "cpu": {
+      "kind": "hwmon",
+      "driver": "zenpower",
+      "input": "temp1_input",
+      "label": "Tdie",
+      "scale": 0.001
+    },
+    "gpu": {
+      "kind": "nvidia-smi",
+      "index": 0,
+      "name": "NVIDIA GeForce RTX 4070"
+    },
+    "coolant": {
+      "kind": "lianli",
+      "device": "lianli:serial:d0d0d0d000000001",
+      "field": "coolant_temps"
+    },
+    "pump": {
+      "kind": "lianli",
+      "device": "lianli:serial:d0d0d0d000000001",
+      "field": "fan_rpms"
+    }
+  },
+  "workarounds": {
+    "lianli.fixed_binary": {
+      "present": false,
+      "needed": null,
+      "daemon_version": "1.1.2",
+      "package_version": "1.1.2.r0.g9485465-1"
+    },
+    "lianli.wake_fan_lcds": {
+      "present": false,
+      "needed": false
+    }
+  }
+}

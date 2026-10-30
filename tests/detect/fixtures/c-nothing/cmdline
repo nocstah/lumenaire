@@ -1,0 +1,1 @@
+BOOT_IMAGE=/vmlinuz-linux root=/dev/sda2 rw

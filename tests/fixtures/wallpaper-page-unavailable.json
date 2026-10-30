@@ -1,0 +1,11 @@
+{
+  "description": "The desktop isn't answering (shell-down): one calm line.",
+  "base": "wallpaper-row",
+  "desktopFile": "desktop.unavailable.json",
+  "ui": {
+    "page": "wallpaper",
+    "wallpaper": {
+      "theme": "sakura"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "description": "Another theme's settings being read: one muted line.",
+  "base": "wallpaper-row",
+  "service": {
+    "desktopTheme": "hellfire",
+    "desktopState": "loading"
+  },
+  "ui": {
+    "page": "wallpaper",
+    "wallpaper": {
+      "theme": "hellfire"
+    }
+  }
+}

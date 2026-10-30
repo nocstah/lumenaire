@@ -1,0 +1,53 @@
+{
+  "description": "Crop on another PC: a 16:9 video framed for the round Galahad pump; the corners outside the circle are dimmed too.",
+  "base": "screen-other-pump",
+  "frame": {
+    "path": "../ui/thumbs/frame-wide-arctic.jpg",
+    "time": 14,
+    "w": 640,
+    "h": 360,
+    "src_w": 1920,
+    "src_h": 1080,
+    "duration": 42.0,
+    "kind": "video"
+  },
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.pump",
+      "step": "crop",
+      "cropItem": {
+        "id": "m-f1",
+        "path": "/home/you/Videos/space/planet37.mp4",
+        "rel": null,
+        "where": null,
+        "group": "videos",
+        "title": "planet37",
+        "kind": "video",
+        "w": 1920,
+        "h": 1080,
+        "duration": 42.0,
+        "fps": 30,
+        "bytes": 5210000,
+        "mtime": 1790000000,
+        "probe_state": "ready",
+        "error": null,
+        "thumb": "../ui/thumbs/photo-wide-arctic.webp",
+        "thumb_state": "ready",
+        "made_for": null,
+        "fit": {
+          "state": "poor",
+          "keep": 0.5625,
+          "scale": 1,
+          "score": 0.42,
+          "note": null
+        },
+        "in_use": [],
+        "used_by": []
+      },
+      "crop": {
+        "time": 14
+      }
+    }
+  }
+}

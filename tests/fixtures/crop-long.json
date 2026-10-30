@@ -1,0 +1,44 @@
+{
+  "description": "Crop: a 3:20 video framed for the pump: \"Uses the first 2:00\" (the tooltip says how long the pump screen takes).",
+  "base": "screen-pump-clips",
+  "frame": {
+    "path": "../ui/thumbs/frame-wide-synthwave.jpg",
+    "time": 66.7,
+    "w": 640,
+    "h": 360,
+    "src_w": 1920,
+    "src_h": 1080,
+    "duration": 200.0,
+    "kind": "video"
+  },
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.pump",
+      "step": "crop",
+      "adding": {
+        "then": "clip-add",
+        "at": 3
+      },
+      "cropItem": {
+        "path": "/home/you/Videos/clips/neon-drive-long.mp4",
+        "kind": "video",
+        "w": 1920,
+        "h": 1080,
+        "duration": 200.0,
+        "thumb": "../ui/thumbs/photo-wide-synthwave.webp",
+        "title": "neon drive long",
+        "fit": {
+          "state": "cropped",
+          "keep": 0.839,
+          "scale": 1.19,
+          "score": 0.7,
+          "note": "long"
+        }
+      },
+      "crop": {
+        "time": 66.7
+      }
+    }
+  }
+}

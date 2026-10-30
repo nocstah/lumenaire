@@ -1,0 +1,7 @@
+{
+  "v": 3,
+  "_about": "Glacier: deep ice. Cyan on the inner edges, cobalt on the outer bars, a sky-blue ring and slow drizzle down the cables. Palette only, so it works on any PC.",
+  "_led_note": "No pale ice-white on purpose: near-white tints read plain white on LEDs, so the frost comes from pure cyan (00e5ff) against a saturated cobalt.",
+  "palette": {"primary": "00e5ff", "secondary": "0a3cff", "accent": "0094ff", "alert": "ff3a00"},
+  "motion": {"mode": "Drizzling", "speed": 1, "direction": "CounterClockwise"}
+}

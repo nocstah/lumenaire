@@ -1,0 +1,11 @@
+{
+  "description": "Screen page: Fan 3's ⋯ menu: Use on every fan screen.",
+  "base": "screen-fan",
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3",
+      "menu": true
+    }
+  }
+}

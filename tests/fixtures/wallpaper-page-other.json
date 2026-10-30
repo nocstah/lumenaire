@@ -1,0 +1,11 @@
+{
+  "description": "The Wallpaper page for another theme (Hellfire, from its card menu): the settings apply when it is on.",
+  "base": "wallpaper-row",
+  "desktopFile": "desktop.other.json",
+  "ui": {
+    "page": "wallpaper",
+    "wallpaper": {
+      "theme": "hellfire"
+    }
+  }
+}

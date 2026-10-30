@@ -1,0 +1,14 @@
+{
+  "description": "Editor: the Strimer group, colour 3 open in the picker; calibration corrects its green (info, no warning).",
+  "base": "editor-role-override",
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "expanded": [
+        "@strimers"
+      ],
+      "picker": "field:@strimers:colors/2",
+      "cursor": "field:@strimers:colors/2"
+    }
+  }
+}

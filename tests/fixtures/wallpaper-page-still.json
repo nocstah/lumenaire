@@ -1,0 +1,23 @@
+{
+  "description": "Sakura's wallpaper kept still: only the Animated wallpaper switch, and Use defaults.",
+  "base": "wallpaper-row-still",
+  "desktopFile": "desktop.current.json",
+  "desktopPatch": [
+    {
+      "op": "replace",
+      "path": "/settings/animated",
+      "value": false
+    },
+    {
+      "op": "add",
+      "path": "/stored/animated",
+      "value": false
+    }
+  ],
+  "ui": {
+    "page": "wallpaper",
+    "wallpaper": {
+      "theme": "sakura"
+    }
+  }
+}

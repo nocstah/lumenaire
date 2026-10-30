@@ -1,0 +1,11 @@
+{
+  "description": "New theme: Copy a theme, Sakura chosen in the small previews.",
+  "base": "editor-card-menu",
+  "ui": {
+    "page": "new",
+    "wizard": {
+      "start": "copy",
+      "copyFrom": "sakura"
+    }
+  }
+}

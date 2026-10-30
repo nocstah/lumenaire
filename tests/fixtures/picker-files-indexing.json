@@ -1,0 +1,250 @@
+{
+  "description": "Picker, My files, for Fan 3: videos and pictures from ~/Videos and ~/Pictures while the engine is still reading them (212 of 857); a file not read yet says \"Checking…\".",
+  "base": "screen-fan",
+  "mediaList": {
+    "v": 1,
+    "source": "files",
+    "for": {
+      "role": "screen.fan3",
+      "model": "TlFlexLcd",
+      "shape": "square",
+      "media": [
+        400,
+        400
+      ]
+    },
+    "total": 857,
+    "offset": 0,
+    "limit": 60,
+    "indexing": {
+      "state": "running",
+      "done": 212,
+      "of": 857
+    },
+    "tools_missing": [],
+    "truncated": false,
+    "groups": [
+      {
+        "id": "videos",
+        "label": "Videos"
+      },
+      {
+        "id": "pictures",
+        "label": "Pictures"
+      }
+    ],
+    "items": [
+      {
+        "id": "m-f1",
+        "path": "/home/you/Videos/space/planet37.mp4",
+        "rel": null,
+        "where": null,
+        "group": "videos",
+        "title": "planet37",
+        "kind": "video",
+        "w": 1920,
+        "h": 1080,
+        "duration": 42.0,
+        "fps": 30,
+        "bytes": 5210000,
+        "mtime": 1790000000,
+        "probe_state": "ready",
+        "error": null,
+        "thumb": "../ui/thumbs/photo-wide-arctic.webp",
+        "thumb_state": "ready",
+        "made_for": null,
+        "fit": {
+          "state": "poor",
+          "keep": 0.5625,
+          "scale": 1,
+          "score": 0.42,
+          "note": null
+        },
+        "in_use": [],
+        "used_by": []
+      },
+      {
+        "id": "m-f2",
+        "path": "/home/you/Videos/clips/neon-drive.mp4",
+        "rel": null,
+        "where": null,
+        "group": "videos",
+        "title": "neon drive",
+        "kind": "video",
+        "w": 1920,
+        "h": 1080,
+        "duration": 95.0,
+        "fps": 60,
+        "bytes": 45210000,
+        "mtime": 1789990000,
+        "probe_state": "ready",
+        "error": null,
+        "thumb": "../ui/thumbs/photo-wide-synthwave.webp",
+        "thumb_state": "ready",
+        "made_for": null,
+        "fit": {
+          "state": "poor",
+          "keep": 0.5625,
+          "scale": 1,
+          "score": 0.42,
+          "note": null
+        },
+        "in_use": [],
+        "used_by": []
+      },
+      {
+        "id": "m-f3",
+        "path": "/home/you/Videos/clips/loop-rings.mp4",
+        "rel": null,
+        "where": null,
+        "group": "videos",
+        "title": "loop rings",
+        "kind": "video",
+        "w": 1080,
+        "h": 1080,
+        "duration": 6.0,
+        "fps": 30,
+        "bytes": 3210000,
+        "mtime": 1789980000,
+        "probe_state": "ready",
+        "error": null,
+        "thumb": "../ui/thumbs/cyberpunk-fan3.webp",
+        "thumb_state": "ready",
+        "made_for": null,
+        "fit": {
+          "state": "scaled",
+          "keep": 1,
+          "scale": 0.37,
+          "score": 1,
+          "note": null
+        },
+        "in_use": [],
+        "used_by": []
+      },
+      {
+        "id": "m-f4",
+        "path": "/home/you/Videos/phone/VID_20260901_183000.mov",
+        "rel": null,
+        "where": null,
+        "group": "videos",
+        "title": "VID 20260901 183000",
+        "kind": "video",
+        "w": null,
+        "h": null,
+        "duration": null,
+        "fps": null,
+        "bytes": 88040000,
+        "mtime": 1788300000,
+        "probe_state": "pending",
+        "error": null,
+        "thumb": null,
+        "thumb_state": "pending",
+        "made_for": null,
+        "fit": {
+          "state": "unknown",
+          "keep": null,
+          "scale": null,
+          "score": null,
+          "note": null
+        },
+        "in_use": [],
+        "used_by": []
+      },
+      {
+        "id": "m-p1",
+        "path": "/home/you/Pictures/toxic-forest.png",
+        "rel": null,
+        "where": null,
+        "group": "pictures",
+        "title": "toxic forest",
+        "kind": "image",
+        "w": 4000,
+        "h": 3000,
+        "duration": null,
+        "fps": null,
+        "bytes": 8210000,
+        "mtime": 1789970000,
+        "probe_state": "ready",
+        "error": null,
+        "thumb": "../ui/thumbs/photo-43-toxic.webp",
+        "thumb_state": "ready",
+        "made_for": null,
+        "fit": {
+          "state": "cropped",
+          "keep": 0.75,
+          "scale": 1,
+          "score": 0.65,
+          "note": null
+        },
+        "in_use": [],
+        "used_by": []
+      },
+      {
+        "id": "m-p2",
+        "path": "/home/you/Pictures/phone/ember.jpg",
+        "rel": null,
+        "where": null,
+        "group": "pictures",
+        "title": "ember",
+        "kind": "image",
+        "w": 1080,
+        "h": 1920,
+        "duration": null,
+        "fps": null,
+        "bytes": 1210000,
+        "mtime": 1789960000,
+        "probe_state": "ready",
+        "error": null,
+        "thumb": "../ui/thumbs/photo-tall-hellfire.webp",
+        "thumb_state": "ready",
+        "made_for": null,
+        "fit": {
+          "state": "poor",
+          "keep": 0.5625,
+          "scale": 1,
+          "score": 0.42,
+          "note": null
+        },
+        "in_use": [],
+        "used_by": []
+      },
+      {
+        "id": "m-p3",
+        "path": "/home/you/Pictures/icons/abyss-mark.png",
+        "rel": null,
+        "where": null,
+        "group": "pictures",
+        "title": "abyss mark",
+        "kind": "image",
+        "w": 64,
+        "h": 64,
+        "duration": null,
+        "fps": null,
+        "bytes": 12000,
+        "mtime": 1789950000,
+        "probe_state": "ready",
+        "error": null,
+        "thumb": "../ui/thumbs/photo-tiny-abyss.webp",
+        "thumb_state": "ready",
+        "made_for": null,
+        "fit": {
+          "state": "scaled",
+          "keep": 1,
+          "scale": 6.25,
+          "score": 0.4,
+          "note": "low-res"
+        },
+        "in_use": [],
+        "used_by": []
+      }
+    ]
+  },
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3",
+      "step": "pick",
+      "tab": "files"
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "status": "ok",
+  "data": {
+    "desktop_streams": [],
+    "media_preparation": {
+      "0": {
+        "startup_recovery_required": false,
+        "generation": 30,
+        "device_id": "serial:hid:1cbe:a018:8-12.2.1",
+        "state": "ready",
+        "error": null,
+        "runtime": {
+          "stage": "frame_submitted",
+          "fps_limit": 30,
+          "hardware_video_allowed": false,
+          "fallback_reason": null
+        },
+        "last_playback_error": null
+      },
+      "1": {
+        "startup_recovery_required": false,
+        "generation": 30,
+        "device_id": "serial:hid:1cbe:a018:8-12.2.2",
+        "state": "ready",
+        "error": null,
+        "runtime": {
+          "stage": "frame_submitted",
+          "fps_limit": 30,
+          "hardware_video_allowed": false,
+          "fallback_reason": null
+        },
+        "last_playback_error": null
+      },
+      "2": {
+        "startup_recovery_required": false,
+        "generation": 30,
+        "device_id": "serial:hid:1cbe:a018:8-12.2.3",
+        "state": "ready",
+        "error": null,
+        "runtime": {
+          "stage": "frame_submitted",
+          "fps_limit": 30,
+          "hardware_video_allowed": false,
+          "fallback_reason": null
+        },
+        "last_playback_error": null
+      },
+      "3": {
+        "startup_recovery_required": false,
+        "generation": 30,
+        "device_id": "serial:hid:1cbe:a018:8-12.4.2",
+        "state": "ready",
+        "error": null,
+        "runtime": {
+          "stage": "frame_submitted",
+          "fps_limit": 30,
+          "hardware_video_allowed": false,
+          "fallback_reason": null
+        },
+        "last_playback_error": null
+      },
+      "4": {
+        "startup_recovery_required": false,
+        "generation": 30,
+        "device_id": "serial:hid:1cbe:a068:8-7.2.2",
+        "state": "ready",
+        "error": null,
+        "runtime": {
+          "stage": "frame_submitted",
+          "fps_limit": 30,
+          "hardware_video_allowed": false,
+          "fallback_reason": null
+        },
+        "last_playback_error": null
+      },
+      "5": {
+        "startup_recovery_required": false,
+        "generation": 30,
+        "device_id": "serial:hid:1cbe:a088:8-10.2.2",
+        "state": "ready",
+        "error": null,
+        "runtime": {
+          "stage": "frame_submitted",
+          "fps_limit": 30,
+          "hardware_video_allowed": false,
+          "fallback_reason": null
+        },
+        "last_playback_error": null
+      }
+    },
+    "fan_rpms": {},
+    "coolant_temps": {},
+    "streaming_active": true,
+    "openrgb_status": {},
+    "pixel_clean_statuses": {}
+  }
+}

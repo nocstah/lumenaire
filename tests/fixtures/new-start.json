@@ -1,0 +1,8 @@
+{
+  "description": "New theme, step 1: the four ways to start, none chosen yet.",
+  "base": "editor-card-menu",
+  "ui": {
+    "page": "new",
+    "wizard": {}
+  }
+}

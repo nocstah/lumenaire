@@ -1,0 +1,18 @@
+{
+  "description": "A video the user picked in Motion Wallpaper plays: the theme's settings leave it alone, and the page says so.",
+  "base": "wallpaper-row",
+  "desktopFile": "desktop.current.json",
+  "desktopPatch": [
+    {
+      "op": "replace",
+      "path": "/user_clip",
+      "value": true
+    }
+  ],
+  "ui": {
+    "page": "wallpaper",
+    "wallpaper": {
+      "theme": "sakura"
+    }
+  }
+}

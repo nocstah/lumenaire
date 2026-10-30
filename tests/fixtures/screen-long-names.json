@@ -1,0 +1,24 @@
+{
+  "description": "Long names: a theme called \"Sakura Midnight Blossom Festival Edition\" and a profile's long screen name; they elide on one line, the full names are the tooltips.",
+  "base": "screen-fan",
+  "editorPatch": [
+    {
+      "op": "replace",
+      "path": "/name",
+      "value": "sakura-midnight-blossom-festival-edition"
+    }
+  ],
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/2/short",
+      "value": "Front intake fan screen number 3"
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3"
+    }
+  }
+}

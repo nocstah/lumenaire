@@ -1,0 +1,50 @@
+{
+  "description": "Picker, My files, on a PC without ffmpeg and ImageMagick: one line says what screen editing needs.",
+  "base": "screen-fan",
+  "mediaList": {
+    "v": 1,
+    "source": "files",
+    "for": {
+      "role": "screen.fan3",
+      "model": "TlFlexLcd",
+      "shape": "square",
+      "media": [
+        400,
+        400
+      ]
+    },
+    "total": 0,
+    "offset": 0,
+    "limit": 60,
+    "indexing": {
+      "state": "idle",
+      "done": 0,
+      "of": 0
+    },
+    "tools_missing": [
+      "ffmpeg",
+      "ffprobe",
+      "magick"
+    ],
+    "truncated": false,
+    "groups": [
+      {
+        "id": "videos",
+        "label": "Videos"
+      },
+      {
+        "id": "pictures",
+        "label": "Pictures"
+      }
+    ],
+    "items": []
+  },
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3",
+      "step": "pick",
+      "tab": "files"
+    }
+  }
+}

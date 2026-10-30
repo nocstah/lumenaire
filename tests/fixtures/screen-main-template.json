@@ -1,0 +1,10 @@
+{
+  "description": "Screen page: the 8.8\" screen shows the theme's clock and stats layout.",
+  "base": "editor-screens",
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.main"
+    }
+  }
+}

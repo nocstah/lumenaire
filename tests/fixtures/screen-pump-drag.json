@@ -1,0 +1,15 @@
+{
+  "description": "Screen page: clip 1 dragged down over clip 2 (the accent line shows where it lands).",
+  "base": "screen-pump-clips",
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.pump",
+      "drag": {
+        "from": 0,
+        "to": 1,
+        "dy": 30
+      }
+    }
+  }
+}

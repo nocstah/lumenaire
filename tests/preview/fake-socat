@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+# fake-socat — stands in for socat in tests/preview (first in PATH): answers
+# the lianli-daemon requests from $HOME/daemon/<Method>.json and records every
+# guarded write in $HOME/requests.jsonl. It refuses any socket but the
+# fixture's ($HOME/fake-lianli.sock, which never exists), so nothing can reach
+# the real daemon. Knobs, all files in the fixture $HOME:
+#   daemon-instance   the current instance_id (a guard with another is refused)
+#   restart-after N   after the N-th recorded write the instance changes (a restart)
+#   daemon-error      every write fails with this message
+#   fail-devices      writes to these device ids (one a line) fail
+#   telemetry-after-writes "N STATE"   GetTelemetry: a screen that got N or more
+#                     SetLcdMedia writes reports generation + its write count and
+#                     STATE (ready, failed, waiting_for_device, preparing); none:
+#                     the telemetry never moves
+#   telemetry-states  "<device_id> <state> [error...]" lines: that screen's state
+#   deny-media        CheckMediaAccess: these paths (one a line) can't be read
+set -u
+sock=
+for a in "$@"; do case $a in UNIX-CONNECT:*) sock=${a#UNIX-CONNECT:} ;; esac; done
+if [[ $sock != "$HOME/fake-lianli.sock" ]]; then
+  echo "fake-socat: refused $sock" >&2
+  echo "$sock" >>"$HOME/refused.log"
+  exit 97
+fi
+req=$(head -n1)
+m=$(jq -r '.method // empty' <<<"$req" 2>/dev/null)
+inst=$(cat "$HOME/daemon-instance" 2>/dev/null || echo test-instance-1)
+case $m in
+  GetDaemonInfo)
+    echo GetDaemonInfo >>"$HOME/reads.log"
+    jq -c --arg i "$inst" '.data.instance_id = $i' "$HOME/daemon/GetDaemonInfo.json" ;;
+  GetTelemetry)
+    echo GetTelemetry >>"$HOME/reads.log"
+    knob=$(cat "$HOME/telemetry-after-writes" 2>/dev/null || true)
+    jq -c --arg knob "$knob" --rawfile w <(cat "$HOME/requests.jsonl" 2>/dev/null || true) \
+      --rawfile st <(cat "$HOME/telemetry-states" 2>/dev/null || true) '
+      ([$w | split("\n")[] | select(length > 0) | fromjson? | select(.method == "SetLcdMedia") | .params.device_id]
+       | group_by(.) | map({key: .[0], value: length}) | from_entries) as $n
+      | ([$st | split("\n")[] | select(length > 0) | split(" ") | {key: .[0], value: {state: .[1], error: (.[2:] | join(" ") | if . == "" then null else . end)}}]
+         | from_entries) as $over
+      | ($knob | split(" ")) as $k
+      | .data.media_preparation |= with_entries(.value as $v | ($n[$v.device_id] // 0) as $c
+          | if $knob != "" and $c >= ($k[0] | tonumber) then
+              .value += {generation: ($v.generation + $c), state: ($over[$v.device_id].state // $k[1]),
+                         error: ($over[$v.device_id].error // null)}
+            else . end)' "$HOME/daemon/GetTelemetry.json" ;;
+  CheckMediaAccess)
+    echo CheckMediaAccess >>"$HOME/reads.log"
+    jq -c --rawfile deny <(cat "$HOME/deny-media" 2>/dev/null || true) '
+      ($deny | split("\n") | map(select(length > 0))) as $d
+      | [.params.lcds[] | select(.path != null and (.path as $p | $d | index($p)))
+         | {owner: "LCD[serial:\(.serial)]", path, error: "Permission denied (os error 13)"}] as $issues
+      | {status: "ok", data: {uid: 1000, checked: (.params.lcds | length), failed: ($issues | length), issues: $issues}}' <<<"$req" ;;
+  Guarded)
+    inner=$(jq -c '.params.request' <<<"$req")
+    if [[ $(jq -r '.params.guard.instance_id' <<<"$req") != "$inst" ]]; then
+      echo "$inner" >>"$HOME/refused-guard.jsonl"
+      echo '{"status":"error","message":"Request was not authorized"}'
+      exit 0
+    fi
+    echo "$inner" >>"$HOME/requests.jsonl"
+    if [[ -f $HOME/restart-after ]] && (( $(grep -c . "$HOME/requests.jsonl") >= $(cat "$HOME/restart-after") )); then
+      echo test-instance-2 >"$HOME/daemon-instance"; rm -f "$HOME/restart-after"
+    fi
+    dev=$(jq -r '.params.device_id // empty' <<<"$inner")
+    if [[ -f $HOME/daemon-error ]]; then
+      jq -nc --arg m "$(cat "$HOME/daemon-error")" '{status: "error", message: $m}'
+    elif [[ -n $dev ]] && grep -qxF "$dev" "$HOME/fail-devices" 2>/dev/null; then
+      echo '{"status":"error","message":"RGB effect error: RGB device is unavailable"}'
+    else
+      echo '{"status":"ok","data":null}'
+    fi ;;
+  *)
+    if [[ -n $m && -f $HOME/daemon/$m.json ]]; then echo "$m" >>"$HOME/reads.log"; jq -c . "$HOME/daemon/$m.json"
+    else echo '{"status":"error","message":"fake-socat: unknown method"}'; fi ;;
+esac

@@ -1,0 +1,68 @@
+Connection attempt failed
+<h2>Warning:</h2><p>One or more I2C/SMBus interfaces failed to initialize.</p>
+0: ASUS ROG STRIX Z790-E GAMING WIFI
+  Type:           Motherboard
+  Description:    ASUS Aura USB Device
+  Version:        AULA3-AR32-0207
+  Location:       HID: /dev/hidraw3
+  Serial:         0000FAKE0001    
+  Modes: [Direct] Off Static Breathing Flashing 'Spectrum Cycle' Rainbow
+  Zones: 'Aura Mainboard' 'Aura Addressable 1' 'Aura Addressable 2' 'Aura Addressable 3'
+  LEDs: 'Aura Mainboard LED 1' 'Aura Mainboard LED 2' 'Aura Addressable 1 LED 1' 'Aura Addressable 2 LED 1' 'Aura Addressable 3 LED 1'
+
+1: Corsair Vengeance Pro RGB
+  Type:           DRAM
+  Description:    Corsair Vengeance Pro RGB Device
+  Version:        I2C: SMBus I801 adapter at efa0, address 0x58
+  Location:       I2C: SMBus I801 adapter at efa0, address 0x58
+  Modes: [Direct] Static 'Color Shift' 'Color Pulse' 'Rainbow Wave'
+  Zones: 'Corsair Pro Zone'
+  LEDs: 'Corsair Pro LED 1' 'Corsair Pro LED 2' 'Corsair Pro LED 3' 'Corsair Pro LED 4' 'Corsair Pro LED 5' 'Corsair Pro LED 6' 'Corsair Pro LED 7' 'Corsair Pro LED 8' 'Corsair Pro LED 9' 'Corsair Pro LED 10'
+
+2: Corsair Vengeance Pro RGB
+  Type:           DRAM
+  Description:    Corsair Vengeance Pro RGB Device
+  Version:        I2C: SMBus I801 adapter at efa0, address 0x59
+  Location:       I2C: SMBus I801 adapter at efa0, address 0x59
+  Modes: [Direct] Static 'Color Shift' 'Color Pulse' 'Rainbow Wave'
+  Zones: 'Corsair Pro Zone'
+  LEDs: 'Corsair Pro LED 1' 'Corsair Pro LED 2' 'Corsair Pro LED 3' 'Corsair Pro LED 4' 'Corsair Pro LED 5' 'Corsair Pro LED 6' 'Corsair Pro LED 7' 'Corsair Pro LED 8' 'Corsair Pro LED 9' 'Corsair Pro LED 10'
+
+3: Sapphire Nitro+ RX 7900 XTX
+  Type:           GPU
+  Description:    Sapphire Nitro+ Device
+  Version:        I2C: AMDGPU DM i2c OEM bus 6 at 3:00.0
+ (/dev/i2c-7), address 0x55
+  Location:       I2C: AMDGPU DM i2c OEM bus 6 at 3:00.0
+ (/dev/i2c-7), address 0x55
+  Modes: [Direct] Off Static Rainbow Breathing
+  Zones: 'Nitro Glow'
+  LEDs: 'Nitro LED 1' 'Nitro LED 2' 'Nitro LED 3' 'Nitro LED 4'
+
+4: SteelSeries Apex Pro
+  Type:           Keyboard
+  Description:    SteelSeries Keyboard Device
+  Version:        HID: /dev/hidraw6
+  Location:       HID: /dev/hidraw6
+  Modes: [Direct]
+  Zones: Keyboard
+  LEDs: Esc F1 F2 F3
+
+5: Lian Li Uni Hub - SL Infinity
+  Type:           Cooler
+  Description:    Lian Li Uni Hub - SL Infinity
+  Version:        HID: /dev/hidraw8
+  Location:       HID: /dev/hidraw8
+  Modes: [Direct] Static Rainbow
+  Zones: 'Channel 1' 'Channel 2'
+  LEDs: 'Channel 1 LED 1' 'Channel 2 LED 1'
+
+6: Generic RGB Strip
+  Type:           LEDStrip
+  Description:    E1.31 Device
+  Version:        E1.31
+  Location:       E1.31: 192.0.2.10
+  Modes: [Direct]
+  Zones: Strip
+  LEDs: 'LED 1' 'LED 2' 'LED 3'
+

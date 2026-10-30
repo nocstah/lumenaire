@@ -1,0 +1,25 @@
+{
+  "v": 1,
+  "available": true,
+  "reason": null,
+  "omarchy_theme": "sakura",
+  "theme": "hellfire",
+  "background": null,
+  "has_animated": null,
+  "playing": null,
+  "user_clip": null,
+  "screens": null,
+  "settings": {
+    "animated": true,
+    "pause_while_active": true,
+    "resume_after_idle": 5,
+    "while_active": "freeze"
+  },
+  "stored": {},
+  "defaults": {
+    "animated": true,
+    "pause_while_active": true,
+    "resume_after_idle": 5,
+    "while_active": "freeze"
+  }
+}

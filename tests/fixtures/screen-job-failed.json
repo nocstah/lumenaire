@@ -1,0 +1,15 @@
+{
+  "description": "Screen page: Fan 2's video couldn't be prepared (media.job.failed.json, a codec this PC can't read): one urgent line, Choose another; the reason is the tooltip.",
+  "base": "editor-screens",
+  "jobs": [
+    {
+      "file": "media.job.failed.json"
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan2"
+    }
+  }
+}

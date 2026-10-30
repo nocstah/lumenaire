@@ -1,0 +1,30 @@
+{
+  "description": "Screen page: preparing Fan 3's video stopped for lack of disk space: \"Couldn't prepare it\", Try again (the tooltip says why).",
+  "base": "screen-fan",
+  "jobs": [
+    {
+      "file": "media.job.failed.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/role",
+          "value": "screen.fan3"
+        },
+        {
+          "op": "replace",
+          "path": "/error",
+          "value": {
+            "code": "disk-full",
+            "text": "needs 4.1 GB, 2.2 GB free"
+          }
+        }
+      ]
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+[Unit]
+Description=Check the pc-lights day/night schedule every minute
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target

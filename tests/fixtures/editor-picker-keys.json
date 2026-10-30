@@ -1,0 +1,38 @@
+{
+  "description": "Picker keyboard walk: j ×2 to Main, Enter opens the picker, Tab to the hue strip, l ×5 turns the hue by 10°.",
+  "base": "editor-role-override",
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "keys": [
+        {
+          "text": "j"
+        },
+        {
+          "text": "j"
+        },
+        {
+          "key": 16777220
+        },
+        {
+          "key": 16777217
+        },
+        {
+          "text": "l"
+        },
+        {
+          "text": "l"
+        },
+        {
+          "text": "l"
+        },
+        {
+          "text": "l"
+        },
+        {
+          "text": "l"
+        }
+      ]
+    }
+  }
+}

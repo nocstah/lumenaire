@@ -1,0 +1,23 @@
+{
+  "description": "Screen page: Fan 2's screen couldn't play the video the preview sent (the daemon's error is the tooltip): \"Couldn't show it\", Choose another.",
+  "base": "editor-screens",
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/1/changed",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/screens/1/media/thumb",
+      "value": "../ui/thumbs/toxic-fan2.webp"
+    }
+  ],
+  "previewFile": "preview.screens.json",
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan2"
+    }
+  }
+}

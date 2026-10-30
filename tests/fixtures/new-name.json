@@ -1,0 +1,12 @@
+{
+  "description": "New theme, step 2: the suggested name from the colour (Neon Cyan).",
+  "base": "editor-card-menu",
+  "ui": {
+    "page": "new",
+    "wizard": {
+      "step": 2,
+      "start": "colour",
+      "colour": "00e5ff"
+    }
+  }
+}

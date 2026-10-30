@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# pcl-heavy CMD [ARGS...] — run a memory-hungry media job (ffmpeg, PIL/numpy
+# frame generation, imagemagick on big images) in its own capped cgroup, at
+# most PCL_HEAVY_SLOTS (default 2) at a time. PCL_HEAVY_WAIT=<s> gives up
+# (exit 75) when no slot frees up in time; the default waits forever.
+#
+# Why: on 2026-09-24 ten build agents rendered theme videos at once inside the
+# terminal's cgroup; it reached 74 GB and systemd-oomd killed the whole terminal
+# scope (274 and 459 processes), Claude included, twice. In its own scope a
+# runaway job is OOM-killed alone and never counts against the terminal.
+set -euo pipefail
+(( $# )) || { echo "usage: pcl-heavy CMD [ARGS...]" >&2; exit 2; }
+
+slots=${PCL_HEAVY_SLOTS:-2}
+mem=${PCL_HEAVY_MEM:-12G}
+wait=${PCL_HEAVY_WAIT:-0}   # seconds to wait for a free slot; 0 = forever
+dir=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/pcl-heavy
+mkdir -p "$dir"
+
+# Semaphore: grab the first free slot lock; the fd stays open (and the lock
+# held) for the lifetime of the job because the scope's process inherits it.
+while :; do
+  for ((i = 0; i < slots; i++)); do
+    exec 9>"$dir/slot$i"
+    if flock -n 9; then
+      exec systemd-run --user --scope --quiet --collect \
+        -p MemoryMax="$mem" -p MemorySwapMax=1G -p CPUWeight=40 -- "$@"
+    fi
+    exec 9>&-
+  done
+  if (( wait > 0 && SECONDS >= wait )); then
+    echo "pcl-heavy: no free slot after ${wait} s (PCL_HEAVY_WAIT); giving up" >&2
+    exit 75
+  fi
+  sleep 2
+done

@@ -1,0 +1,129 @@
+{
+  "description": "lianli-daemon failed; socket unreachable.",
+  "status": {
+    "v": 1,
+    "ts": 1790231180,
+    "theme": "sakura",
+    "day_theme": "sakura",
+    "screens_show": "sakura",
+    "lights": "on",
+    "screens": "on",
+    "clips": {
+      "state": "on",
+      "paused_at": null
+    },
+    "busy": null,
+    "pending": [],
+    "ui_requested": null,
+    "last_run": {
+      "v": 1,
+      "op": "pick",
+      "target": null,
+      "theme": "sakura",
+      "unit": "pc-lights-ui-pick-1790224900000000000",
+      "rc": 0,
+      "started": 1790224900,
+      "ended": 1790224921,
+      "error": null,
+      "fallback": false,
+      "skipped": false,
+      "missed_devices": []
+    },
+    "daemon_unit": "failed",
+    "screens_on_usb": {
+      "have": 0,
+      "want": 7
+    },
+    "alert": {
+      "cpu": {
+        "enabled": true,
+        "threshold": 90
+      },
+      "gpu": {
+        "enabled": true,
+        "threshold": 85
+      }
+    },
+    "schedule": {
+      "enabled": true,
+      "night_theme": "stealth",
+      "night_start": "00:00",
+      "night_end": "07:00",
+      "period": "day",
+      "last_boundary": "2026-09-24T07:00",
+      "handled": true,
+      "next_boundary": "2026-09-25T00:00",
+      "override": false,
+      "timer": "active"
+    },
+    "omarchy": {
+      "current": "sakura",
+      "requested": "sakura",
+      "maps_to": "sakura",
+      "mapping": "explicit",
+      "paired": true,
+      "generating": false
+    },
+    "rotation": [
+      {
+        "serial": "a1a1a1a100000006",
+        "where": "HydroShift II OLED Curve pump",
+        "count": 6,
+        "rotate": 300,
+        "shuffle": false,
+        "index": 1,
+        "clip": "pump-2.mp4",
+        "since": 1790231124,
+        "next_in": 244,
+        "paused": false
+      }
+    ],
+    "previews_building": false
+  },
+  "service": {
+    "ready": true,
+    "engineError": "",
+    "engine": "idle",
+    "busyElapsed": 0,
+    "ops": {
+      "theme": null,
+      "lights": null,
+      "screens": null,
+      "clips": null,
+      "schedule": null
+    },
+    "failureUnseen": false,
+    "daemonState": "offline",
+    "daemonVersion": "1.1.2",
+    "transport": "socket",
+    "pumpRpm": null,
+    "coolantC": null,
+    "coolantAgeS": null,
+    "coolantStale": true,
+    "cpuC": 51.1,
+    "gpuC": 37,
+    "gpuUtil": 5,
+    "gpuW": 21.5,
+    "fans": [],
+    "missingDevices": [],
+    "nowPlaying": {},
+    "notice": "Lian Li daemon isn't running. Lights, screens and clips can't change until it's back.",
+    "noticeLevel": "urgent",
+    "noticeActions": [
+      "log"
+    ],
+    "previewRev": 0,
+    "settings": {
+      "show": "coolant",
+      "coolantWarn": 40,
+      "showGpu": true,
+      "rightClick": "panel",
+      "showDot": true
+    },
+    "blockedKinds": [
+      "lights",
+      "screens",
+      "clips"
+    ]
+  }
+}

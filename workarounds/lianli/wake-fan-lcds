@@ -1,0 +1,48 @@
+#!/usr/bin/env -S uv run -q --script
+# /// script
+# dependencies = ["pyusb"]
+# ///
+# lianli-wake-fan-lcds: wake the TL fan LCD screens (TL Flex LCD, 1cbe:a018)
+# before lianli-daemon starts.
+#
+# After a full shutdown the wireless LCD receivers (43a8:0102) keep the fan
+# LCDs off USB, and lian-li-linux never sends them RebootLcd (0x17), so the
+# daemon starts without the screens and the fans show their built-in CPU
+# temperature instead of your media. This sends 0x17 to every receiver and
+# waits up to ~10 s for the screens to enumerate.
+#
+# Installed by `pc-lights install --workarounds` (only when the hardware
+# profile has TL fan LCDs) as ~/.local/bin/lianli-wake-fan-lcds, run from the
+# drop-in lianli-daemon.service.d/wake-fan-lcds.conf as ExecStartPre=-...
+# (the "-" means a failure never stops the daemon from starting).
+# Needs uv (it pulls pyusb on first run) and write access to the receivers,
+# which lian-li-linux's udev rules (60-lianli.rules) give the logged-in user.
+# It does nothing when the screens are already on USB or there is no receiver.
+import time
+
+import usb.core
+import usb.util
+
+LCD = dict(idVendor=0x1CBE, idProduct=0xA018)        # TL Flex LCD
+RECEIVER = dict(idVendor=0x43A8, idProduct=0x0102)   # TL wireless LCD receiver
+
+if usb.core.find(**LCD):
+    raise SystemExit(0)
+receivers = list(usb.core.find(find_all=True, **RECEIVER))
+if not receivers:
+    raise SystemExit(0)
+for d in receivers:
+    try:
+        if d.is_kernel_driver_active(0):
+            d.detach_kernel_driver(0)
+        usb.util.claim_interface(d, 0)
+        d.write(0x01, bytes([0x17]) + bytes(63), 2000)
+        d.read(0x81, 64, 3000)
+        usb.util.release_interface(d, 0)
+    except usb.core.USBError as e:
+        print(f"receiver {d.bus}-{'.'.join(map(str, d.port_numbers))}: {e}")
+for _ in range(20):
+    if usb.core.find(**LCD):
+        time.sleep(2)  # let the rest enumerate
+        break
+    time.sleep(0.5)

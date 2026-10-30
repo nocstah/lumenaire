@@ -1,0 +1,38 @@
+{
+  "description": "Screen page: the preview is sending Fan 3's new video to its screen: \"Updating…\".",
+  "base": "screen-fan",
+  "previewFile": "preview.screens.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.fan2/state",
+      "value": "ready"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.fan2/error",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.pump/state",
+      "value": "ready"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/failed",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.fan3/state",
+      "value": "preparing"
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3"
+    }
+  }
+}

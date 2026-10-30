@@ -1,0 +1,18 @@
+#!/bin/bash
+# Omarchy theme-set hook: pair the PC's case lighting and LCD screens with the
+# Omarchy theme. Installed by `pc-lights install --hook` into
+# ~/.config/omarchy/hooks/theme-set.d/pc-lights.
+#
+# `pc-lights omarchy <slug>` maps the slug through
+# ~/.config/pc-lights/omarchy-map.json (or builds an "omarchy-<slug>" theme
+# with tools/auto-theme, which can take a few seconds), records it as the day
+# theme and queues a debounced apply. An apply can take from seconds to a few
+# minutes, so it runs as its own transient user unit: this hook returns at
+# once, never blocks the theme switch and always exits 0. Its output goes to
+# the journal: journalctl --user -t pc-lights -u 'pc-lights-omarchy-*'.
+slug=${1:-}
+pcl=$HOME/.local/bin/pc-lights
+[[ -n $slug && -x $pcl ]] || exit 0
+systemd-run --user --quiet --collect --unit="pc-lights-omarchy-$(date +%s%N)" \
+  -- "$pcl" omarchy "$slug" 2>&1 | logger -t pc-lights
+exit 0

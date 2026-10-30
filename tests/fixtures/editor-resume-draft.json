@@ -1,0 +1,10 @@
+{
+  "description": "Editor reopened on Sakura, whose draft still holds changes: one line says so, Keep editing or Discard.",
+  "base": "editor-role-override",
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "resumed": true
+    }
+  }
+}

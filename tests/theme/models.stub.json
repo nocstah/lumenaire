@@ -1,0 +1,10 @@
+{
+  "_note": "stub of lib/pc-lights/models.json (WP2) for tests/theme: the plan §4 model table",
+  "lcd": {
+    "TlFlexLcd": {"aspect": "square", "media": [400, 400], "orientation": 0},
+    "HydroShift2OledCurveLcd": {"aspect": "wide-curve", "media": [2288, 1080], "orientation": 90},
+    "UniversalScreen": {"aspect": "strip", "media": [1920, 480], "orientation": 90},
+    "HydroShiftLcd": {"aspect": "round", "media": [480, 480], "orientation": 0}
+  },
+  "class": {"Tlv2Led": "tl_fan", "WirelessStrimer": "strimer", "HydroShift2OledCurveLed": "ring", "UniversalScreenLighting": "ring"}
+}

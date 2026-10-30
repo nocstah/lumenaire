@@ -1,0 +1,31 @@
+hwmon0	name	nvme
+hwmon0	device	/sys/devices/pci0000:00/0000:00:1b.0/0000:02:00.0/nvme/nvme0
+hwmon0	temp1_label	Composite
+hwmon0	temp1_input	38850
+hwmon1	name	acpitz
+hwmon1	device	
+hwmon1	temp1_input	27800
+hwmon2	name	jc42
+hwmon2	device	/sys/devices/pci0000:00/0000:00:1f.4/i2c-0/0-0018
+hwmon2	temp1_input	41250
+hwmon3	name	jc42
+hwmon3	device	/sys/devices/pci0000:00/0000:00:1f.4/i2c-0/0-0019
+hwmon3	temp1_input	40750
+hwmon4	name	coretemp
+hwmon4	device	/sys/devices/platform/coretemp.0
+hwmon4	temp1_label	Package id 0
+hwmon4	temp2_label	Core 0
+hwmon4	temp3_label	Core 4
+hwmon4	temp1_input	45000
+hwmon4	temp2_input	41000
+hwmon4	temp3_input	43000
+hwmon5	name	amdgpu
+hwmon5	device	/sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/0000:02:00.0/0000:03:00.0
+hwmon5	temp1_label	edge
+hwmon5	temp2_label	junction
+hwmon5	temp3_label	mem
+hwmon5	temp1_input	44000
+hwmon5	temp2_input	51000
+hwmon5	temp3_input	56000
+hwmon5	device/boot_vga	1
+hwmon5	device/mem_info_vram_total	25753026560

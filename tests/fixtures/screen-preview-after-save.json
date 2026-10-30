@@ -1,0 +1,23 @@
+{
+  "description": "Screen page: the 8.8\" screen's layout isn't installed yet (the preview skips it): \"Shows after you save\".",
+  "base": "editor-screens",
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/6/template/installed",
+      "value": false
+    },
+    {
+      "op": "replace",
+      "path": "/screens/6/changed",
+      "value": true
+    }
+  ],
+  "previewFile": "preview.screens.json",
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.main"
+    }
+  }
+}

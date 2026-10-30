@@ -1,0 +1,10 @@
+{
+  "description": "Screen page on another PC: the round Galahad pump, one video, brightness 70 %.",
+  "base": "editor-screens-other",
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.pump"
+    }
+  }
+}

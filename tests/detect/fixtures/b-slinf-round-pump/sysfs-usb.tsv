@@ -1,0 +1,4 @@
+3-1	0416	8040		wch.cn	SLV3TX_V1.6
+3-2	0416	8041		wch.cn	SLV3RX_V1.6
+3-4	0416	7398	d0d0d0d000000001	lianli	HydroShift LCD
+usb3	1d6b	0002	0000:0c:00.3	Linux xhci-hcd	xHCI Host Controller

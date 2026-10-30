@@ -1,0 +1,8 @@
+{
+  "description": "With the editor: the keyboard cursor on Arctic shows its ring and the pencil; e edits it, the menu key opens its menu.",
+  "base": "normal-editor",
+  "ui": {
+    "keyNav": true,
+    "cursor": 3
+  }
+}

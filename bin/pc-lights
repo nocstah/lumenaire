@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# pc-lights — the old name of the Lumenaire engine, kept as an alias: the
+# systemd units, the Omarchy hook, scripts and muscle memory all call it.
+# A wrapper, not a symlink: an Omarchy plugin folder may not hold symlinks.
+exec "$(dirname "$(readlink -f "$0")")/lumenaire" "$@"

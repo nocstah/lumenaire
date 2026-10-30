@@ -1,0 +1,26 @@
+{
+  "description": "Main page keyboard walk: j ×4 down the grid, l to Hellfire, the menu key opens its menu (Edit, Duplicate, Rename…, Delete…).",
+  "base": "normal-editor",
+  "ui": {
+    "keys": [
+      {
+        "text": "j"
+      },
+      {
+        "text": "j"
+      },
+      {
+        "text": "j"
+      },
+      {
+        "text": "j"
+      },
+      {
+        "text": "l"
+      },
+      {
+        "key": 16777301
+      }
+    ]
+  }
+}

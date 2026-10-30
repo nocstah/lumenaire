@@ -1,0 +1,25 @@
+{
+  "description": "Editor: the preview worker is sending the edit.",
+  "base": "editor-role-override",
+  "previewFile": "preview.live.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/theme",
+      "value": "sakura"
+    },
+    {
+      "op": "replace",
+      "path": "/state",
+      "value": "queued"
+    },
+    {
+      "op": "replace",
+      "path": "/applied_rev",
+      "value": 13
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

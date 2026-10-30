@@ -1,0 +1,11 @@
+{
+  "description": "Editor: Advanced open: keep colours vivid on LEDs, colour correction for this PC, the heat warning colour.",
+  "base": "editor-role-override",
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "advanced": true,
+      "cursor": "calib"
+    }
+  }
+}

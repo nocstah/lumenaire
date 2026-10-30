@@ -1,0 +1,29 @@
+{
+  "description": "New theme keyboard walk: Enter, Enter chooses A colour, l l moves to a third colour, j j reaches Next.",
+  "base": "editor-card-menu",
+  "ui": {
+    "page": "new",
+    "wizard": {
+      "keys": [
+        {
+          "key": 16777220
+        },
+        {
+          "key": 16777220
+        },
+        {
+          "text": "l"
+        },
+        {
+          "text": "l"
+        },
+        {
+          "text": "j"
+        },
+        {
+          "text": "j"
+        }
+      ]
+    }
+  }
+}

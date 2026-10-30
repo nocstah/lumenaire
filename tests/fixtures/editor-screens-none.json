@@ -1,0 +1,169 @@
+{
+  "description": "Editor: a theme with no screen media at all (a new theme from a colour): every tile is the empty plate with its screen's glyph; the tooltips say each screen keeps what it shows.",
+  "base": "editor-screens",
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/0/media",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/0/entry",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/0/source",
+      "value": "none"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/0/clips",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/1/media",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/1/entry",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/1/source",
+      "value": "none"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/1/clips",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/entry",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/source",
+      "value": "none"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/clips",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/3/media",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/3/entry",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/3/source",
+      "value": "none"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/3/clips",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/4/media",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/4/entry",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/4/source",
+      "value": "none"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/4/clips",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/5/media",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/5/entry",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/5/source",
+      "value": "none"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/5/clips",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/6/media",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/6/entry",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/6/source",
+      "value": "none"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/6/clips",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/6/template",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/6/modes",
+      "value": {
+        "current": "media",
+        "can": [
+          "media"
+        ]
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/screens/5/pending",
+      "value": null
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

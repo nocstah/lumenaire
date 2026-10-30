@@ -1,0 +1,12 @@
+{
+  "description": "Editor: Fan 2's new video couldn't be prepared (media.job.failed.json: a codec this PC can't read): the urgent dot on its tile and one line with Choose another.",
+  "base": "editor-screens-changed",
+  "jobs": [
+    {
+      "file": "media.job.failed.json"
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

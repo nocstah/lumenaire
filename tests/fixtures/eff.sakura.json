@@ -1,0 +1,179 @@
+{
+  "_about": "Sakura: a calm cherry-blossom night in soft pinks and white with a touch of plum on near-black, paired with Omarchy rose-pine. Original art generated 2026-09-24 with imagegen (src/ holds prompts, renders and sidecars) and animated procedurally by src/animate.py into seamless 12 s loops: a blossom branch swaying before a full moon with falling petals, two koi circling a moonlit pond with petals floating on the current, a torii garden drifting under falling petals on the pump, and a lantern-hung branch with falling petals behind a script clock, date and weather on the 8.8\".",
+  "fans": {
+    "top": "ff4a9a",
+    "bottom": "ff1a70",
+    "_note": "top = inner octagon edges (LEDs 0-12), bottom = outer bars (13-25)"
+  },
+  "strimers": {
+    "mode": "Drizzling",
+    "colors": [
+      "ff4a9a",
+      "ff1a70",
+      "ff7ab6",
+      "ff2a80",
+      "ff4a9a",
+      "d4106a"
+    ],
+    "speed": 1,
+    "direction": "Clockwise"
+  },
+  "rings": "ff3a8a",
+  "gpu": {
+    "gradient": [
+      "ff6aa8",
+      "e0106a"
+    ]
+  },
+  "board": "ff2a80",
+  "ram": {
+    "gradient": [
+      "ff7ab6",
+      "ff3a8a",
+      "c0105a"
+    ],
+    "span": "across"
+  },
+  "alert": {
+    "color": "ff0000"
+  },
+  "screens": [
+    {
+      "_where": "3-fan group, screen 1 (rotated 180)",
+      "serial": "f1f1f1f100000001",
+      "type": "video",
+      "path": "media/fan-a.mp4",
+      "orientation": 180
+    },
+    {
+      "_where": "3-fan group, screen 2",
+      "serial": "f1f1f1f100000002",
+      "type": "video",
+      "path": "media/fan-c.mp4",
+      "orientation": 180
+    },
+    {
+      "_where": "3-fan group, screen 3",
+      "serial": "f1f1f1f100000003",
+      "type": "video",
+      "path": "media/fan-e.mp4",
+      "orientation": 180
+    },
+    {
+      "_where": "2-fan group, screen 1",
+      "serial": "f1f1f1f100000004",
+      "type": "video",
+      "path": "media/fan-b.mp4",
+      "orientation": 0
+    },
+    {
+      "_where": "2-fan group, screen 2",
+      "serial": "f1f1f1f100000005",
+      "type": "video",
+      "path": "media/fan-d.mp4",
+      "orientation": 0
+    },
+    {
+      "_where": "HydroShift II OLED Curve pump",
+      "serial": "a1a1a1a100000006",
+      "type": "video",
+      "path": "media/pump.mp4",
+      "orientation": 90,
+      "clips": [
+        "media/pump"
+      ],
+      "rotate": 300
+    },
+    {
+      "_where": "8.8\" Universal Screen",
+      "serial": "b8b8b8b800000007",
+      "type": "custom",
+      "template_id": "us88-sakura",
+      "orientation": 90
+    }
+  ],
+  "templates": [
+    "us88/us88-sakura.template.json"
+  ],
+  "_led_note": "2026-09-24: first pass (pale pinks ffd0e6/fff0f6, white stops) read too white on the LEDs per the user; pinks need low green (G/R <~0.4)",
+  "_roles": {
+    "fans.side": {
+      "fans": {
+        "top": "ff4a9a",
+        "bottom": "ff1a70"
+      }
+    },
+    "fans.bottom": {
+      "fans": {
+        "top": "ff4a9a",
+        "bottom": "ff1a70"
+      }
+    },
+    "fans.top": {
+      "fans": {
+        "top": "ff4a9a",
+        "bottom": "ff1a70"
+      }
+    },
+    "strimer.atx24": {
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "ff4a9a",
+          "ff1a70",
+          "ff7ab6",
+          "ff2a80",
+          "ff4a9a",
+          "d4106a"
+        ],
+        "speed": 1,
+        "direction": "Clockwise"
+      }
+    },
+    "strimer.gpu": {
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "ff4a9a",
+          "ff1a70",
+          "ff7ab6",
+          "ff2a80",
+          "ff4a9a",
+          "d4106a"
+        ],
+        "speed": 1,
+        "direction": "Clockwise"
+      }
+    },
+    "pump.ring": {
+      "rings": "ff3a8a"
+    },
+    "screen.main.ring": {
+      "rings": "ff3a8a"
+    },
+    "gpu": {
+      "gpu": {
+        "gradient": [
+          "ff6aa8",
+          "e0106a"
+        ]
+      }
+    },
+    "board": {
+      "board": "ff2a80"
+    },
+    "board.argb": {
+      "board": "ff2a80"
+    },
+    "ram": {
+      "ram": {
+        "gradient": [
+          "ff7ab6",
+          "ff3a8a",
+          "c0105a"
+        ],
+        "span": "across"
+      }
+    }
+  }
+}

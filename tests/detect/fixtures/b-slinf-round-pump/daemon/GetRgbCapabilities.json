@@ -1,0 +1,5 @@
+{"status":"ok","data":[
+ {"device_id":"wireless:02:00:00:00:03:01","effect_regions":["All"],"render_profile":{"led_count":132},"total_led_count":132},
+ {"device_id":"wireless:02:00:00:00:03:02","effect_regions":["All"],"render_profile":{"led_count":176},"total_led_count":176},
+ {"device_id":"hid:0416:7398:3-4","effect_regions":["All"],"render_profile":{"led_count":24},"total_led_count":24}
+]}

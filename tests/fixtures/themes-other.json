@@ -1,0 +1,401 @@
+[
+  {
+    "name": "aurora",
+    "about": "Aurora: a palette-only example, green and violet northern lights.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": false,
+    "omarchy_slugs": [],
+    "schema": 3,
+    "palette": {
+      "primary": "00ff9c",
+      "secondary": "7a2cff",
+      "accent": "00c8ff"
+    },
+    "colors": {
+      "fans_top": [
+        "#00ff9c"
+      ],
+      "fans_bottom": [
+        "#7a2cff"
+      ],
+      "rings": [
+        "#00c8ff"
+      ],
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "#00ff9c",
+          "#7a2cff",
+          "#00c8ff",
+          "#00ff9c",
+          "#7a2cff",
+          "#00c8ff"
+        ]
+      },
+      "gpu": [
+        "#00ff9c",
+        "#7a2cff"
+      ],
+      "board": [
+        "#00c8ff"
+      ],
+      "ram": [
+        "#00ff9c",
+        "#00c8ff",
+        "#7a2cff"
+      ]
+    },
+    "preview": null,
+    "preview_mtime": null,
+    "preview_stale": false,
+    "swatch": [
+      "#00ff9c",
+      "#7a2cff",
+      "#00c8ff",
+      "#00ff9c",
+      "#7a2cff",
+      "#00c8ff"
+    ],
+    "coverage": {
+      "summary": "full",
+      "roles": {
+        "gpu": "palette",
+        "board": "palette",
+        "board.argb": "palette",
+        "ram": "palette",
+        "keyboard": "unmanaged"
+      },
+      "counts": {
+        "theme": 0,
+        "palette": 4,
+        "none": 0,
+        "total": 4
+      },
+      "missing": []
+    }
+  },
+  {
+    "name": "ember",
+    "about": "Ember: a palette-only example, glowing coals.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": false,
+    "omarchy_slugs": [],
+    "schema": 3,
+    "palette": {
+      "primary": "ff4a00",
+      "secondary": "ff0030",
+      "accent": "ff8a1a"
+    },
+    "colors": {
+      "fans_top": [
+        "#ff4a00"
+      ],
+      "fans_bottom": [
+        "#ff0030"
+      ],
+      "rings": [
+        "#ff8a1a"
+      ],
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "#ff4a00",
+          "#ff0030",
+          "#ff8a1a",
+          "#ff4a00",
+          "#ff0030",
+          "#ff8a1a"
+        ]
+      },
+      "gpu": [
+        "#ff4a00",
+        "#ff0030"
+      ],
+      "board": [
+        "#ff8a1a"
+      ],
+      "ram": [
+        "#ff4a00",
+        "#ff8a1a",
+        "#ff0030"
+      ]
+    },
+    "preview": null,
+    "preview_mtime": null,
+    "preview_stale": false,
+    "swatch": [
+      "#ff4a00",
+      "#ff0030",
+      "#ff8a1a",
+      "#ff4a00",
+      "#ff0030",
+      "#ff8a1a"
+    ],
+    "coverage": {
+      "summary": "full",
+      "roles": {
+        "gpu": "palette",
+        "board": "palette",
+        "board.argb": "palette",
+        "ram": "palette",
+        "keyboard": "unmanaged"
+      },
+      "counts": {
+        "theme": 0,
+        "palette": 4,
+        "none": 0,
+        "total": 4
+      },
+      "missing": []
+    }
+  },
+  {
+    "name": "glacier",
+    "about": "Glacier: a palette-only example, cold blue ice.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": false,
+    "omarchy_slugs": [],
+    "schema": 3,
+    "palette": {
+      "primary": "40c8ff",
+      "secondary": "0038ff",
+      "accent": "a0f0ff"
+    },
+    "colors": {
+      "fans_top": [
+        "#40c8ff"
+      ],
+      "fans_bottom": [
+        "#0038ff"
+      ],
+      "rings": [
+        "#a0f0ff"
+      ],
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "#40c8ff",
+          "#0038ff",
+          "#a0f0ff",
+          "#40c8ff",
+          "#0038ff",
+          "#a0f0ff"
+        ]
+      },
+      "gpu": [
+        "#40c8ff",
+        "#0038ff"
+      ],
+      "board": [
+        "#a0f0ff"
+      ],
+      "ram": [
+        "#40c8ff",
+        "#a0f0ff",
+        "#0038ff"
+      ]
+    },
+    "preview": null,
+    "preview_mtime": null,
+    "preview_stale": false,
+    "swatch": [
+      "#40c8ff",
+      "#0038ff",
+      "#a0f0ff",
+      "#40c8ff",
+      "#0038ff",
+      "#a0f0ff"
+    ],
+    "coverage": {
+      "summary": "full",
+      "roles": {
+        "gpu": "palette",
+        "board": "palette",
+        "board.argb": "palette",
+        "ram": "palette",
+        "keyboard": "unmanaged"
+      },
+      "counts": {
+        "theme": 0,
+        "palette": 4,
+        "none": 0,
+        "total": 4
+      },
+      "missing": []
+    }
+  },
+  {
+    "name": "sakura",
+    "about": "Sakura: a calm cherry-blossom night in soft pinks and white with a touch of plum on near-black, paired with Omarchy rose-pine. Original art generated 2026-09-24 with imagegen (src/ holds prompts, renders and sidecars) and animated procedurally by src/animate.py into seamless 12 s loops: a blossom branch swaying before a full moon with falling petals, two koi circling a moonlit pond with petals floating on the current, a torii garden drifting under falling petals on the pump, and a lantern-hung branch with falling petals behind a script clock, date and weather on the 8.8\".",
+    "active": true,
+    "day": true,
+    "night": false,
+    "auto": false,
+    "known_good": false,
+    "omarchy_slugs": [
+      "rose-pine",
+      "sakura",
+      "sakura-light"
+    ],
+    "colors": {
+      "fans_top": [
+        "#ff4a9a"
+      ],
+      "fans_bottom": [
+        "#ff1a70"
+      ],
+      "rings": [
+        "#ff3a8a"
+      ],
+      "strimers": {
+        "mode": "Drizzling",
+        "colors": [
+          "#ff4a9a",
+          "#ff1a70",
+          "#ff7ab6",
+          "#ff2a80",
+          "#ff4a9a",
+          "#d4106a"
+        ]
+      },
+      "gpu": [
+        "#ff6aa8",
+        "#e0106a"
+      ],
+      "board": [
+        "#ff2a80"
+      ],
+      "ram": [
+        "#ff7ab6",
+        "#ff3a8a",
+        "#c0105a"
+      ],
+      "alert": "#ff0000"
+    },
+    "preview": null,
+    "preview_mtime": null,
+    "preview_stale": false,
+    "swatch": [
+      "#ff4a9a",
+      "#ff1a70",
+      "#ff3a8a",
+      "#ff7ab6",
+      "#ff2a80",
+      "#d4106a"
+    ],
+    "schema": 2,
+    "palette": null,
+    "coverage": {
+      "summary": "foreign",
+      "roles": {
+        "gpu": "theme",
+        "board": "theme",
+        "board.argb": "theme",
+        "ram": "theme",
+        "keyboard": "unmanaged"
+      },
+      "counts": {
+        "theme": 4,
+        "palette": 0,
+        "none": 0,
+        "total": 4
+      },
+      "missing": [
+        "screen.fan1",
+        "screen.pump",
+        "screen.main"
+      ]
+    }
+  },
+  {
+    "name": "synthwave",
+    "about": "Synthwave: Outrun night drive in hot magenta, cyan and violet (pairs with Omarchy retro-82). Original art generated 2026-09-24 (src/ holds prompts + imagegen sidecars and the Python generators), animated procedurally into seamless 12 s loops: a neon sun whose retro stripes slide down and thicken on fan A, chrome palms over a rippling sunset sea on fan B, and on the pump a sunset with mountains over a glowing perspective grid that scrolls toward you. The 8.8\" shows the sun-on-grid horizon with the time and BTC price on the smoked left third and GPU temp/load in a neon-edged panel, all in L-Connect's Hyperspace Race italic.",
+    "active": false,
+    "day": false,
+    "night": false,
+    "auto": false,
+    "known_good": true,
+    "omarchy_slugs": [
+      "retro-82"
+    ],
+    "colors": {
+      "fans_top": [
+        "#ff1a8c"
+      ],
+      "fans_bottom": [
+        "#00e5ff"
+      ],
+      "rings": [
+        "#ff2bd6"
+      ],
+      "strimers": {
+        "mode": "Wave",
+        "colors": [
+          "#ff2bd6",
+          "#9000ff",
+          "#00e5ff",
+          "#ff2bd6",
+          "#9000ff",
+          "#00e5ff"
+        ]
+      },
+      "gpu": [
+        "#00e5ff",
+        "#ff2bd6"
+      ],
+      "board": [
+        "#9000ff"
+      ],
+      "ram": [
+        "#ff2bd6",
+        "#7a00ff",
+        "#00e5ff"
+      ],
+      "alert": "#ffe600"
+    },
+    "preview": null,
+    "preview_mtime": null,
+    "preview_stale": false,
+    "swatch": [
+      "#ff1a8c",
+      "#00e5ff",
+      "#ff2bd6",
+      "#9000ff"
+    ],
+    "schema": 3,
+    "palette": {
+      "primary": "ff2a9a",
+      "secondary": "00e0ff",
+      "accent": "8a2aff"
+    },
+    "coverage": {
+      "summary": "leds-only",
+      "roles": {
+        "gpu": "theme",
+        "board": "theme",
+        "board.argb": "theme",
+        "ram": "theme",
+        "keyboard": "unmanaged"
+      },
+      "counts": {
+        "theme": 4,
+        "palette": 0,
+        "none": 0,
+        "total": 4
+      },
+      "missing": [
+        "screen.pump",
+        "screen.main"
+      ]
+    }
+  }
+]

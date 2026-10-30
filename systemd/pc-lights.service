@@ -1,0 +1,17 @@
+[Unit]
+Description=pc-lights: re-apply the saved OpenRGB lighting at login (GPU, board, RAM)
+# The schedule tick may apply a theme, which needs lianli-daemon up. On a PC
+# without lian-li-linux this ordering is simply ignored.
+After=lianli-daemon.service
+
+[Service]
+Type=oneshot
+# "-": a failing schedule tick must never cost the login its lighting.
+ExecStartPre=-%h/.local/bin/pc-lights schedule tick
+ExecStart=%h/.local/bin/pc-lights apply-openrgb
+# The tick can restart lianli-daemon (1-3 min); killing it mid-apply would
+# leave the daemon stopped.
+TimeoutStartSec=15min
+
+[Install]
+WantedBy=default.target

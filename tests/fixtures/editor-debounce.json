@@ -1,0 +1,43 @@
+{
+  "description": "Editor: an edit made, the preview goes out in 1 s.",
+  "base": "editor-role-override",
+  "editorLocal": [
+    {
+      "op": "add",
+      "path": "/roles/fans.bottom",
+      "value": {
+        "inner": "ff1a8c"
+      }
+    }
+  ],
+  "service": {
+    "previewCountdown": 0.8,
+    "editPending": true
+  },
+  "previewFile": "preview.live.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/theme",
+      "value": "sakura"
+    },
+    {
+      "op": "replace",
+      "path": "/openrgb/state",
+      "value": "ok"
+    }
+  ],
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "expanded": [
+        "@fans",
+        "fans.bottom"
+      ],
+      "cursor": "field:fans.bottom:inner",
+      "more": [
+        "@fans"
+      ]
+    }
+  }
+}

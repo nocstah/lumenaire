@@ -1,0 +1,842 @@
+#!/usr/bin/env bash
+# shellcheck source-path=SCRIPTDIR
+# lumenaire — the Lumenaire engine: switch every light (and optionally the
+# LCD screens) on the desktop on or off, pick the theme they show, and keep
+# that across logins. bin/pc-lights is an alias (a two-line exec wrapper):
+# the units, the hook, the log tag (pc-lights), the state paths
+# (~/.config/pc-lights, ~/.cache/pc-lights) and the PCL_* variables keep the
+# old name, and so does the text below, since every command works under
+# either name.
+#
+#   pc-lights on|off [lights|screens|all]   (default target: lights)
+#   pc-lights status
+#   pc-lights scheme [name]                 (list themes / pick the one "on" uses)
+#   pc-lights render [name]                 (dry run: print what "on" would write)
+#   pc-lights schedule [status|on|off|tick] (day/night theme switching)
+#   pc-lights clips [status|on|off|next]    (rotate a screen's clips, see "clips")
+#   pc-lights omarchy <slug>                (pair with an Omarchy theme; hook entry)
+#   pc-lights apply-openrgb                 (login service entry point)
+#   pc-lights ram-drift [status|run]        (a drifting RAM gradient; run = the
+#                                            animator lumenaire-ram-drift.service starts)
+#   pc-lights pick <name>                   (the UI's choice: day theme + apply, even at night)
+#   pc-lights clips pause|resume            (off/on that freeze and resume the countdown)
+#   pc-lights status --json | themes --json (contract v1 for the Lumenaire for Omarchy plugin)
+#   pc-lights previews [--force] [name...]  (preview images in ~/.cache/pc-lights/previews)
+#   pc-lights --detach <cmd ...>            (queue pick/on/off/schedule/clips next/previews/
+#                                            detect as a transient user unit; see "detach")
+#   pc-lights detect | profile | sensors --json | explain <theme> | migrate | install
+#                                           (hardware profile and portability, plan WP2-WP8;
+#                                            lib/pc-lights/{detect,profile,sensors,theme,migrate,install}.sh)
+#   pc-lights theme <verb> ...              (the theme editor: lib/pc-lights/editor.sh; "theme
+#                                            preview" shows a draft live: lib/pc-lights/preview.sh;
+#                                            "theme screens|media" edit its screens)
+#   pc-lights media <verb> ...              (screen media: list, probe, prepare, jobs, gc;
+#                                            lib/pc-lights/media.sh)
+#   pc-lights desktop [--theme T] [--json] | set | reset | sync | toggle | watch
+#                                           (the desktop wallpaper per theme: the Motion
+#                                            Wallpaper plugin; lib/pc-lights/desktop.sh)
+#
+# Lian Li gear goes through the lian-li-linux daemon config
+# (~/.config/lianli/config.json); GPU, motherboard and RAM go through the
+# OpenRGB CLI, whose Lian Li detectors are off.
+set -euo pipefail
+
+CFG_LIVE=$HOME/.config/lianli/config.json
+TPL_LIVE=$HOME/.config/lianli/lcd_templates.json
+# The builders write $CFG/$TPL_FILE; they point at scratch copies while a new
+# config is built (the daemon keeps running) and at the live files otherwise.
+CFG=$CFG_LIVE
+TPL_FILE=$TPL_LIVE
+SOCK=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/lianli-daemon.sock
+STATE_DIR=$HOME/.config/pc-lights
+THEME_DIR=$STATE_DIR/themes
+CACHE=$HOME/.cache/pc-lights
+LOCK=$CACHE/lock
+SCHED=$STATE_DIR/schedule.json
+DAY_SCHEME=$STATE_DIR/day-scheme
+BOUNDARY=$CACHE/schedule-boundary
+CLIPS_STATE=$CACHE/clips.json
+PENDING=$CACHE/pending
+PREVIEWS=$CACHE/previews
+TMP=$(mktemp -d)
+mkdir -p "$CACHE" "$PENDING" "$PREVIEWS"
+
+# Run bookkeeping for the shell plugin (see claim_run): what this run does,
+# how it ended, and the transient unit it runs in (set by --detach and by the
+# Omarchy pairing, so the UI can match a request to its result).
+RUN_OP= RUN_TARGET= RUN_THEME= RUN_STARTED= RUN_ERR= RUN_FALLBACK= RUN_SKIPPED=
+RUN_MISSED=()
+PCL_UNIT=${PCL_UNIT:-}
+
+# die() inside $(...) runs in a subshell, so the message also goes to a file
+# the EXIT trap reads.
+die() {
+  RUN_ERR="$*"
+  printf '%s' "$*" >"$TMP/run-err" 2>/dev/null || true
+  echo "pc-lights: $*" >&2; exit 1
+}
+log() { echo "pc-lights: $*" >&2; logger -t pc-lights -- "$*" 2>/dev/null || true; }
+
+# Never leave lianli-daemon stopped. DAEMON_STOPPED is set from the moment
+# this run stops it until it starts it again; if the run dies in between (a
+# failed command under set -e, die, or SIGTERM from a unit timeout), the EXIT
+# trap starts it. If the new config was already installed and the daemon has
+# not accepted it yet (CFG_GOOD), the previous config is put back first.
+# Restart=on-failure never covers this: a stop is a clean exit.
+DAEMON_STOPPED= INSTALLED= CFG_GOOD=
+on_exit() {
+  local rc=$?
+  if [[ -n $DAEMON_STOPPED ]]; then
+    if [[ -n $INSTALLED && -z $CFG_GOOD && -f $TMP/prev/config.json ]]; then
+      cp "$TMP/prev/config.json" "$CFG_LIVE" 2>/dev/null || true
+      if [[ -f $TMP/prev/tpl.json ]]; then cp "$TMP/prev/tpl.json" "$TPL_LIVE" 2>/dev/null || true; fi
+      log "run failed (exit $rc) after installing a new config; previous config restored"
+    fi
+    log "run failed (exit $rc) with lianli-daemon stopped; starting it again"
+    systemctl --user start lianli-daemon 2>/dev/null || log "could not start lianli-daemon"
+  fi
+  # A run that claimed the lock for a change leaves its result for the UI,
+  # however it ended (die, set -e, SIGTERM from a unit stop or timeout).
+  if [[ -n $RUN_OP ]]; then
+    if [[ -z $RUN_ERR && -s $TMP/run-err ]]; then RUN_ERR=$(<"$TMP/run-err"); fi
+    if [[ -z $RUN_ERR && $rc != 0 ]]; then
+      case $rc in
+        143) RUN_ERR="stopped (SIGTERM)" ;;
+        130 | 129) RUN_ERR="interrupted (exit $rc)" ;;
+        *) RUN_ERR="exited with status $rc" ;;
+      esac
+    fi
+    if [[ $(jq -r .pid "$CACHE/busy.json" 2>/dev/null) == "$$" ]]; then rm -f "$CACHE/busy.json"; fi
+    write_last_run "$rc" || true
+  fi
+  if [[ -n $PCL_UNIT ]]; then rm -f "$PENDING/$PCL_UNIT.json"; fi
+  # A theme preview worker that died mid-loop hands its session back, so the
+  # next request or the reaper starts another one.
+  if [[ -n ${PV_WORKER_ID:-} ]]; then
+    # shellcheck disable=SC2016 # jq, not shell
+    pv_upd "$PV_WORKER_ID" --arg e "the preview worker stopped (exit $rc)" '.worker = false | .error = (.error // $e)' 2>/dev/null || true
+  fi
+  rm -rf "$TMP"
+}
+trap on_exit EXIT
+trap 'exit 143' TERM
+trap 'exit 130' INT
+trap 'exit 129' HUP
+
+# ---- library --------------------------------------------------------------------
+# The rest of the engine lives in lib/pc-lights/ (portability plan §11), found
+# beside this script's real path, so a symlinked ~/.local/bin/pc-lights still
+# finds it; PCL_LIB overrides. The modules only define functions and
+# constants, and load before the PCL_TEST_OVERRIDES hook so a test can
+# replace anything they define.
+PCL_LIB=${PCL_LIB:-$(dirname "$(readlink -f "$0")")/../lib/pc-lights}
+for pcl_m in theme backend-lianli backend-openrgb backends json previews profile detect sensors migrate install preview desktop; do
+  [[ -f $PCL_LIB/$pcl_m.sh ]] || die "missing $PCL_LIB/$pcl_m.sh (set PCL_LIB to the lib/pc-lights folder)"
+done
+unset pcl_m
+# shellcheck source=../lib/pc-lights/theme.sh
+source "$PCL_LIB/theme.sh"
+# shellcheck source=../lib/pc-lights/backend-lianli.sh
+source "$PCL_LIB/backend-lianli.sh"
+# shellcheck source=../lib/pc-lights/backend-openrgb.sh
+source "$PCL_LIB/backend-openrgb.sh"
+# shellcheck source=../lib/pc-lights/backends.sh
+source "$PCL_LIB/backends.sh"
+# shellcheck source=../lib/pc-lights/json.sh
+source "$PCL_LIB/json.sh"
+# shellcheck source=../lib/pc-lights/previews.sh
+source "$PCL_LIB/previews.sh"
+# shellcheck source=../lib/pc-lights/profile.sh
+source "$PCL_LIB/profile.sh"
+# shellcheck source=../lib/pc-lights/detect.sh
+source "$PCL_LIB/detect.sh"
+# shellcheck source=../lib/pc-lights/sensors.sh
+source "$PCL_LIB/sensors.sh"
+# shellcheck source=../lib/pc-lights/migrate.sh
+source "$PCL_LIB/migrate.sh"
+# shellcheck source=../lib/pc-lights/install.sh
+source "$PCL_LIB/install.sh"
+# The theme editor (builder A's editor.sh) before the preview, which stands
+# in for any draft function editor.sh doesn't define (yet).
+if [[ -f $PCL_LIB/editor.sh ]]; then
+  # shellcheck source=/dev/null
+  source "$PCL_LIB/editor.sh"
+fi
+# The screen media pipeline (media list, prepare, jobs, thumbnails, GC;
+# screens plan §2): optional, like the editor. Without it "media" says so and
+# the editor works without probes, thumbnails or jobs. The read-only reports
+# the plugin polls (status, themes and sensors --json) never use it, and
+# reading its ~90 KB costs them a few ms a call, so they go without. So do they
+# without the desktop wallpaper module: status --json reads its files itself
+# (json.sh, DESKTOP_V14_JQ).
+case ${1:-}:${2:-} in
+  status:--json | themes:--json | sensors:--json) ;;
+  *)
+    if [[ -f $PCL_LIB/media.sh ]]; then
+      # shellcheck source=/dev/null
+      source "$PCL_LIB/media.sh"
+    fi
+    # shellcheck source=../lib/pc-lights/desktop.sh
+    source "$PCL_LIB/desktop.sh" ;;
+esac
+if ! declare -F media_cmd >/dev/null; then
+  media_cmd() { die "media: the screen media pipeline is not installed (lib/pc-lights/media.sh): not implemented"; }
+fi
+# shellcheck source=../lib/pc-lights/preview.sh
+source "$PCL_LIB/preview.sh"
+
+# The hook, the schedule timer, the login unit and manual runs all change the
+# same config and restart the same daemon; interleaved, one run's stop lands in
+# the middle of another's apply. So every state change holds this lock.
+take_lock() {
+  exec 8>"$LOCK"
+  flock -w 600 8 || die "another pc-lights run held the lock for 10 min; gave up"
+  LOCK_HELD=1
+}
+drop_lock() { exec 8>&-; LOCK_HELD=; }
+
+# ---- run bookkeeping (read by "status --json") ----------------------------
+# busy.json: the run that holds the lock for a change, and its current step.
+# last-run.json: how the last such run ended. pending/<unit>.json: a request
+# queued in a transient unit that hasn't taken the lock yet. Only runs that
+# change something claim: the per-minute schedule tick and the clip timer
+# stay quiet unless they act. Every write is tmp + mv and can't trip set -e.
+nul_jq='def n: if . == "" then null else . end;'
+put_json() {   # put_json <file>: stdin -> file, atomically; empty input changes nothing
+  if cat >"$1.$$.tmp" && [[ -s $1.$$.tmp ]]; then mv -f "$1.$$.tmp" "$1" || true; fi
+  rm -f "$1.$$.tmp"
+}
+
+# claim_run <op> [target] [theme]; the lock must be held.
+claim_run() {
+  RUN_OP=$1 RUN_TARGET=${2:-} RUN_THEME=${3:-} RUN_STARTED=$EPOCHSECONDS
+  jq -nc --argjson pid $$ --arg op "$RUN_OP" --arg target "$RUN_TARGET" --arg theme "$RUN_THEME" \
+    --arg unit "$PCL_UNIT" --argjson since "$RUN_STARTED" "$nul_jq"'
+    {v: 1, pid: $pid, op: $op, target: ($target | n), theme: ($theme | n), unit: ($unit | n),
+     step: "waiting", since: $since}' 2>/dev/null | put_json "$CACHE/busy.json" || true
+  if [[ -n $PCL_UNIT ]]; then rm -f "$PENDING/$PCL_UNIT.json"; fi
+}
+
+# progress <step>: what the claimed run is doing now ("lian li", "openrgb", ...).
+progress() {
+  [[ -n $RUN_OP ]] || return 0
+  jq -c --arg s "$1" '.step = $s' "$CACHE/busy.json" 2>/dev/null | put_json "$CACHE/busy.json" || true
+}
+
+write_last_run() {
+  local rc=$1
+  jq -nc --arg op "$RUN_OP" --arg target "$RUN_TARGET" --arg theme "$RUN_THEME" --arg unit "$PCL_UNIT" \
+    --argjson rc "$rc" --argjson started "${RUN_STARTED:-$EPOCHSECONDS}" --argjson ended "$EPOCHSECONDS" \
+    --arg error "$RUN_ERR" --arg fallback "$RUN_FALLBACK" --arg skipped "$RUN_SKIPPED" "$nul_jq"'
+    {v: 1, op: $op, target: ($target | n), theme: ($theme | n), unit: ($unit | n), rc: $rc,
+     started: $started, ended: $ended, error: ($error | n), fallback: ($fallback != ""),
+     skipped: ($skipped != ""), missed_devices: $ARGS.positional}' --args "${RUN_MISSED[@]}" 2>/dev/null |
+    put_json "$CACHE/last-run.json"
+}
+
+# Stop the debounced Omarchy applies that haven't fired yet (the latest
+# request wins) and drop their pending entries. A timer stays active until
+# its service ends, and stopping it doesn't stop a switch that already fired
+# and waits for the lock: that one keeps its entry, and "switch" drops out on
+# its own once it sees the newer request.
+stop_apply_timers() {
+  local u
+  for u in $(systemctl --user list-units --plain --no-legend --no-pager 'pc-lights-apply-*.timer' 2>/dev/null | awk '{print $1}'); do
+    u=${u%.timer}
+    if systemctl --user is-active --quiet "$u.service" 2>/dev/null; then continue; fi
+    rm -f "$PENDING/$u.json"
+    systemctl --user stop "$u.timer" 2>/dev/null || true
+  done
+}
+
+# The saved on/off state of the lights and of the screens.
+lights_state() { cat "$STATE_DIR/lights" 2>/dev/null || echo on; }
+screens_state() { cat "$STATE_DIR/screens" 2>/dev/null || echo on; }
+
+# ---- day/night schedule -------------------------------------------------
+# schedule.json: {"enabled", "night_theme", "night_start", "night_end"} (HH:MM,
+# the window may cross midnight). day-scheme holds the user's day theme.
+# The timer only acts once per boundary (stored in $BOUNDARY), so a manual
+# theme picked at night holds until the next boundary.
+sched() { jq -r "$1" "$SCHED" 2>/dev/null; }
+sched_enabled() { [[ $(sched '.enabled // false') == true ]]; }
+
+# Print "<ISO time of the last boundary> night|day" for now.
+last_boundary() {
+  local s e now best=0 kind=day t d
+  s=$(sched '.night_start // "00:00"'); e=$(sched '.night_end // "07:00"')
+  [[ $s == "$e" ]] && { echo "never day"; return; }
+  now=$(date +%s)
+  for d in today yesterday; do
+    t=$(date -d "$d $s" +%s); if (( t <= now && t > best )); then best=$t kind=night; fi
+    t=$(date -d "$d $e" +%s); if (( t <= now && t > best )); then best=$t kind=day; fi
+  done
+  echo "$(date -d "@$best" +%FT%H:%M) $kind"
+}
+next_boundary() {
+  local s e now best=0 t d
+  s=$(sched '.night_start // "00:00"'); e=$(sched '.night_end // "07:00"')
+  now=$(date +%s)
+  for d in today tomorrow; do
+    for t in "$(date -d "$d $s" +%s)" "$(date -d "$d $e" +%s)"; do
+      if (( t > now && (best == 0 || t < best) )); then best=$t; fi
+    done
+  done
+  date -d "@$best" '+%F %H:%M'
+}
+is_night() { sched_enabled && [[ $(last_boundary) == *" night" ]]; }
+day_scheme() {
+  local d; d=$(cat "$DAY_SCHEME" 2>/dev/null || true)
+  theme_exists "$d" && echo "$d" || active_name
+}
+mark_boundary() { sched_enabled && last_boundary >"$BOUNDARY" || true; }
+
+# Remember a theme the user chose as their day theme. Picking the night theme
+# during the night is a night choice, not a new day theme.
+set_day_scheme() {
+  local name=$1
+  if is_night && [[ $name == "$(sched '.night_theme')" ]]; then return 0; fi
+  echo "$name" >"$DAY_SCHEME"
+}
+
+# Switch to a theme and, if the lights are on, apply it. Lock must be held.
+# The new name is saved only once the apply went through, so a failed switch
+# leaves the old theme active and a later switch to the same theme retries.
+# $2 = force: apply even when it is already active (the UI's re-apply).
+switch_to() {
+  local name=$1 force=${2:-}
+  theme_exists "$name" || die "no theme $THEME_DIR/$name/theme.json"
+  [[ -z $force && $name == "$(active_name)" ]] && { echo "pc-lights: $name already active"; return 0; }
+  validate_theme "$name"
+  if [[ $(lights_state) == on ]]; then
+    # A live theme preview gives the case back first (the Lian Li part now;
+    # the apply below covers OpenRGB). No preview: nothing happens here.
+    local op=$RUN_OP
+    case $op in schedule-tick) op=schedule ;; switch | "") op=omarchy ;; esac
+    preview_yield "$op" "$name"
+    log "applying theme $name"
+    THEME=$name
+    progress "lian li"
+    lianli_lights on
+    progress openrgb
+    apply_openrgb
+    THEME=
+  else
+    log "theme set to $name (lights are off, applied at the next 'on')"
+  fi
+  echo "$name" >"$STATE_DIR/scheme"
+}
+
+schedule_tick() {
+  preview_reap_locked   # an abandoned theme preview ends here too (no session: no-op)
+  sched_enabled || return 0
+  local b want
+  b=$(last_boundary)
+  [[ $b == never* ]] && return 0
+  [[ $(cat "$BOUNDARY" 2>/dev/null) == "$b" ]] && return 0   # handled; manual choices hold
+  # A theme preview is running: leave the boundary unhandled and try again
+  # next minute (bounded: an abandoned preview ends by heartbeat or idle).
+  if preview_live; then log "schedule: deferred while a theme preview runs"; return 0; fi
+  if [[ $b == *" night" ]]; then want=$(sched '.night_theme'); else want=$(day_scheme); fi
+  if ! theme_exists "$want"; then
+    log "schedule: theme '$want' does not exist; staying on $(active_name)"
+    echo "$b" >"$BOUNDARY"; return 0
+  fi
+  # Daemon down (early login): retry next minute instead of marking it done.
+  if [[ $want != "$(active_name)" && $(lights_state) == on ]] && ! systemctl --user is-active -q lianli-daemon; then
+    log "schedule: lianli-daemon not running yet; will retry"; return 0
+  fi
+  # Marked before applying so a failing apply can't restart the daemon every minute.
+  echo "$b" >"$BOUNDARY"
+  log "schedule: boundary $b -> $want"
+  claim_run schedule-tick "" "$want"
+  switch_to "$want"
+}
+
+schedule_status() {
+  if [[ ! -f $SCHED ]]; then echo "schedule: not configured ($SCHED)"; return; fi
+  echo "schedule: $(sched 'if .enabled then "enabled" else "disabled" end'), night $(sched .night_start)-$(sched .night_end) -> $(sched .night_theme)"
+  echo "now: $(last_boundary | awk '{print $2}') (last boundary $(last_boundary | awk '{print $1}'), handled: $(cat "$BOUNDARY" 2>/dev/null || echo none))"
+  echo "next boundary: $(next_boundary)"
+  echo "day theme: $(day_scheme); active: $(active_name); lights: $(lights_state)"
+  echo "timer: $(systemctl --user is-active pc-lights-schedule.timer 2>/dev/null || true)"
+}
+
+# ---- Omarchy pairing ----------------------------------------------------
+# omarchy-map.json maps Omarchy theme slugs to pc-lights themes; "_default"
+# (or a mapped theme that doesn't exist yet) -> "auto": tools/auto-theme
+# builds themes/omarchy-<slug>/, and rebuilds it when the Omarchy theme's
+# colors.toml, wallpapers or selected wallpaper changed (a fast no-op when it
+# is up to date or its theme.json was edited by hand). The apply is debounced
+# in a transient timer so flipping themes quickly applies only the last one
+# and never blocks.
+
+# The omarchy-map.json entry for an Omarchy slug: a theme name, or "auto"
+# (unmapped with "_default" auto or unset, or no map at all).
+omarchy_mapped() {
+  jq -r --arg s "$1" '.[$s] // ._default // "auto"' "$STATE_DIR/omarchy-map.json" 2>/dev/null || echo auto
+}
+
+# The theme an Omarchy slug pairs with, found the way omarchy_pair finds it
+# but with no side effect (nothing generated, no lock): the mapped theme when
+# it exists, else the auto-theme omarchy-<slug>, which may not be built yet.
+# The desktop wallpaper settings (desktop.sh) follow it.
+omarchy_theme_for() {
+  local name
+  name=$(omarchy_mapped "$1")
+  if [[ $name == auto ]] || ! theme_exists "$name"; then name=omarchy-$1; fi
+  echo "$name"
+}
+
+omarchy_pair() {
+  local slug=$1 name req=$CACHE/omarchy-requested asked
+  [[ $slug =~ ^[A-Za-z0-9._-]+$ ]] || die "bad omarchy theme slug '$slug'"
+  asked=$(date +%s%N)
+  echo "$slug" >"$req"
+  name=$(omarchy_mapped "$slug")
+  if [[ $name == auto ]] || ! theme_exists "$name"; then
+    name=omarchy-$slug
+    # A local tools/auto-theme wins; the shipped one is the fallback.
+    local gen=$STATE_DIR/tools/auto-theme
+    [[ -x $gen ]] || gen=$PCL_LIB/tools/auto-theme
+    if [[ -x $gen ]]; then
+      # Serialise generations and skip stale requests.
+      exec 7>"$CACHE/auto-theme.lock"; flock 7
+      [[ $(cat "$req") == "$slug" ]] || { log "omarchy: $slug superseded before generating"; return 0; }
+      if theme_exists "$name"; then
+        "$gen" "$slug" || log "omarchy: refreshing $name failed; keeping the existing one"
+      else
+        log "omarchy: generating theme $name"
+        "$gen" "$slug" || die "auto-theme failed for $slug"
+        theme_exists "$name" || die "auto-theme did not create $THEME_DIR/$name/theme.json"
+      fi
+      exec 7>&-
+    elif ! theme_exists "$name"; then
+      die "no mapping for '$slug' and $gen is missing"
+    fi
+  fi
+  [[ $(cat "$req") == "$slug" ]] || { log "omarchy: $slug superseded by $(cat "$req")"; return 0; }
+  take_lock
+  set_day_scheme "$name"
+  mark_boundary
+  if is_night; then
+    log "omarchy: $slug -> $name saved as the day theme; night theme stays until $(sched .night_end)"
+    return 0
+  fi
+  drop_lock
+  stop_apply_timers
+  # The queued unit carries PCL_UNIT, and pending/<unit>.json tells the UI
+  # what is coming and when; the run drops the file once it has the lock.
+  local unit pf
+  unit=pc-lights-apply-$(date +%s%N) pf=$PENDING/$unit.json
+  jq -nc --arg theme "$name" --arg unit "$unit" --arg slug "$slug" --argjson now "$EPOCHSECONDS" '
+    {v: 1, op: "switch", target: null, theme: $theme, unit: $unit, source: "omarchy", slug: $slug,
+     queued: $now, due: ($now + 5)}' | put_json "$pf" || true
+  if ! systemd-run --user --quiet --collect --on-active=5 --unit="$unit" --setenv=PCL_UNIT="$unit" \
+      --setenv=PCL_SLUG="$slug" --setenv=PCL_ASKED="$asked" \
+      -- "$HOME/.local/bin/pc-lights" switch "$name"; then
+    rm -f "$pf"
+    die "omarchy: could not queue the apply of $name"
+  fi
+  log "omarchy: $slug -> $name, applying in 5 s"
+}
+
+# ---- clip rotation --------------------------------------------------------
+# A theme screen with "clips" (files or folders, relative to the theme) and
+# "rotate" (seconds) cycles through them: "path" plays after a full theme
+# apply, then the timer swaps in the next clip with SetLcdMedia, which only
+# touches that one screen (~1 s, the other LCDs keep streaming; measured
+# 2026-09-24). The daemon keys screens as "serial:<config serial>", not the
+# bare serial: a wrong id appends a second entry, which the loader then drops
+# as a duplicate (keeping the old one), so the swap silently does nothing.
+clips_state() { cat "$STATE_DIR/clips" 2>/dev/null || echo on; }
+
+# One line per rotating screen of the active theme:
+# {serial, where, rotate, shuffle, clips: [absolute paths]}.
+rotating_screens() {
+  local root sf
+  root=$(theme_dir); sf=$(scheme_file)   # the compiled EFF for v3 (media paths stay relative to root)
+  jq -c --arg root "$root" '
+    def abs: if startswith("/") then . else $root + "/" + . end;
+    .screens[]? | select(.clips != null and (.rotate // 0) > 0)
+    | {serial, where: (._where // .serial), rotate, shuffle: (.shuffle // false),
+       clips: ([.path] + .clips | map(abs))}' "$sf" |
+    while IFS= read -r s; do
+      # Expand folders into their media files, drop repeats, keep the order.
+      jq -r '.clips[]' <<<"$s" | while IFS= read -r p; do
+        if [[ -d $p ]]; then
+          find "$p" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' -o -iname '*.webm' -o -iname '*.mkv' \) | sort
+        elif [[ -f $p ]]; then echo "$p"; fi
+      done | awk '!seen[$0]++' | jq -R . | jq -sc --argjson s "$s" '$s + {clips: .}'
+    done
+}
+
+# Swap one screen's media live. $1 = theme serial, $2 = absolute clip path.
+swap_clip() {
+  local ser=$1 clip=$2 map
+  map=$(usb_serial_map)
+  jq -c --slurpfile m "$map" --arg ser "$ser" --arg p "$clip" '
+    ($m[0][$ser] // null) as $hid
+    | [.lcds[] | select(.serial == $ser or ($hid != null and .serial == $hid))] | first
+    | if . == null then error("screen \($ser) is not in the daemon config") else . end
+    | {method: "SetLcdMedia", params: {device_id: ("serial:" + .serial), config: (.path = $p | .type = "video")}}' \
+    "$CFG_LIVE" >"$TMP/req-clip.json" || return 1
+  [[ -s $TMP/req-clip.json ]] || return 1
+  daemon_guarded "$TMP/req-clip.json"
+}
+
+# Advance every rotating screen that is due ($1 = force: all of them now).
+clips_tick() {
+  local force=${1:-} now theme s ser n st idx since rot next clip
+  preview_reap_locked   # an abandoned theme preview ends here too (no session: no-op)
+  [[ $(clips_state) == on && $(screens_state) == on ]] || return 0
+  # No clip swap (a SetLcdMedia config reload) while a theme preview shows.
+  if preview_live; then return 0; fi
+  now=$(date +%s) theme=$(active_name)
+  [[ -f $CLIPS_STATE ]] && jq -e --arg t "$theme" '.theme == $t' "$CLIPS_STATE" >/dev/null 2>&1 ||
+    jq -n --arg t "$theme" --argjson now "$now" '{theme: $t, since: $now, screens: {}}' >"$CLIPS_STATE"
+  rotating_screens >"$TMP/rot.jsonl"
+  while IFS= read -r s; do
+    ser=$(jq -r .serial <<<"$s") n=$(jq '.clips | length' <<<"$s") rot=$(jq .rotate <<<"$s")
+    (( n > 1 )) || continue
+    st=$(jq -c --arg k "$ser" '.screens[$k] // {}' "$CLIPS_STATE")
+    idx=$(jq '.index // 0' <<<"$st")
+    since=$(jq --argjson d "$(jq .since "$CLIPS_STATE")" '.since // $d' <<<"$st")
+    [[ -n $force ]] || (( now - since >= rot )) || continue
+    if [[ $(jq .shuffle <<<"$s") == true ]]; then
+      next=$(( (idx + 1 + RANDOM % (n - 1)) % n ))   # any clip but the current one
+    else
+      next=$(( (idx + 1) % n ))
+    fi
+    clip=$(jq -r --argjson i "$next" '.clips[$i]' <<<"$s")
+    if swap_clip "$ser" "$clip"; then
+      log "clips: $(jq -r .where <<<"$s") -> $(basename "$clip") ($((next + 1))/$n)"
+      # tmp + mv: the plugin re-reads clips.json on every change.
+      jq --arg k "$ser" --argjson i "$next" --argjson now "$now" --arg c "$clip" \
+        '.screens[$k] = {index: $i, since: $now, clip: $c}' "$CLIPS_STATE" | put_json "$CLIPS_STATE" || true
+    else
+      log "clips: swap on $(jq -r .where <<<"$s") failed: ${LIVE_ERR:-no config entry}"
+    fi
+  done <"$TMP/rot.jsonl"
+}
+
+clips_status() {
+  local now s ser st
+  now=$(date +%s)
+  echo "clip rotation: $(clips_state) (screens $(screens_state)), theme $(active_name)"
+  rotating_screens >"$TMP/rot.jsonl"
+  [[ -s $TMP/rot.jsonl ]] || { echo "  no rotating screens in this theme"; return 0; }
+  while IFS= read -r s; do
+    ser=$(jq -r .serial <<<"$s")
+    st=$(jq -c --arg k "$ser" --arg t "$(active_name)" 'if .theme == $t then .screens[$k] // {} else {} end' "$CLIPS_STATE" 2>/dev/null || echo '{}')
+    jq -r --argjson st "$st" --argjson now "$now" '
+      "  \(.where): \(.clips | length) clips every \(.rotate)s\(if .shuffle then ", shuffled" else "" end)",
+      "    now: \(($st.clip // .clips[0]) | split("/") | last) (\(($st.index // 0) + 1)/\(.clips | length))"
+        + (if $st.since then ", next in \([.rotate - ($now - $st.since), 0] | max)s" else "" end),
+      (.clips[] | "    - \(split("/") | last)")' <<<"$s"
+  done <"$TMP/rot.jsonl"
+}
+
+# Pause/resume the rotation without losing the countdown: pause records
+# paused_at in clips.json, resume shifts every "since" by the paused time, so
+# an overdue screen doesn't swap the moment it resumes. No lock: instant.
+clips_pause() {
+  mkdir -p "$STATE_DIR"
+  echo off >"$STATE_DIR/clips"
+  [[ -f $CLIPS_STATE ]] || return 0
+  jq --argjson now "$EPOCHSECONDS" '.paused_at = (.paused_at // $now)' "$CLIPS_STATE" 2>/dev/null |
+    put_json "$CLIPS_STATE" || true
+}
+clips_resume() {
+  if [[ -f $CLIPS_STATE ]]; then
+    jq --argjson now "$EPOCHSECONDS" '
+      ([$now - (.paused_at // $now), 0] | max) as $d
+      | (if .since then .since += $d else . end)
+      | .screens |= ((. // {}) | map_values(if .since then .since += $d else . end))
+      | del(.paused_at)' "$CLIPS_STATE" 2>/dev/null | put_json "$CLIPS_STATE" || true
+  fi
+  mkdir -p "$STATE_DIR"
+  echo on >"$STATE_DIR/clips"
+}
+
+# ---- --detach: queue a change in a transient user unit ----------------------
+# The shell plugin never runs a change as its own child: a shell restart would
+# SIGTERM it mid-apply. --detach validates first (a bad theme or target comes
+# back at once: exit 2, {"error": ...} on stdout), then starts "pc-lights
+# <cmd>" in its own unit pc-lights-ui-<op>-<ns> and prints {"queued": true,
+# "unit": ...} (exit 0; exit 3 if systemd-run failed). pending/<unit>.json
+# shows the request until the run takes the lock. For pick, ui-requested holds
+# "<name> <ns>": a queued pick that isn't the latest when it gets the lock
+# drops out, so the last pick wins.
+detach_fail() {
+  echo "pc-lights: $2" >&2
+  jq -nc --arg e "$2" '{error: $e}'
+  exit "$1"
+}
+
+detach() {
+  local op=${1:-} name= tgt= jop= err a ns unit pf prev_req= extra=()
+  local usage="usage: pc-lights --detach pick <theme> | on|off [lights|screens|all] | schedule on|off | clips next --nowait | previews [--force] [theme...] | detect [--probe|--no-openrgb]"
+  case $op in
+    pick)
+      (( $# == 2 )) || detach_fail 2 "$usage"
+      name=$2 jop=pick
+      theme_exists "$name" || detach_fail 2 "no theme $THEME_DIR/$name/theme.json"
+      if ! err=$( (validate_theme "$name") 2>&1 ); then
+        sed '$d' <<<"$err" >&2   # the problems; the last line is the verdict
+        detach_fail 2 "$(tail -n1 <<<"$err" | sed 's/^pc-lights: //')"
+      fi
+      ;;
+    on | off)
+      (( $# <= 2 )) || detach_fail 2 "$usage"
+      tgt=${2:-lights} jop=$op
+      [[ $tgt =~ ^(lights|screens|all)$ ]] || detach_fail 2 "target must be lights, screens or all"
+      ;;
+    schedule)
+      [[ $# == 2 && $2 =~ ^(on|off)$ ]] || detach_fail 2 "$usage"
+      [[ -f $SCHED ]] || detach_fail 2 "no $SCHED"
+      tgt=$2 jop=schedule-set
+      ;;
+    clips)
+      [[ $# == 3 && $2 == next && $3 == --nowait ]] || detach_fail 2 "$usage"
+      jop=clips-next
+      ;;
+    detect)
+      # Detect may probe the SMBus (--probe runs openrgb --list-devices), so
+      # the user starts it, and it runs in its own unit like any change.
+      for a in "${@:2}"; do
+        [[ $a =~ ^--(probe|no-openrgb)$ ]] || detach_fail 2 "$usage"
+      done
+      jop=detect
+      ;;
+    previews)
+      for a in "${@:2}"; do
+        [[ $a == --force ]] || theme_exists "$a" || detach_fail 2 "no theme $THEME_DIR/$a/theme.json"
+      done
+      ;;
+    *) detach_fail 2 "$usage" ;;
+  esac
+  ns=$(date +%s%N)
+  unit=pc-lights-ui-$op-$ns pf=$PENDING/pc-lights-ui-$op-$ns.json
+  # The latest user action wins over an Omarchy apply that hasn't fired yet.
+  if [[ $op =~ ^(pick|on|off)$ ]]; then stop_apply_timers; fi
+  # A failed systemd-run puts the previous request back: left pointing at a
+  # unit that never started, it would make a queued earlier pick drop out as
+  # superseded and nothing would apply.
+  if [[ $op == pick ]]; then
+    prev_req=$(cat "$CACHE/ui-requested" 2>/dev/null || true)
+    printf '%s %s\n' "$name" "$ns" | put_json "$CACHE/ui-requested"
+  fi
+  if [[ $op != previews ]]; then
+    jq -nc --arg op "$jop" --arg target "$tgt" --arg theme "$name" --arg unit "$unit" \
+      --argjson now "$EPOCHSECONDS" "$nul_jq"'
+      {v: 1, op: $op, target: ($target | n), theme: ($theme | n), unit: $unit, source: "ui", slug: null,
+       queued: $now, due: null}' | put_json "$pf"
+  fi
+  if [[ -n ${PCL_TEST_OVERRIDES:-} ]]; then extra=(--setenv=PCL_TEST_OVERRIDES="$PCL_TEST_OVERRIDES"); fi
+  if ! systemd-run --user --quiet --collect --unit="$unit" --setenv=PCL_UNIT="$unit" --setenv=PCL_REQ="$ns" \
+      --setenv=HOME="$HOME" "${extra[@]}" -- "$(readlink -f "$0")" "$@"; then
+    rm -f "$pf"
+    if [[ $op == pick && $(cat "$CACHE/ui-requested" 2>/dev/null || true) == "$name $ns" ]]; then
+      if [[ -n $prev_req ]]; then printf '%s\n' "$prev_req" | put_json "$CACHE/ui-requested"
+      else rm -f "$CACHE/ui-requested"; fi
+    fi
+    detach_fail 3 "systemd-run could not start $unit"
+  fi
+  jq -nc --arg u "$unit" '{queued: true, unit: $u}'
+  exit 0
+}
+
+# Test hook: tests/engine-contract.sh points this at a file that stubs the
+# hardware calls (lianli_lights, lianli_screens, apply_openrgb, swap_clip).
+# shellcheck source=/dev/null
+[[ -n ${PCL_TEST_OVERRIDES:-} ]] && source "$PCL_TEST_OVERRIDES"
+if [[ ${1:-} == --detach ]]; then shift; detach "$@"; fi
+
+cmd=${1:-}
+target=${2:-lights}
+case $cmd in
+  on | off)
+    [[ $target =~ ^(lights|screens|all)$ ]] || die "target must be lights, screens or all"
+    mkdir -p "$STATE_DIR"
+    take_lock
+    claim_run "$cmd" "$target"
+    # A theme preview ends first, its screens sent back before anything else:
+    # "on" sends the saved lights back too ("on screens" the OpenRGB part as
+    # well: nothing below applies it), "off" doesn't (Off replaces them), and
+    # "off screens" ends it with "screens-off".
+    case $cmd:$target in
+      off:screens) preview_yield screens-off ;;
+      on:screens) preview_yield on --openrgb ;;
+      off:*) preview_yield off ;;
+      *) preview_yield on ;;
+    esac
+    if [[ $target != screens ]]; then
+      progress "lian li"
+      lianli_lights "$cmd"
+      echo "$cmd" >"$STATE_DIR/lights"
+      progress openrgb
+      apply_openrgb
+    fi
+    if [[ $target != lights ]]; then
+      progress screens
+      lianli_screens "$cmd"
+      echo "$cmd" >"$STATE_DIR/screens"
+    fi
+    status
+    ;;
+  scheme)
+    if [[ -z $target || $target == lights ]]; then
+      echo "active: $(active_name)"
+      for t in "$THEME_DIR"/*/theme.json; do echo "  $(basename "$(dirname "$t")")"; done
+    else
+      theme_exists "$target" || die "no theme $THEME_DIR/$target/theme.json"
+      validate_theme "$target"
+      take_lock
+      claim_run scheme "" "$target"
+      echo "$target" >"$STATE_DIR/scheme"
+      set_day_scheme "$target"
+      mark_boundary
+      echo "theme set to $target; run 'pc-lights on' to apply"
+    fi
+    ;;
+  pick)
+    # The UI's theme choice (normally in the unit --detach starts): it becomes
+    # the day theme and is applied now, even at night (an override until the
+    # next boundary) and even when it is already active (re-apply). A queued
+    # pick superseded by a later one drops out once it gets the lock.
+    [[ -n ${2:-} ]] || die "usage: pc-lights pick <theme>"
+    theme_exists "$2" || die "no theme $THEME_DIR/$2/theme.json"
+    validate_theme "$2"
+    mkdir -p "$STATE_DIR"
+    take_lock
+    if [[ -n ${PCL_REQ:-} && $(cat "$CACHE/ui-requested" 2>/dev/null || true) != *" $PCL_REQ" ]]; then
+      log "pick: $2 superseded"
+      exit 0
+    fi
+    claim_run pick "" "$2"
+    set_day_scheme "$2"
+    mark_boundary
+    switch_to "$2" force
+    ;;
+  render) shift; render "$@" ;;
+  schedule)
+    case ${2:-status} in
+      status) schedule_status ;;
+      on | off)
+        [[ -f $SCHED ]] || die "no $SCHED"
+        take_lock
+        claim_run schedule-set "$2"
+        jq --argjson e "$([[ $2 == on ]] && echo true || echo false)" '.enabled = $e' "$SCHED" >"$TMP/sched.json"
+        [[ -s $TMP/sched.json ]] && cp "$TMP/sched.json" "$SCHED"
+        # Turning it on mid-period takes effect at the next boundary, not now.
+        mark_boundary
+        schedule_status
+        ;;
+      tick) take_lock; schedule_tick ;;
+      *) die "usage: pc-lights schedule [status|on|off|tick]" ;;
+    esac
+    ;;
+  omarchy)
+    [[ -n ${2:-} ]] || die "usage: pc-lights omarchy <omarchy-theme-slug>"
+    omarchy_pair "$2"
+    ;;
+  switch)
+    # Debounced apply started by "omarchy"; the schedule may have turned to
+    # night since it was queued.
+    [[ -n ${2:-} ]] || die "usage: pc-lights switch <theme>"
+    take_lock
+    # flock doesn't wake waiters in order: a switch that fired before a newer
+    # request can get the lock after it. It drops out when Omarchy has moved
+    # on to another theme, or when a UI pick came after this Omarchy change
+    # (ui-requested is "<name> <ns>"; PCL_ASKED is when the hook ran).
+    if [[ -n ${PCL_SLUG:-} && $(cat "$CACHE/omarchy-requested" 2>/dev/null || true) != "$PCL_SLUG" ]]; then
+      log "switch: $2 superseded by Omarchy $(cat "$CACHE/omarchy-requested" 2>/dev/null || true)"
+      exit 0
+    fi
+    uireq=$(cat "$CACHE/ui-requested" 2>/dev/null || true) uireq=${uireq##* }
+    if [[ -n ${PCL_ASKED:-} && $uireq =~ ^[0-9]+$ ]] && (( uireq > PCL_ASKED )); then
+      log "switch: $2 superseded by a later pick"
+      exit 0
+    fi
+    claim_run switch "" "$2"
+    if is_night; then
+      RUN_SKIPPED=1 RUN_ERR="night: kept $(active_name)"
+      log "switch: night now, keeping $(active_name)"; exit 0
+    fi
+    switch_to "$2"
+    mark_boundary
+    ;;
+  clips)
+    case ${2:-status} in
+      status) clips_status ;;
+      off | pause) clips_pause; clips_status ;;
+      on | resume) clips_resume; clips_status ;;
+      # The timer never waits for a theme apply: it just tries next minute.
+      tick) exec 8>"$LOCK"; flock -n 8 || exit 0; LOCK_HELD=1; clips_tick ;;
+      next)
+        if [[ ${3:-} == --nowait ]]; then
+          # The UI's skip never queues behind a theme apply: 75 = busy.
+          exec 8>"$LOCK"; flock -n 8 || { echo busy >&2; exit 75; }
+          LOCK_HELD=1
+        else
+          take_lock
+        fi
+        claim_run clips-next
+        # Say so when there's nothing to skip; clips_tick would just return.
+        if [[ $(clips_state) != on ]]; then RUN_SKIPPED=1 RUN_ERR="clips are paused"
+        elif [[ $(screens_state) != on ]]; then RUN_SKIPPED=1 RUN_ERR="screens are off"
+        elif preview_live; then RUN_SKIPPED=1 RUN_ERR="a theme preview is running"; fi
+        if [[ -n $RUN_SKIPPED ]]; then log "clips next: $RUN_ERR; nothing skipped"; exit 0; fi
+        clips_tick force
+        ;;
+      *) die "usage: pc-lights clips [status|on|off|pause|resume|next [--nowait]|tick]" ;;
+    esac
+    ;;
+  status)
+    if [[ ${2:-} == --json ]]; then status_json; else status; fi
+    ;;
+  themes)
+    [[ ${2:-} == --json ]] || die "usage: pc-lights themes --json"
+    themes_json
+    ;;
+  previews) shift; previews "$@" ;;
+  detect) shift; detect_cmd "$@" ;;
+  profile) shift; profile_cmd "$@" ;;
+  sensors)
+    [[ ${2:-} == --json ]] || die "usage: pc-lights sensors --json"
+    sensors_json
+    ;;
+  explain) shift; explain_cmd "$@" ;;
+  migrate) shift; migrate_cmd "$@" ;;
+  install) shift; install_cmd "$@" ;;
+  apply-openrgb) take_lock; claim_run apply-openrgb; preview_yield apply-openrgb; progress openrgb; apply_openrgb ;;
+  ram-drift)
+    # The RAM drift (lib/pc-lights/ramdrift.py): "run" is the animator
+    # lumenaire-ram-drift.service starts; the engine starts and stops that
+    # unit itself around every OpenRGB call (backend-openrgb.sh orgb_begin).
+    case ${2:-status} in
+      run) rm -rf "$TMP"; trap - EXIT; exec python3 "$PCL_LIB/ramdrift.py" run ;;
+      status)
+        echo "unit: $RAM_DRIFT_UNIT $(if ram_drift_installed; then systemctl --user is-active "$RAM_DRIFT_UNIT" 2>/dev/null || true; else echo "(not installed)"; fi)"
+        if [[ -s $RAM_DRIFT_JSON ]]; then python3 "$PCL_LIB/ramdrift.py" describe "$RAM_DRIFT_JSON" | sed 's/^# //'
+        else echo "ram drift: none (the active theme's ram doesn't drift, or the lights are off)"; fi ;;
+      *) die "usage: pc-lights ram-drift [status|run]" ;;
+    esac
+    ;;
+  media) shift; media_cmd "$@" ;;
+  desktop) shift; desktop_cmd "$@" ;;
+  theme)
+    # The theme editor: "theme preview ..." is the live preview (preview.sh),
+    # every other verb the editor (editor.sh).
+    shift
+    if [[ ${1:-} == preview ]]; then
+      shift
+      if [[ ${1:-} == --run ]]; then PV_WORKER_ID=$(pv_get .id); preview_cmd --run; PV_WORKER_ID=
+      else preview_cmd "$@"; fi
+    else
+      editor_cmd "$@"
+    fi
+    ;;
+  *) die "usage: pc-lights on|off [lights|screens|all] | scheme [name] | pick <name> | render [name] | schedule [status|on|off|tick] | clips [status|on|off|pause|resume|next [--nowait]] | omarchy <slug> | status [--json] | themes --json | previews [--force] [name...] | detect | profile | sensors --json | explain <theme> | migrate | install | theme <verb> ... | media <verb> ... | desktop ... | ram-drift [status|run] | --detach <cmd...>" ;;
+esac

@@ -1,0 +1,10 @@
+{
+  "description": "Screen page for a screen this theme leaves alone (fan 3 on the other PC): the plate with its glyph, \"Unchanged\", Choose….",
+  "base": "editor-screens-other",
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3"
+    }
+  }
+}

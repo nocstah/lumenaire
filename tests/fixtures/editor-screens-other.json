@@ -1,0 +1,396 @@
+{
+  "description": "Editor on another PC (another profile): four fan screens along the bottom and a round Galahad pump, no 8.8\" screen. The map follows the place hints; the pump is drawn round. Fan 3 has nothing yet; the profile leaves fan 4 alone (dimmed).",
+  "base": "editor-screens",
+  "editorPatch": [
+    {
+      "op": "replace",
+      "path": "/name",
+      "value": "aurora"
+    },
+    {
+      "op": "replace",
+      "path": "/mode",
+      "value": "edit"
+    },
+    {
+      "op": "replace",
+      "path": "/from",
+      "value": null
+    }
+  ],
+  "screensFile": null,
+  "screensPatch": null,
+  "screens": {
+    "v": 1,
+    "name": "aurora",
+    "rev": 2,
+    "draft": true,
+    "mode": "edit",
+    "sig": "0f00ba11",
+    "editable": true,
+    "media_root": "/home/you/.config/pc-lights/themes/aurora",
+    "stage": "/home/you/.config/pc-lights/drafts/aurora.media",
+    "map": {
+      "groups": [
+        {
+          "group": "fans.1",
+          "label": "Fan group 1",
+          "place": "bottom",
+          "axis": "row",
+          "roles": [
+            "screen.fan1",
+            "screen.fan2",
+            "screen.fan3",
+            "screen.fan4"
+          ]
+        }
+      ],
+      "order": [
+        "screen.pump",
+        "screen.fan1",
+        "screen.fan2",
+        "screen.fan3"
+      ]
+    },
+    "coverage": {
+      "summary": "partial",
+      "missing": []
+    },
+    "disk": {
+      "stage_bytes": 0,
+      "free_bytes": 420000000000,
+      "warn": null
+    },
+    "limits": {
+      "brightness": [
+        0,
+        100
+      ],
+      "rotate": [
+        30,
+        86400
+      ],
+      "rotate_choices": [
+        60,
+        300,
+        900,
+        3600
+      ],
+      "clips_max": 64
+    },
+    "problems": [],
+    "screens": [
+      {
+        "role": "screen.fan1",
+        "short": "Fan 1",
+        "label": "Fan group 1, screen 1",
+        "kind": "fan",
+        "group": "fans.1",
+        "place": "bottom",
+        "wide": false,
+        "index": 0,
+        "of": 3,
+        "device": "lianli:lcd:c0c0c0c000000001",
+        "present": true,
+        "managed": true,
+        "model": "SlInfFlexLcd",
+        "shape": "square",
+        "media_size": [
+          400,
+          400
+        ],
+        "orientation": 0,
+        "source": "theme",
+        "unfit": null,
+        "target": {
+          "kind": "role",
+          "key": "screen.fan1",
+          "index": null,
+          "path": "/screens/screen.fan1",
+          "expand": []
+        },
+        "shared_with": [],
+        "changed": false,
+        "entry": {
+          "type": "video",
+          "path": "media/fan-1.mp4",
+          "model": "SlInfFlexLcd"
+        },
+        "media": {
+          "type": "video",
+          "rel": "media/fan-1.mp4",
+          "where": "root",
+          "abs": "/home/you/.config/pc-lights/themes/aurora/media/fan-1.mp4",
+          "title": "aurora 1",
+          "thumb": "../ui/thumbs/arctic-fan1.webp",
+          "thumb_state": "ready",
+          "probe": {
+            "kind": "video",
+            "w": 400,
+            "h": 400,
+            "duration": 8,
+            "fps": 24,
+            "bytes": 1800000
+          },
+          "fit": {
+            "state": "exact",
+            "keep": 1,
+            "scale": 1,
+            "score": 1,
+            "note": null
+          }
+        },
+        "brightness": {
+          "path": "/screens/@screen.fan1/brightness",
+          "value": null,
+          "effective": 100
+        },
+        "clips": null,
+        "template": null,
+        "modes": null,
+        "pending": null,
+        "problems": []
+      },
+      {
+        "role": "screen.fan2",
+        "short": "Fan 2",
+        "label": "Fan group 1, screen 2",
+        "kind": "fan",
+        "group": "fans.1",
+        "place": "bottom",
+        "wide": false,
+        "index": 1,
+        "of": 3,
+        "device": "lianli:lcd:c0c0c0c000000002",
+        "present": true,
+        "managed": true,
+        "model": "SlInfFlexLcd",
+        "shape": "square",
+        "media_size": [
+          400,
+          400
+        ],
+        "orientation": 0,
+        "source": "theme",
+        "unfit": null,
+        "target": {
+          "kind": "role",
+          "key": "screen.fan2",
+          "index": null,
+          "path": "/screens/screen.fan2",
+          "expand": []
+        },
+        "shared_with": [],
+        "changed": false,
+        "entry": {
+          "type": "video",
+          "path": "media/fan-2.mp4",
+          "model": "SlInfFlexLcd"
+        },
+        "media": {
+          "type": "video",
+          "rel": "media/fan-2.mp4",
+          "where": "root",
+          "abs": "/home/you/.config/pc-lights/themes/aurora/media/fan-2.mp4",
+          "title": "aurora 2",
+          "thumb": "../ui/thumbs/arctic-fan2.webp",
+          "thumb_state": "ready",
+          "probe": {
+            "kind": "video",
+            "w": 400,
+            "h": 400,
+            "duration": 8,
+            "fps": 24,
+            "bytes": 1800000
+          },
+          "fit": {
+            "state": "exact",
+            "keep": 1,
+            "scale": 1,
+            "score": 1,
+            "note": null
+          }
+        },
+        "brightness": {
+          "path": "/screens/@screen.fan2/brightness",
+          "value": null,
+          "effective": 100
+        },
+        "clips": null,
+        "template": null,
+        "modes": null,
+        "pending": null,
+        "problems": []
+      },
+      {
+        "role": "screen.fan3",
+        "short": "Fan 3",
+        "label": "Fan group 1, screen 3",
+        "kind": "fan",
+        "group": "fans.1",
+        "place": "bottom",
+        "wide": false,
+        "index": 2,
+        "of": 3,
+        "device": "lianli:lcd:c0c0c0c000000003",
+        "present": true,
+        "managed": true,
+        "model": "SlInfFlexLcd",
+        "shape": "square",
+        "media_size": [
+          400,
+          400
+        ],
+        "orientation": 0,
+        "source": "none",
+        "unfit": null,
+        "target": {
+          "kind": "role",
+          "key": "screen.fan3",
+          "index": null,
+          "path": "/screens/screen.fan3",
+          "expand": []
+        },
+        "shared_with": [],
+        "changed": false,
+        "entry": null,
+        "media": null,
+        "brightness": {
+          "path": "/screens/@screen.fan3/brightness",
+          "value": null,
+          "effective": 100
+        },
+        "clips": null,
+        "template": null,
+        "modes": null,
+        "pending": null,
+        "problems": []
+      },
+      {
+        "role": "screen.fan4",
+        "short": "Fan 4",
+        "label": "Fan group 1, screen 4 (left alone)",
+        "kind": "fan",
+        "group": "fans.1",
+        "place": "bottom",
+        "wide": false,
+        "index": 3,
+        "of": 3,
+        "device": "lianli:lcd:c0c0c0c000000004",
+        "present": true,
+        "managed": false,
+        "model": "SlInfFlexLcd",
+        "shape": "square",
+        "media_size": [
+          400,
+          400
+        ],
+        "orientation": 0,
+        "source": "unmanaged",
+        "unfit": null,
+        "target": null,
+        "shared_with": [],
+        "changed": false,
+        "entry": null,
+        "media": null,
+        "brightness": null,
+        "clips": null,
+        "template": null,
+        "modes": null,
+        "pending": null,
+        "problems": []
+      },
+      {
+        "role": "screen.pump",
+        "short": "Pump",
+        "label": "Galahad II LCD pump",
+        "kind": "pump",
+        "group": null,
+        "place": "centre",
+        "wide": false,
+        "index": null,
+        "of": null,
+        "device": "lianli:lcd:d0d0d0d000000004",
+        "present": true,
+        "managed": true,
+        "model": "Galahad2Lcd",
+        "shape": "round",
+        "media_size": [
+          480,
+          480
+        ],
+        "orientation": 0,
+        "source": "theme",
+        "unfit": null,
+        "target": {
+          "kind": "role",
+          "key": "screen.pump",
+          "index": null,
+          "path": "/screens/screen.pump",
+          "expand": []
+        },
+        "shared_with": [],
+        "changed": true,
+        "entry": {
+          "type": "video",
+          "path": "media/pump.mp4",
+          "model": "Galahad2Lcd"
+        },
+        "media": {
+          "type": "video",
+          "rel": "media/pump.mp4",
+          "where": "stage",
+          "abs": "/home/you/.config/pc-lights/drafts/aurora.media/media/pump.mp4",
+          "title": "aurora ring",
+          "thumb": "../ui/thumbs/arctic-fan4.webp",
+          "thumb_state": "ready",
+          "probe": {
+            "kind": "video",
+            "w": 480,
+            "h": 480,
+            "duration": 20,
+            "fps": 30,
+            "bytes": 5200000
+          },
+          "fit": {
+            "state": "exact",
+            "keep": 1,
+            "scale": 1,
+            "score": 1,
+            "note": null
+          }
+        },
+        "brightness": {
+          "path": "/screens/@screen.pump/brightness",
+          "value": 70,
+          "effective": 70
+        },
+        "clips": {
+          "rotate": null,
+          "shuffle": false,
+          "folder_form": false,
+          "max": 64,
+          "items": [
+            {
+              "i": 0,
+              "rel": "media/pump.mp4",
+              "from": "path",
+              "where": "stage",
+              "title": "aurora ring",
+              "thumb": "../ui/thumbs/arctic-fan4.webp",
+              "thumb_state": "ready",
+              "duration": 20
+            }
+          ]
+        },
+        "template": null,
+        "modes": null,
+        "pending": null,
+        "problems": []
+      }
+    ]
+  },
+  "ui": {
+    "page": "editor"
+  }
+}

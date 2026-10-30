@@ -1,0 +1,26 @@
+{
+  "description": "Editor: primary colour being dragged in the picker (not synced yet); derived lights are made LED-safe, so the pastel only shows an info line. Preview in 1 s.",
+  "base": "editor-role-override",
+  "editorLocal": [
+    {
+      "op": "add",
+      "path": "/palette/primary",
+      "value": "ffb3d6"
+    }
+  ],
+  "service": {
+    "previewCountdown": 0.6,
+    "editPending": true
+  },
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "picker": "pal:primary",
+      "pickerOriginal": "ffd0e6",
+      "recent": [
+        "ff4a9a",
+        "ff1a8c"
+      ]
+    }
+  }
+}

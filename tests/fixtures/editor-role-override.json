@@ -1,0 +1,75 @@
+{
+  "description": "Editor: editing Sakura; Fans open with \"Customise each…\" showing its three fan groups, the right column and the 2-fan group open. Two colours set on the device (Custom), the magenta one with its LED warning dot.",
+  "base": "editor-duplicate",
+  "editorPatch": [
+    {
+      "op": "replace",
+      "path": "/name",
+      "value": "sakura"
+    },
+    {
+      "op": "replace",
+      "path": "/mode",
+      "value": "edit"
+    },
+    {
+      "op": "replace",
+      "path": "/from",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/rev",
+      "value": 7
+    },
+    {
+      "op": "replace",
+      "path": "/dirty",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/saved",
+      "value": {
+        "exists": true,
+        "sha256": "5f1c0e2b7a9d4c3e8f6a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a",
+        "active": true,
+        "day": true,
+        "night": false,
+        "auto": false,
+        "mapped_slugs": [
+          "rose-pine"
+        ]
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/base_sha256",
+      "value": "5f1c0e2b7a9d4c3e8f6a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f6a"
+    },
+    {
+      "op": "replace",
+      "path": "/media_root",
+      "value": "/home/you/.config/pc-lights/themes/sakura"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/summary",
+      "value": "5 fan videos, pump video, main template"
+    }
+  ],
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "expanded": [
+        "@fans",
+        "fans.side",
+        "fans.top"
+      ],
+      "more": [
+        "@fans"
+      ],
+      "cursor": "field:fans.top:outer"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "description": "Editor: the night schedule switched to Stealth and ended the preview; edits kept.",
+  "base": "editor-role-override",
+  "previewFile": "preview.live.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/theme",
+      "value": "sakura"
+    },
+    {
+      "op": "replace",
+      "path": "/state",
+      "value": "ended"
+    },
+    {
+      "op": "replace",
+      "path": "/ended",
+      "value": {
+        "at": 1790231170,
+        "reason": "cancelled",
+        "by": {
+          "op": "schedule-tick",
+          "theme": "stealth"
+        },
+        "reverted": true
+      }
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "description": "The right-click menu on Hellfire with the desktop wallpaper settings (Wallpaper…) under Edit.",
+  "base": "editor-card-menu",
+  "statusPatch": [
+    {
+      "op": "replace",
+      "path": "/v_minor",
+      "value": 4
+    },
+    {
+      "op": "add",
+      "path": "/desktop",
+      "value": {
+        "available": true,
+        "theme": "sakura",
+        "settings": {
+          "animated": true,
+          "pause_while_active": true,
+          "resume_after_idle": 5,
+          "while_active": "freeze"
+        },
+        "playing": false,
+        "at": 1790231170
+      }
+    }
+  ],
+  "desktopCurrentFile": "desktop.current.json"
+}

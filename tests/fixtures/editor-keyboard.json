@@ -1,0 +1,41 @@
+{
+  "description": "Editor keyboard walk: j ×6 to Strimers, Enter opens them, j j to Speed, l raises it to 2 (set on the group, not synced yet).",
+  "base": "editor-role-override",
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "keys": [
+        {
+          "text": "j"
+        },
+        {
+          "text": "j"
+        },
+        {
+          "text": "j"
+        },
+        {
+          "text": "j"
+        },
+        {
+          "text": "j"
+        },
+        {
+          "text": "j"
+        },
+        {
+          "key": 16777220
+        },
+        {
+          "text": "j"
+        },
+        {
+          "text": "j"
+        },
+        {
+          "text": "l"
+        }
+      ]
+    }
+  }
+}

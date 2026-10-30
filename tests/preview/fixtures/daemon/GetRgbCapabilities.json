@@ -1,0 +1,157 @@
+{
+  "status": "ok",
+  "data": [
+    {
+      "device_id": "wireless:02:00:00:00:01:01",
+      "device_name": "UNI FAN TL V3 Wireless LCD",
+      "zones": [
+        {
+          "name": "Fan 1",
+          "led_count": 26
+        },
+        {
+          "name": "Fan 2",
+          "led_count": 26
+        },
+        {
+          "name": "Fan 3",
+          "led_count": 26
+        }
+      ],
+      "effect_regions": [
+        "All",
+        "Top",
+        "Bottom"
+      ]
+    },
+    {
+      "device_id": "wireless:02:00:00:00:01:02",
+      "device_name": "UNI FAN TL V3 Wireless",
+      "zones": [
+        {
+          "name": "Fan 1",
+          "led_count": 26
+        },
+        {
+          "name": "Fan 2",
+          "led_count": 26
+        },
+        {
+          "name": "Fan 3",
+          "led_count": 26
+        }
+      ],
+      "effect_regions": [
+        "All",
+        "Top",
+        "Bottom"
+      ]
+    },
+    {
+      "device_id": "wireless:02:00:00:00:01:03",
+      "device_name": "UNI FAN TL V3 Wireless LCD",
+      "zones": [
+        {
+          "name": "Fan 1",
+          "led_count": 26
+        },
+        {
+          "name": "Fan 2",
+          "led_count": 26
+        }
+      ],
+      "effect_regions": [
+        "All",
+        "Top",
+        "Bottom"
+      ]
+    },
+    {
+      "device_id": "wireless:02:00:00:00:02:01",
+      "device_name": "Strimer Plus Wireless",
+      "zones": [
+        {
+          "name": "LED Strip",
+          "led_count": 132
+        }
+      ],
+      "effect_regions": [
+        "All",
+        "Segment1",
+        "Segment2",
+        "Segment3",
+        "Segment4",
+        "Segment5",
+        "Segment6"
+      ]
+    },
+    {
+      "device_id": "wireless:02:00:00:00:02:02",
+      "device_name": "Strimer Plus Wireless",
+      "zones": [
+        {
+          "name": "LED Strip",
+          "led_count": 174
+        }
+      ],
+      "effect_regions": [
+        "All",
+        "Segment1",
+        "Segment2",
+        "Segment3",
+        "Segment4",
+        "Segment5",
+        "Segment6"
+      ]
+    },
+    {
+      "device_id": "hid:0416:8051:8-7.2.3",
+      "device_name": "HydroShift II OLED Curve LED",
+      "zones": [
+        {
+          "name": "Ring",
+          "led_count": 45
+        }
+      ],
+      "effect_regions": [
+        "All"
+      ]
+    },
+    {
+      "device_id": "hid:0416:8050:8-10.2.3",
+      "device_name": "Universal Screen 8.8\" LED Ring",
+      "zones": [
+        {
+          "name": "Ring",
+          "led_count": 60
+        }
+      ],
+      "effect_regions": [
+        "All"
+      ]
+    },
+    {
+      "device_id": "hid:43a8:0102:8-12.2.4",
+      "device_name": "TL Flex LCD Controller",
+      "zones": [
+        {
+          "name": "Fan 1",
+          "led_count": 26
+        },
+        {
+          "name": "Fan 2",
+          "led_count": 26
+        },
+        {
+          "name": "Fan 3",
+          "led_count": 26
+        }
+      ],
+      "effect_regions": [
+        "All",
+        "Top",
+        "Bottom"
+      ]
+    }
+  ]
+}

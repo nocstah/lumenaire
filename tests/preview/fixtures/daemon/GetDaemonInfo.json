@@ -1,0 +1,12 @@
+{
+  "status": "ok",
+  "data": {
+    "version": "1.1.2",
+    "protocol_version": 3,
+    "instance_id": "test-instance-1",
+    "capabilities": [
+      "guarded_writes",
+      "daemon_info"
+    ]
+  }
+}

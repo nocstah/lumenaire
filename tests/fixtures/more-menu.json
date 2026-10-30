@@ -1,0 +1,7 @@
+{
+  "description": "The ⋯ menu: the last change as a muted line, then Refresh, Rebuild previews and Show log.",
+  "base": "normal-editor",
+  "ui": {
+    "menu": "more"
+  }
+}

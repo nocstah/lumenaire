@@ -1,0 +1,10 @@
+{
+  "description": "Editor keyboard walk into the map: the cursor on the pump tile (after Fan 4 and Fan 5).",
+  "base": "editor-screens-changed",
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "cursor": "scr:screen.pump"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+#!/bin/bash
+# Omarchy theme-set hook: the Motion Wallpaper follows the theme. The new
+# theme's animated wallpaper plays (backgrounds/.animated/) with the pause
+# settings of the Lumenaire theme it pairs with, or the clip Lumenaire started
+# stops: `lumenaire desktop sync`, through ~/.local/bin/motion-wallpaper-theme.
+# Installed by `lumenaire install --desktop` (docs/ENGINE.md, "Desktop wallpaper").
+[[ -x $HOME/.local/bin/motion-wallpaper-theme ]] && "$HOME/.local/bin/motion-wallpaper-theme"
+exit 0

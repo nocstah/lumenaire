@@ -1,0 +1,15 @@
+{
+  "description": "A change that didn't go through: one urgent line under the header, the engine's words as its tooltip.",
+  "base": "wallpaper-row",
+  "desktopFile": "desktop.current.json",
+  "service": {
+    "desktopError": "That change didn't go through.",
+    "desktopErrorTip": "desktop: could not write the theme's settings"
+  },
+  "ui": {
+    "page": "wallpaper",
+    "wallpaper": {
+      "theme": "sakura"
+    }
+  }
+}

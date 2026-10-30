@@ -1,0 +1,5 @@
+{"status":"ok","data":[
+ {"device_id":"wireless:02:00:00:00:03:01","family":"SlInf","fan_count":3,"has_fan":true,"has_lcd":false,"has_pump":false,"has_rgb":true,"name":"UNI FAN SL-INF Wireless","serial":"02:00:00:00:03:01","screen_height":null,"screen_width":null,"wireless_group_mac":null},
+ {"device_id":"wireless:02:00:00:00:03:02","family":"SlInf","fan_count":4,"has_fan":true,"has_lcd":false,"has_pump":false,"has_rgb":true,"name":"UNI FAN SL-INF Wireless","serial":"02:00:00:00:03:02","screen_height":null,"screen_width":null,"wireless_group_mac":null},
+ {"device_id":"hid:0416:7398:3-4","family":"HydroShiftLcd","fan_count":3,"has_fan":true,"has_lcd":true,"has_pump":true,"has_rgb":true,"name":"HydroShift LCD","serial":"d0d0d0d000000001","screen_height":480,"screen_width":480,"wireless_group_mac":null}
+]}

@@ -1,0 +1,35 @@
+{
+  "description": "Picker, Library, searching for \"koi\": nothing matches.",
+  "base": "screen-fan",
+  "mediaListFile": "media.list.library.json",
+  "mediaListPatch": [
+    {
+      "op": "replace",
+      "path": "/items",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/total",
+      "value": 0
+    },
+    {
+      "op": "replace",
+      "path": "/indexing",
+      "value": {
+        "state": "done",
+        "done": 7,
+        "of": 7
+      }
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3",
+      "step": "pick",
+      "tab": "library",
+      "query": "koi"
+    }
+  }
+}

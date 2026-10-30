@@ -1,0 +1,10 @@
+{
+  "description": "Editor: the ⋯ menu (Save as copy…, Discard changes, Duplicate, Rename…, Delete…).",
+  "base": "editor-role-override",
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "menu": true
+    }
+  }
+}

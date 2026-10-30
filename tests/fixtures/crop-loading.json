@@ -1,0 +1,17 @@
+{
+  "description": "Crop: the frame grab hasn't arrived yet; the file's thumbnail stands in and the framing already works.",
+  "base": "picker-files-indexing",
+  "frame": null,
+  "service": {
+    "frameState": "loading"
+  },
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3",
+      "step": "crop",
+      "tab": "files",
+      "cropIndex": 1
+    }
+  }
+}

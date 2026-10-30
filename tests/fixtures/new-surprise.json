@@ -1,0 +1,11 @@
+{
+  "description": "New theme: Surprise me, a random palette with Another.",
+  "base": "editor-card-menu",
+  "ui": {
+    "page": "new",
+    "wizard": {
+      "start": "surprise",
+      "seed": 7
+    }
+  }
+}

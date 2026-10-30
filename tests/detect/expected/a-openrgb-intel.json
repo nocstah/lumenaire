@@ -1,0 +1,213 @@
+{
+  "v": 1,
+  "machine": {
+    "name": "intel-box",
+    "hostname": "intel-box",
+    "detected_at": "2026-09-24T16:00:00+02:00",
+    "detect_version": 1
+  },
+  "backends": {
+    "lianli": {
+      "enabled": true,
+      "state": "absent",
+      "message": "lian-li-linux is not installed"
+    },
+    "openrgb": {
+      "enabled": true,
+      "state": "ok",
+      "version": "0.9"
+    }
+  },
+  "devices": {
+    "openrgb:ASUS ROG STRIX Z790-E GAMING WIFI#0": {
+      "backend": "openrgb",
+      "present": true,
+      "name": "ASUS ROG STRIX Z790-E GAMING WIFI",
+      "type": "Motherboard",
+      "kind": "board",
+      "leds": 5,
+      "zones": [
+        "Aura Mainboard",
+        "Aura Addressable 1",
+        "Aura Addressable 2",
+        "Aura Addressable 3"
+      ],
+      "match": {
+        "name": "ASUS ROG STRIX Z790-E GAMING WIFI"
+      }
+    },
+    "openrgb:Corsair Vengeance Pro RGB#0": {
+      "backend": "openrgb",
+      "present": true,
+      "name": "Corsair Vengeance Pro RGB",
+      "type": "DRAM",
+      "kind": "ram",
+      "leds": 10,
+      "match": {
+        "name": "Corsair Vengeance Pro RGB",
+        "location": "I2C: SMBus I801 adapter at efa0, address 0x58"
+      }
+    },
+    "openrgb:Corsair Vengeance Pro RGB#1": {
+      "backend": "openrgb",
+      "present": true,
+      "name": "Corsair Vengeance Pro RGB",
+      "type": "DRAM",
+      "kind": "ram",
+      "leds": 10,
+      "match": {
+        "name": "Corsair Vengeance Pro RGB",
+        "location": "I2C: SMBus I801 adapter at efa0, address 0x59"
+      }
+    },
+    "openrgb:Sapphire Nitro+ RX 7900 XTX#0": {
+      "backend": "openrgb",
+      "present": true,
+      "name": "Sapphire Nitro+ RX 7900 XTX",
+      "type": "GPU",
+      "kind": "gpu",
+      "leds": 4,
+      "match": {
+        "name": "Sapphire Nitro+ RX 7900 XTX"
+      }
+    },
+    "openrgb:SteelSeries Apex Pro#0": {
+      "backend": "openrgb",
+      "present": true,
+      "name": "SteelSeries Apex Pro",
+      "type": "Keyboard",
+      "kind": "peripheral",
+      "leds": 4,
+      "zones": [
+        "Keyboard"
+      ],
+      "match": {
+        "name": "SteelSeries Apex Pro"
+      }
+    },
+    "openrgb:Lian Li Uni Hub - SL Infinity#0": {
+      "backend": "openrgb",
+      "present": true,
+      "name": "Lian Li Uni Hub - SL Infinity",
+      "type": "Cooler",
+      "kind": "duplicate",
+      "leds": 2,
+      "zones": [
+        "Channel 1",
+        "Channel 2"
+      ],
+      "note": "a Lian Li device seen by OpenRGB: turn its detector off, lian-li-linux drives it",
+      "match": {
+        "name": "Lian Li Uni Hub - SL Infinity"
+      }
+    },
+    "openrgb:Generic RGB Strip#0": {
+      "backend": "openrgb",
+      "present": true,
+      "name": "Generic RGB Strip",
+      "type": "LEDStrip",
+      "kind": "peripheral",
+      "leds": 3,
+      "zones": [
+        "Strip"
+      ],
+      "match": {
+        "name": "Generic RGB Strip"
+      }
+    }
+  },
+  "roles": {
+    "gpu": {
+      "device": "openrgb:Sapphire Nitro+ RX 7900 XTX#0",
+      "leds": 4,
+      "layout": "linear",
+      "source": "detect",
+      "confidence": "sure"
+    },
+    "board": {
+      "device": "openrgb:ASUS ROG STRIX Z790-E GAMING WIFI#0",
+      "source": "detect",
+      "confidence": "sure"
+    },
+    "board.argb": {
+      "device": "openrgb:ASUS ROG STRIX Z790-E GAMING WIFI#0",
+      "argb": {
+        "zones": [
+          1,
+          2,
+          3
+        ],
+        "size": null
+      },
+      "source": "detect",
+      "confidence": "guess"
+    },
+    "ram": {
+      "devices": [
+        "openrgb:Corsair Vengeance Pro RGB#0",
+        "openrgb:Corsair Vengeance Pro RGB#1"
+      ],
+      "match_name": "Corsair Vengeance Pro RGB",
+      "leds_per_device": 10,
+      "source": "detect",
+      "confidence": "sure"
+    },
+    "keyboard": {
+      "device": "openrgb:SteelSeries Apex Pro#0",
+      "managed": false,
+      "source": "detect",
+      "confidence": "sure"
+    },
+    "ledstrip.1": {
+      "device": "openrgb:Generic RGB Strip#0",
+      "managed": false,
+      "source": "detect",
+      "confidence": "sure"
+    },
+    "ignore": {
+      "devices": [
+        "openrgb:Lian Li Uni Hub - SL Infinity#0"
+      ],
+      "source": "detect",
+      "confidence": "sure"
+    }
+  },
+  "screens": {
+    "expected": 0
+  },
+  "sensors": {
+    "cpu": {
+      "kind": "hwmon",
+      "driver": "coretemp",
+      "input": "temp1_input",
+      "label": "Package id 0",
+      "scale": 0.001
+    },
+    "gpu": {
+      "kind": "hwmon",
+      "driver": "amdgpu",
+      "input": "temp1_input",
+      "label": "edge",
+      "scale": 0.001,
+      "pci": "0000:03:00.0",
+      "integrated": false
+    },
+    "ram": {
+      "kind": "hwmon",
+      "driver": "jc42",
+      "input": "temp1_input",
+      "scale": 0.001,
+      "count": 2
+    }
+  },
+  "workarounds": {
+    "openrgb.lianli_detectors_off": {
+      "present": false,
+      "needed": false
+    },
+    "openrgb.smbus_lax": {
+      "present": false,
+      "needed": false
+    }
+  }
+}

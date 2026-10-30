@@ -1,0 +1,11 @@
+{
+  "description": "The wallpaper on the desktop has no animated version: the page says so under the switch; the settings stay Sakura's.",
+  "base": "wallpaper-row-no-animated",
+  "desktopFile": "desktop.no-animated.json",
+  "ui": {
+    "page": "wallpaper",
+    "wallpaper": {
+      "theme": "sakura"
+    }
+  }
+}

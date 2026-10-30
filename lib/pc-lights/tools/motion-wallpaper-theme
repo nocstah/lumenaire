@@ -1,0 +1,3 @@
+#!/bin/bash
+# motion-wallpaper-theme [sync|toggle|watch]: now lumenaire desktop (docs/ENGINE.md "Desktop wallpaper"); ~/.local/bin as a fallback for the units.
+PATH=$PATH:$HOME/.local/bin; exec lumenaire desktop "${@:-sync}"

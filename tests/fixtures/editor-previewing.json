@@ -1,0 +1,15 @@
+{
+  "description": "Editor: previewing on the case, OpenRGB (GPU, board, RAM) still catching up.",
+  "base": "editor-role-override",
+  "previewFile": "preview.live.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/theme",
+      "value": "sakura"
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

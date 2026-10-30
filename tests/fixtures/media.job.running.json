@@ -1,0 +1,13 @@
+{"v": 1, "id": "j-1790000400123-4821", "kind": "prepare", "state": "encoding",
+ "draft": "sakura-2", "role": "screen.fan3", "model": "TlFlexLcd", "then": "set", "at": null, "dest": null,
+ "source": {"path": "/home/you/Videos/space/planet37.mp4", "size": 5210000, "mtime": 1790000000,
+            "kind": "video", "w": 1920, "h": 1080, "duration": 42.0, "fps": 30},
+ "request": {"crop": [656, 236, 608, 608], "time": 12.4, "start": null, "duration": null},
+ "recipe": {"v": 1, "mode": "encode", "crop": [656, 236, 608, 608], "time": 12.4, "start": 0, "duration": 42.0,
+            "fps": 30, "size": [400, 400], "codec": "h264", "crf": 20, "maxrate": "4M", "bg": null,
+            "key": "4025e162e9ff8a780e0b313ba37deb8f62c721be737b27914eabfeab48230e03"},
+ "estimate": null,
+ "progress": {"frac": 0.42, "out_time": 17.7, "speed": 3.1, "eta": 8},
+ "unit": "lumenaire-media-j-1790000400123-4821", "pid": 48213,
+ "started": 1790000400, "updated": 1790000406, "ended": null,
+ "output": null, "warnings": [], "error": null, "applied": null}

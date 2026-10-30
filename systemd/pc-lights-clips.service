@@ -1,0 +1,8 @@
+[Unit]
+Description=pc-lights: rotate screen clips that are due (see "clips" in theme.json)
+After=lianli-daemon.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/pc-lights clips tick
+TimeoutStartSec=2min

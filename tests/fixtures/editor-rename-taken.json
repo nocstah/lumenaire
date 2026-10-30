@@ -1,0 +1,13 @@
+{
+  "description": "Editor: Rename… with a name that exists: the hint offers the next free one.",
+  "base": "editor-role-override",
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "confirm": {
+        "kind": "rename",
+        "name": "Hellfire"
+      }
+    }
+  }
+}

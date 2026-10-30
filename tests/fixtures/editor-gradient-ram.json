@@ -1,0 +1,14 @@
+{
+  "description": "Editor: RAM as a 3-stop gradient across both sticks, and the GPU's two stops.",
+  "base": "editor-role-override",
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "expanded": [
+        "ram",
+        "gpu"
+      ],
+      "cursor": "field:ram:span"
+    }
+  }
+}

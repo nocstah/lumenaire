@@ -1,0 +1,62 @@
+{
+  "description": "Editor: Fan 3 has a new video (the accent outline) and the preview shows it on the case: \"On the case\" under the map.",
+  "base": "editor-screens",
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/2/changed",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/thumb",
+      "value": "../ui/thumbs/arctic-fan3.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/title",
+      "value": "planet 37"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/rel",
+      "value": "media/planet37-3fa9c2d1.mp4"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/where",
+      "value": "stage"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/probe/duration",
+      "value": 42
+    }
+  ],
+  "previewFile": "preview.screens.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.fan2/state",
+      "value": "ready"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.fan2/error",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.pump/state",
+      "value": "ready"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/failed",
+      "value": []
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

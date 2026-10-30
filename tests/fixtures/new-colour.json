@@ -1,0 +1,11 @@
+{
+  "description": "New theme: A colour, Neon Cyan picked; the other two colours follow it.",
+  "base": "editor-card-menu",
+  "ui": {
+    "page": "new",
+    "wizard": {
+      "start": "colour",
+      "colour": "00e5ff"
+    }
+  }
+}

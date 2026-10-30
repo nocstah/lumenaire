@@ -1,0 +1,44 @@
+{
+  "description": "Main page: preparing Sakura 2's fan 2 video failed while no editor was open: an urgent notice to dismiss.",
+  "base": "normal-editor",
+  "statusPatch": [
+    {
+      "op": "replace",
+      "path": "/v_minor",
+      "value": 3
+    },
+    {
+      "op": "add",
+      "path": "/media",
+      "value": {
+        "running": 0,
+        "jobs": [
+          {
+            "id": "j-1790000405789-3310",
+            "draft": "sakura-2",
+            "role": "screen.fan2",
+            "state": "failed",
+            "progress": 0.02,
+            "error": {
+              "code": "unsupported",
+              "text": "ffmpeg could not decode the video (hevc Main 12)"
+            },
+            "then": "set",
+            "applied": null,
+            "started": 1790000405,
+            "ended": 1790000407
+          }
+        ]
+      }
+    }
+  ],
+  "service": {
+    "notice": "Couldn’t prepare Sakura 2’s fan 2 video.",
+    "noticeLevel": "urgent",
+    "noticeActions": [
+      "dismiss"
+    ],
+    "noticeKey": "media:j-1790000405789-3310"
+  },
+  "ui": {}
+}

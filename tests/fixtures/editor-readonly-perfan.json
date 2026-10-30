@@ -1,0 +1,50 @@
+{
+  "description": "Editor: the bottom fans hold a per-fan list (read-only here): the reason and Replace with one colour.",
+  "base": "editor-role-override",
+  "editorPatch": [
+    {
+      "op": "add",
+      "path": "/theme/roles/fans.bottom",
+      "value": {
+        "inner": [
+          "ff4a9a",
+          "ff1a70",
+          "ff3a8a"
+        ]
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/form",
+      "value": "readonly"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/source",
+      "value": "role"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/readonly_reason",
+      "value": "Per-fan list (3 colours). Edit theme.json, or replace it with one colour"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/fields",
+      "value": {}
+    }
+  ],
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "expanded": [
+        "@fans",
+        "fans.bottom"
+      ],
+      "cursor": "field:fans.bottom:replace",
+      "more": [
+        "@fans"
+      ]
+    }
+  }
+}

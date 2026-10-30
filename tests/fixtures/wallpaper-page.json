@@ -1,0 +1,11 @@
+{
+  "description": "The Wallpaper page for the theme the desktop follows (Sakura): animated, pauses, resumes after 5 s, freezes.",
+  "base": "wallpaper-row",
+  "desktopFile": "desktop.current.json",
+  "ui": {
+    "page": "wallpaper",
+    "wallpaper": {
+      "theme": "sakura"
+    }
+  }
+}

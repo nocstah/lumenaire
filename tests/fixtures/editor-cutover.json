@@ -1,0 +1,36 @@
+{
+  "description": "Editor page before the cut-over: no hardware profile, v2 themes. Disabled with Detect hardware and the migrate command.",
+  "base": "no-profile",
+  "statusPatch": [
+    {
+      "op": "add",
+      "path": "/v_minor",
+      "value": 2
+    },
+    {
+      "op": "add",
+      "path": "/drafts",
+      "value": []
+    },
+    {
+      "op": "add",
+      "path": "/preview",
+      "value": null
+    }
+  ],
+  "themeEdits": {
+    "*": {
+      "editable": false,
+      "edit_block": "no-profile",
+      "draft": null
+    }
+  },
+  "service": {
+    "editorState": "failed",
+    "editorErrorCode": "no-profile",
+    "editorName": "sakura"
+  },
+  "ui": {
+    "page": "editor"
+  }
+}

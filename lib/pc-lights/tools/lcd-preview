@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# lcd-preview <template.json> [out.jpg] [width height] — render a lian-li-linux
+# LCD template through the running daemon (read-only RenderTemplatePreview).
+set -euo pipefail
+tpl=$1; out=${2:-/tmp/lcd-preview.jpg}; w=${3:-$(jq .base_width "$tpl")}; h=${4:-$(jq .base_height "$tpl")}
+jq -c --argjson w "$w" --argjson h "$h" '{method: "RenderTemplatePreview", params: {template: ., width: $w, height: $h}}' "$tpl" |
+  timeout 30 socat - "UNIX-CONNECT:${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/lianli-daemon.sock" |
+  jq -er '.data.jpeg_base64' | base64 -d >"$out"
+echo "$out"

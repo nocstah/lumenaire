@@ -1,0 +1,803 @@
+{
+  "description": "Editor right after Create on the New theme page: Neon Cyan, a new theme from one colour; the preview goes out at once (Updating…).",
+  "base": "editor-duplicate",
+  "editorPatch": [
+    {
+      "op": "replace",
+      "path": "/name",
+      "value": "neon-cyan"
+    },
+    {
+      "op": "replace",
+      "path": "/mode",
+      "value": "new"
+    },
+    {
+      "op": "replace",
+      "path": "/from",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/rev",
+      "value": 1
+    },
+    {
+      "op": "replace",
+      "path": "/dirty",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/media_root",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/about/value",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/theme",
+      "value": {
+        "v": 3,
+        "palette": {
+          "primary": "00e5ff",
+          "secondary": "00ff9a",
+          "accent": "0065ff"
+        }
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/palette/primary/value",
+      "value": "00e5ff"
+    },
+    {
+      "op": "replace",
+      "path": "/palette/primary/derived_use",
+      "value": "00e5ff"
+    },
+    {
+      "op": "replace",
+      "path": "/palette/primary/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/palette/primary/shows",
+      "value": {
+        "tl_fan": "00e5ff",
+        "strimer": "00e5ff",
+        "ring": "00e5ff",
+        "gpu": "00e5ff",
+        "board": "00e5ff",
+        "ram": "00e5ff"
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/palette/secondary/value",
+      "value": "00ff9a"
+    },
+    {
+      "op": "replace",
+      "path": "/palette/secondary/derived_use",
+      "value": "00ff9a"
+    },
+    {
+      "op": "replace",
+      "path": "/palette/secondary/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/palette/secondary/shows",
+      "value": {
+        "tl_fan": "00ff9a",
+        "strimer": "00ff9a",
+        "ring": "00ff9a",
+        "gpu": "00ff9a",
+        "board": "00ff9a",
+        "ram": "00ff9a"
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/palette/accent/value",
+      "value": "0065ff"
+    },
+    {
+      "op": "replace",
+      "path": "/palette/accent/set",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/palette/accent/from",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/palette/accent/derived_use",
+      "value": "0065ff"
+    },
+    {
+      "op": "replace",
+      "path": "/palette/accent/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/palette/alert",
+      "value": {
+        "path": "/palette/alert",
+        "value": null,
+        "set": false,
+        "from": "alerts.json",
+        "hints": []
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/groups/0/set",
+      "value": false
+    },
+    {
+      "op": "replace",
+      "path": "/groups/0/value",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/groups/1/set",
+      "value": false
+    },
+    {
+      "op": "replace",
+      "path": "/groups/1/value",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/groups/2/set",
+      "value": false
+    },
+    {
+      "op": "replace",
+      "path": "/groups/2/value",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens",
+      "value": {
+        "editable": false,
+        "coverage": "leds-only",
+        "entries": 0,
+        "templates": 0,
+        "summary": ""
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/roles/0/fields/inner/value",
+      "value": "00e5ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/0/fields/inner/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/0/fields/inner/source_path",
+      "value": "/palette/primary"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/0/fields/inner/shows",
+      "value": "00e5ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/0/fields/inner/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/roles/0/fields/outer/value",
+      "value": "7a00ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/0/fields/outer/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/0/fields/outer/source_path",
+      "value": "/palette/secondary"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/0/fields/outer/shows",
+      "value": "7a00ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/0/fields/outer/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/roles/0/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/fields/inner/value",
+      "value": "00e5ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/fields/inner/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/fields/inner/source_path",
+      "value": "/palette/primary"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/fields/inner/shows",
+      "value": "00e5ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/fields/inner/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/fields/outer/value",
+      "value": "7a00ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/fields/outer/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/fields/outer/source_path",
+      "value": "/palette/secondary"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/fields/outer/shows",
+      "value": "7a00ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/fields/outer/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/roles/1/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/2/fields/inner/value",
+      "value": "00e5ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/2/fields/inner/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/2/fields/inner/source_path",
+      "value": "/palette/primary"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/2/fields/inner/shows",
+      "value": "00e5ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/2/fields/inner/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/roles/2/fields/outer/value",
+      "value": "7a00ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/2/fields/outer/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/2/fields/outer/source_path",
+      "value": "/palette/secondary"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/2/fields/outer/shows",
+      "value": "7a00ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/2/fields/outer/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/roles/2/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/mode/value",
+      "value": "Drizzling"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/mode/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/mode/source_path",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/speed/value",
+      "value": 2
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/speed/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/speed/source_path",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/direction/value",
+      "value": "Clockwise"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/direction/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/direction/source_path",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/colors/value",
+      "value": [
+        "00e5ff",
+        "7a00ff",
+        "0048ff",
+        "00e5ff",
+        "7a00ff",
+        "0048ff"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/colors/shows",
+      "value": [
+        "00e5ff",
+        "7a00ff",
+        "0048ff",
+        "00e5ff",
+        "7a00ff",
+        "0048ff"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/colors/hints",
+      "value": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/colors/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/3/fields/colors/source_path",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/mode/value",
+      "value": "Drizzling"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/mode/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/mode/source_path",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/speed/value",
+      "value": 2
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/speed/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/speed/source_path",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/direction/value",
+      "value": "Clockwise"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/direction/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/direction/source_path",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/colors/value",
+      "value": [
+        "00e5ff",
+        "7a00ff",
+        "0048ff",
+        "00e5ff",
+        "7a00ff",
+        "0048ff"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/colors/shows",
+      "value": [
+        "00e5ff",
+        "7a00ff",
+        "0048ff",
+        "00e5ff",
+        "7a00ff",
+        "0048ff"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/colors/hints",
+      "value": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/colors/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/4/fields/colors/source_path",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/roles/5/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/5/fields/colour/value",
+      "value": "0048ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/5/fields/colour/shows",
+      "value": "0048ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/5/fields/colour/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/roles/5/fields/colour/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/5/fields/colour/source_path",
+      "value": "/palette/accent"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/6/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/6/fields/colour/value",
+      "value": "0048ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/6/fields/colour/shows",
+      "value": "0048ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/6/fields/colour/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/roles/6/fields/colour/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/6/fields/colour/source_path",
+      "value": "/palette/accent"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/8/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/8/fields/colour/value",
+      "value": "0048ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/8/fields/colour/shows",
+      "value": "0048ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/8/fields/colour/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/roles/8/fields/colour/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/8/fields/colour/source_path",
+      "value": "/palette/accent"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/9/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/9/fields/colour/value",
+      "value": "0048ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/9/fields/colour/shows",
+      "value": "0048ff"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/9/fields/colour/hints",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/roles/9/fields/colour/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/9/fields/colour/source_path",
+      "value": "/palette/accent"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/7/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/7/fields/stops/value",
+      "value": [
+        "00e5ff",
+        "7a00ff"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/roles/7/fields/stops/shows",
+      "value": [
+        "00e5ff",
+        "7a00ff"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/roles/7/fields/stops/hints",
+      "value": [
+        [],
+        []
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/roles/7/fields/stops/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/10/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/10/fields/stops/value",
+      "value": [
+        "00e5ff",
+        "0048ff",
+        "7a00ff"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/roles/10/fields/stops/shows",
+      "value": [
+        "00e5ff",
+        "0048ff",
+        "7a00ff"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/roles/10/fields/stops/hints",
+      "value": [
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/roles/10/fields/stops/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/roles/10/fields/span/source",
+      "value": "palette"
+    },
+    {
+      "op": "replace",
+      "path": "/palette/primary/set",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/palette/primary/from",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/palette/secondary/set",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/palette/secondary/from",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/palette/accent/shows",
+      "value": {
+        "tl_fan": "0065ff",
+        "strimer": "0065ff",
+        "ring": "0065ff",
+        "gpu": "0065ff",
+        "board": "0065ff",
+        "ram": "0065ff"
+      }
+    }
+  ],
+  "statusPatch": [
+    {
+      "op": "add",
+      "path": "/drafts",
+      "value": [
+        {
+          "name": "neon-cyan",
+          "mode": "new",
+          "from": null,
+          "rev": 1,
+          "updated": 1790231170
+        }
+      ]
+    }
+  ],
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "previewOnOpen": true
+    }
+  },
+  "previewFile": "preview.live.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/theme",
+      "value": "neon-cyan"
+    },
+    {
+      "op": "replace",
+      "path": "/state",
+      "value": "queued"
+    }
+  ]
+}

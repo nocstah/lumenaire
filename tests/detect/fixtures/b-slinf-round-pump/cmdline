@@ -1,0 +1,1 @@
+BOOT_IMAGE=/vmlinuz-linux root=/dev/nvme0n1p2 rw quiet

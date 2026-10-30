@@ -1,0 +1,23 @@
+{
+  "description": "Resume after set elsewhere to 45 s: the value joins the choices in its place, and Use defaults shows.",
+  "base": "wallpaper-row",
+  "desktopFile": "desktop.current.json",
+  "desktopPatch": [
+    {
+      "op": "replace",
+      "path": "/settings/resume_after_idle",
+      "value": 45
+    },
+    {
+      "op": "add",
+      "path": "/stored/resume_after_idle",
+      "value": 45
+    }
+  ],
+  "ui": {
+    "page": "wallpaper",
+    "wallpaper": {
+      "theme": "sakura"
+    }
+  }
+}

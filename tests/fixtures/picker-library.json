@@ -1,0 +1,44 @@
+{
+  "description": "Picker, Library, adding a clip to the pump: L-Connect pump clips, other themes' pump video, your uploads, a 16:9 video (cropped) and a fan clip (doesn't fit); one file still being read.",
+  "base": "screen-pump-clips",
+  "mediaListFile": "media.list.library.json",
+  "mediaListPatch": [
+    {
+      "op": "replace",
+      "path": "/items/0/thumb",
+      "value": "../ui/thumbs/toxic-pump.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/items/3/thumb",
+      "value": "../ui/thumbs/hellfire-pump.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/items/4/thumb",
+      "value": "../ui/thumbs/cyberpunk-pump.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/items/5/thumb",
+      "value": "../ui/thumbs/photo-wide-synthwave.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/items/6/thumb",
+      "value": "../ui/thumbs/arctic-fan3.webp"
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.pump",
+      "step": "pick",
+      "tab": "library",
+      "adding": {
+        "then": "clip-add",
+        "at": 3
+      }
+    }
+  }
+}

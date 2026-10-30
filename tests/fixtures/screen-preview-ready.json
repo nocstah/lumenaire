@@ -1,0 +1,33 @@
+{
+  "description": "Screen page: Fan 3's new video is on the case (the preview): \"On the case\".",
+  "base": "screen-fan",
+  "previewFile": "preview.screens.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.fan2/state",
+      "value": "ready"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.fan2/error",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.pump/state",
+      "value": "ready"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/failed",
+      "value": []
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "description": "No Motion Wallpaper plugin: one calm line.",
+  "base": "wallpaper-row",
+  "desktopFile": "desktop.unavailable.json",
+  "desktopPatch": [
+    {
+      "op": "replace",
+      "path": "/reason",
+      "value": "no-plugin"
+    }
+  ],
+  "ui": {
+    "page": "wallpaper",
+    "wallpaper": {
+      "theme": "sakura"
+    }
+  }
+}

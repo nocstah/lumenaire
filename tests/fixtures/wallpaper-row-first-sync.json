@@ -1,0 +1,21 @@
+{
+  "description": "Before the engine's first sync status says available: null; the view read at panel open says the desktop takes the settings, so the row shows (the same as wallpaper-row).",
+  "base": "wallpaper-row",
+  "statusPatch": [
+    {
+      "op": "replace",
+      "path": "/desktop/available",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/desktop/playing",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/desktop/at",
+      "value": null
+    }
+  ]
+}

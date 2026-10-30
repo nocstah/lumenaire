@@ -1,0 +1,18 @@
+{
+  "description": "Editor: no edits for a while; the preview ends in 0:42 unless kept.",
+  "base": "editor-role-override",
+  "previewFile": "preview.live.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/theme",
+      "value": "sakura"
+    }
+  ],
+  "service": {
+    "previewIdleLeft": 42
+  },
+  "ui": {
+    "page": "editor"
+  }
+}

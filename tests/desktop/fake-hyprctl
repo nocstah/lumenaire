@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# fake-hyprctl — stands in for hyprctl in tests/desktop: "hyprctl monitors -j"
+# prints $HOME/monitors.json (DP-3 alone, landscape, without it). Every call
+# is recorded in $HOME/hyprctl.log; anything else prints nothing and fails,
+# so the real compositor is never reached.
+printf '%s\n' "$*" >>"$HOME/hyprctl.log"
+if [[ ${1:-} == monitors ]]; then
+  cat "$HOME/monitors.json" 2>/dev/null || echo '[{"name": "DP-3", "transform": 0, "disabled": false}]'
+  exit 0
+fi
+exit 1

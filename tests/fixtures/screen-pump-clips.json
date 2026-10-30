@@ -1,0 +1,31 @@
+{
+  "description": "Screen page: the pump takes turns between three clips every 5 minutes.",
+  "base": "editor-screens",
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/5/pending",
+      "value": null
+    },
+    {
+      "op": "add",
+      "path": "/screens/5/clips/items/-",
+      "value": {
+        "i": 2,
+        "rel": "media/pump/pump-3.mp4",
+        "from": "folder",
+        "where": "root",
+        "title": "pump 3",
+        "thumb": "../ui/thumbs/abyss-pump.webp",
+        "thumb_state": "ready",
+        "duration": 30
+      }
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.pump"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "description": "Screen page: the screens are switched off: \"Screens are off\".",
+  "base": "screen-fan",
+  "statusPatch": [
+    {
+      "op": "replace",
+      "path": "/screens",
+      "value": "off"
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3"
+    }
+  }
+}

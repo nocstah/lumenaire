@@ -1,0 +1,23 @@
+{
+  "description": "Hellfire keeps a setting of its own (it doesn't pause): Resume after and While you work hide, Use defaults shows.",
+  "base": "wallpaper-row",
+  "desktopFile": "desktop.other.json",
+  "desktopPatch": [
+    {
+      "op": "replace",
+      "path": "/settings/pause_while_active",
+      "value": false
+    },
+    {
+      "op": "add",
+      "path": "/stored/pause_while_active",
+      "value": false
+    }
+  ],
+  "ui": {
+    "page": "wallpaper",
+    "wallpaper": {
+      "theme": "hellfire"
+    }
+  }
+}

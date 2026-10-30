@@ -1,0 +1,99 @@
+{
+  "v": 3,
+  "_about": "Sakura: a calm cherry-blossom night in soft pinks and white with a touch of plum on near-black, paired with Omarchy rose-pine. Original art generated 2026-09-24 with imagegen (src/ holds prompts, renders and sidecars) and animated procedurally by src/animate.py into seamless 12 s loops: a blossom branch swaying before a full moon with falling petals, two koi circling a moonlit pond with petals floating on the current, a torii garden drifting under falling petals on the pump, and a lantern-hung branch with falling petals behind a script clock, date and weather on the 8.8\".",
+  "_led_note": "2026-09-24: first pass (pale pinks ffd0e6/fff0f6, white stops) read too white on the LEDs per the user; pinks need low green (G/R <~0.4)",
+  "led": {
+    "calibrated_for": "example-desktop"
+  },
+  "palette": {
+    "primary": "ff4a9a",
+    "secondary": "ff1a70",
+    "accent": "ff3a8a",
+    "alert": "ff0000"
+  },
+  "roles": {
+    "fans": {
+      "inner": "ff4a9a",
+      "outer": "ff1a70",
+      "_note": "top = inner octagon edges (LEDs 0-12), bottom = outer bars (13-25)"
+    },
+    "strimers": {
+      "mode": "Drizzling",
+      "colors": [
+        "ff4a9a",
+        "ff1a70",
+        "ff7ab6",
+        "ff2a80",
+        "ff4a9a",
+        "d4106a"
+      ],
+      "speed": 1,
+      "direction": "Clockwise"
+    },
+    "rings": "ff3a8a",
+    "gpu": {
+      "gradient": [
+        "ff6aa8",
+        "e0106a"
+      ]
+    },
+    "board": "ff2a80",
+    "ram": {
+      "gradient": [
+        "ff7ab6",
+        "ff3a8a",
+        "c0105a"
+      ],
+      "span": "across"
+    }
+  },
+  "alert": {
+    "color": "ff0000"
+  },
+  "screens": {
+    "screen.fan": [
+      {
+        "type": "video",
+        "path": "media/fan-a.mp4",
+        "model": "TlFlexLcd"
+      },
+      {
+        "type": "video",
+        "path": "media/fan-c.mp4",
+        "model": "TlFlexLcd"
+      },
+      {
+        "type": "video",
+        "path": "media/fan-e.mp4",
+        "model": "TlFlexLcd"
+      },
+      {
+        "type": "video",
+        "path": "media/fan-b.mp4",
+        "model": "TlFlexLcd"
+      },
+      {
+        "type": "video",
+        "path": "media/fan-d.mp4",
+        "model": "TlFlexLcd"
+      }
+    ],
+    "screen.pump": {
+      "type": "video",
+      "path": "media/pump.mp4",
+      "clips": [
+        "media/pump"
+      ],
+      "rotate": 300,
+      "model": "HydroShift2OledCurveLcd"
+    },
+    "screen.main": {
+      "type": "custom",
+      "template_id": "us88-sakura",
+      "model": "UniversalScreen"
+    }
+  },
+  "templates": [
+    "us88/us88-sakura.template.json"
+  ]
+}

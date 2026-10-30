@@ -1,0 +1,53 @@
+{
+  "status": "ok",
+  "data": [
+    {
+      "device_id": "wireless:02:00:00:00:01:01",
+      "family": "Tlv2Led",
+      "name": "UNI FAN TL V3 Wireless LCD",
+      "serial": "02:00:00:00:01:01"
+    },
+    {
+      "device_id": "wireless:02:00:00:00:01:02",
+      "family": "Tlv2Led",
+      "name": "UNI FAN TL V3 Wireless",
+      "serial": "02:00:00:00:01:02"
+    },
+    {
+      "device_id": "wireless:02:00:00:00:01:03",
+      "family": "Tlv2Led",
+      "name": "UNI FAN TL V3 Wireless LCD",
+      "serial": "02:00:00:00:01:03"
+    },
+    {
+      "device_id": "wireless:02:00:00:00:02:01",
+      "family": "WirelessStrimer",
+      "name": "Strimer Plus Wireless",
+      "serial": "02:00:00:00:02:01"
+    },
+    {
+      "device_id": "wireless:02:00:00:00:02:02",
+      "family": "WirelessStrimer",
+      "name": "Strimer Plus Wireless",
+      "serial": "02:00:00:00:02:02"
+    },
+    {
+      "device_id": "hid:0416:8051:8-7.2.3",
+      "family": "HydroShift2OledCurveLed",
+      "name": "HydroShift II OLED Curve LED",
+      "serial": "0000c0ffee"
+    },
+    {
+      "device_id": "hid:0416:8050:8-10.2.3",
+      "family": "UniversalScreenLighting",
+      "name": "Universal Screen 8.8\" LED Ring",
+      "serial": null
+    },
+    {
+      "device_id": "hid:43a8:0102:8-12.2.4",
+      "family": "WiredReceiver",
+      "name": "TL Flex LCD Controller",
+      "serial": null
+    }
+  ]
+}

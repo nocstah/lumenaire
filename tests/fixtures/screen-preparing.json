@@ -1,0 +1,18 @@
+{
+  "description": "Screen page: a video from My files is being prepared for Fan 3 (media.job.running.json): the file being made, dimmed, and \"Preparing… 42 %\" with Cancel.",
+  "base": "editor-screens",
+  "jobs": [
+    {
+      "file": "media.job.running.json"
+    }
+  ],
+  "jobThumbs": {
+    "j-1790000400123-4821": "../ui/thumbs/photo-wide-arctic.webp"
+  },
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "description": "First snapshot not parsed yet.",
+  "status": {},
+  "service": {
+    "ready": false,
+    "engineError": "",
+    "engine": "idle",
+    "busyElapsed": 0,
+    "ops": {
+      "theme": null,
+      "lights": null,
+      "screens": null,
+      "clips": null,
+      "schedule": null
+    },
+    "failureUnseen": false,
+    "daemonState": "connecting",
+    "daemonVersion": "1.1.2",
+    "transport": "socket",
+    "pumpRpm": null,
+    "coolantC": null,
+    "coolantAgeS": null,
+    "coolantStale": false,
+    "cpuC": null,
+    "gpuC": null,
+    "gpuUtil": null,
+    "gpuW": 21.5,
+    "fans": [],
+    "missingDevices": [],
+    "nowPlaying": {
+      "a1a1a1a100000006": "pump-2.mp4"
+    },
+    "notice": "",
+    "noticeLevel": "",
+    "noticeActions": [],
+    "previewRev": 0,
+    "settings": {
+      "show": "coolant",
+      "coolantWarn": 40,
+      "showGpu": true,
+      "rightClick": "panel",
+      "showDot": true
+    },
+    "blockedKinds": []
+  },
+  "themes": {
+    "empty": true
+  }
+}

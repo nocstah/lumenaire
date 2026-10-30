@@ -1,0 +1,32 @@
+{
+  "description": "Picker, Library, for the pump: 60 of 151 shown, Show more under the grid.",
+  "base": "picker-library",
+  "mediaListPatch": [
+    {
+      "op": "replace",
+      "path": "/total",
+      "value": 151
+    },
+    {
+      "op": "replace",
+      "path": "/indexing",
+      "value": {
+        "state": "done",
+        "done": 151,
+        "of": 151
+      }
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.pump",
+      "step": "pick",
+      "tab": "library",
+      "adding": {
+        "then": "clip-add",
+        "at": 3
+      }
+    }
+  }
+}

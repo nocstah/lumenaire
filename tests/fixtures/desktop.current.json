@@ -1,0 +1,38 @@
+{
+  "v": 1,
+  "available": true,
+  "reason": null,
+  "omarchy_theme": "sakura",
+  "theme": "sakura",
+  "background": "/home/user/.config/omarchy/current/theme/backgrounds/1-sakura.png",
+  "has_animated": true,
+  "playing": true,
+  "user_clip": false,
+  "screens": [
+    {
+      "name": "HDMI-A-1",
+      "portrait": true,
+      "clip": "/home/user/.config/omarchy/themes/sakura/backgrounds/.animated/1-sakura.portrait.mp4",
+      "playing": true
+    },
+    {
+      "name": "DP-3",
+      "portrait": false,
+      "clip": "/home/user/.config/omarchy/themes/sakura/backgrounds/.animated/1-sakura.mp4",
+      "playing": true
+    }
+  ],
+  "settings": {
+    "animated": true,
+    "pause_while_active": true,
+    "resume_after_idle": 5,
+    "while_active": "freeze"
+  },
+  "stored": {},
+  "defaults": {
+    "animated": true,
+    "pause_while_active": true,
+    "resume_after_idle": 5,
+    "while_active": "freeze"
+  }
+}

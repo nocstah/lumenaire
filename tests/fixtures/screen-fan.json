@@ -1,0 +1,42 @@
+{
+  "description": "Screen page: Fan 3 (right column) with its new video; the preview is off, so it shows after you save.",
+  "base": "editor-screens",
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/2/changed",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/thumb",
+      "value": "../ui/thumbs/arctic-fan3.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/title",
+      "value": "planet 37"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/rel",
+      "value": "media/planet37-3fa9c2d1.mp4"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/where",
+      "value": "stage"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/probe/duration",
+      "value": 42
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3"
+    }
+  }
+}

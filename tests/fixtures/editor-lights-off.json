@@ -1,0 +1,14 @@
+{
+  "description": "Editor: lights are off, so there is nothing to preview on.",
+  "base": "editor-role-override",
+  "statusPatch": [
+    {
+      "op": "replace",
+      "path": "/lights",
+      "value": "off"
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

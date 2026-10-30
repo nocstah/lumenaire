@@ -1,0 +1,23 @@
+{
+  "description": "Main page: the wallpaper kept still for Sakura (Still, switch off).",
+  "base": "wallpaper-row",
+  "statusPatch": [
+    {
+      "op": "replace",
+      "path": "/desktop/settings/animated",
+      "value": false
+    }
+  ],
+  "desktopCurrentPatch": [
+    {
+      "op": "replace",
+      "path": "/settings/animated",
+      "value": false
+    },
+    {
+      "op": "add",
+      "path": "/stored/animated",
+      "value": false
+    }
+  ]
+}

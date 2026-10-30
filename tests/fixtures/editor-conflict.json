@@ -1,0 +1,19 @@
+{
+  "description": "Editor: sakura/theme.json changed on disk since editing began.",
+  "base": "editor-role-override",
+  "editorPatch": [
+    {
+      "op": "replace",
+      "path": "/conflict",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/saved/sha256",
+      "value": "0a9b8c7d6e5f40312a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f8091"
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

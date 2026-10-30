@@ -1,0 +1,12 @@
+{
+  "description": "New theme: A colour with the colour picker open on a hot pink.",
+  "base": "editor-card-menu",
+  "ui": {
+    "page": "new",
+    "wizard": {
+      "start": "colour",
+      "colour": "ff1a8c",
+      "picker": true
+    }
+  }
+}

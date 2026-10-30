@@ -1,0 +1,89 @@
+{
+  "description": "Theme list: the right-click menu on Hellfire (Edit, Duplicate, Rename…, Delete…).",
+  "base": "normal",
+  "statusPatch": [
+    {
+      "op": "add",
+      "path": "/v_minor",
+      "value": 2
+    },
+    {
+      "op": "add",
+      "path": "/profile",
+      "value": {
+        "state": "ok",
+        "machine": "example-desktop",
+        "detected_at": "2026-09-24T16:00:00+02:00",
+        "screens": 7,
+        "backends": {
+          "lianli": {
+            "state": "ok",
+            "enabled": true,
+            "devices": 16
+          },
+          "openrgb": {
+            "state": "ok",
+            "enabled": true,
+            "devices": 5
+          }
+        },
+        "new_devices": [],
+        "missing_devices": [],
+        "sensors": {
+          "cpu": "k10temp",
+          "gpu": "nvidia-smi",
+          "gpu_integrated": "amdgpu",
+          "coolant": "lianli",
+          "pump": "lianli",
+          "ram": "spd5118"
+        },
+        "pump_device": "hid:0416:8051:8-7.2.3",
+        "groups": [
+          "fans",
+          "strimers",
+          "rings",
+          "gpu",
+          "board",
+          "ram"
+        ]
+      }
+    },
+    {
+      "op": "add",
+      "path": "/drafts",
+      "value": [
+        {
+          "name": "sakura-2",
+          "mode": "duplicate",
+          "from": "sakura",
+          "rev": 3,
+          "updated": 1790231100
+        }
+      ]
+    },
+    {
+      "op": "add",
+      "path": "/preview",
+      "value": null
+    }
+  ],
+  "themeEdits": {
+    "*": {
+      "editable": true,
+      "edit_block": null,
+      "draft": null
+    },
+    "sakura": {
+      "draft": {
+        "rev": 7,
+        "updated": 1790231100
+      }
+    }
+  },
+  "ui": {
+    "confirm": {
+      "kind": "menu",
+      "name": "hellfire"
+    }
+  }
+}

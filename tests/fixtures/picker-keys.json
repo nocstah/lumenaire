@@ -1,0 +1,13 @@
+{
+  "description": "Picker keys: the cursor moved to the second row (l, j) of This theme for Fan 3.",
+  "base": "picker-theme",
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3",
+      "step": "pick",
+      "tab": "theme",
+      "pickCursor": 5
+    }
+  }
+}

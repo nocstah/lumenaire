@@ -1,0 +1,6 @@
+[Unit]
+Description=Motion Wallpaper follows the Omarchy wallpaper (plays a theme's animated version)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/motion-wallpaper-theme

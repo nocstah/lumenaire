@@ -1,0 +1,581 @@
+{
+  "v": 1,
+  "machine": {
+    "name": "example-desktop",
+    "hostname": "example-desktop",
+    "detected_at": "2026-09-24T16:00:00+02:00",
+    "detect_version": 1
+  },
+  "backends": {
+    "lianli": {
+      "enabled": true,
+      "state": "ok",
+      "version": "1.1.2"
+    },
+    "openrgb": {
+      "enabled": true,
+      "state": "ok",
+      "version": "0.9+ (1.0rc3)"
+    }
+  },
+  "devices": {
+    "lianli:mac:02:00:00:00:01:01": {
+      "backend": "lianli",
+      "present": true,
+      "name": "UNI FAN TL V3 Wireless LCD",
+      "family": "Tlv2Led",
+      "kind": "fan_group",
+      "fans": 3,
+      "leds": 78,
+      "regions": [
+        "inner",
+        "outer"
+      ],
+      "match": {
+        "mac": "02:00:00:00:01:01",
+        "device_id": "wireless:02:00:00:00:01:01"
+      }
+    },
+    "lianli:mac:02:00:00:00:01:02": {
+      "backend": "lianli",
+      "present": true,
+      "name": "UNI FAN TL V3 Wireless",
+      "family": "Tlv2Led",
+      "kind": "fan_group",
+      "fans": 3,
+      "leds": 78,
+      "regions": [
+        "inner",
+        "outer"
+      ],
+      "match": {
+        "mac": "02:00:00:00:01:02",
+        "device_id": "wireless:02:00:00:00:01:02"
+      }
+    },
+    "lianli:mac:02:00:00:00:01:03": {
+      "backend": "lianli",
+      "present": true,
+      "name": "UNI FAN TL V3 Wireless LCD",
+      "family": "Tlv2Led",
+      "kind": "fan_group",
+      "fans": 2,
+      "leds": 52,
+      "regions": [
+        "inner",
+        "outer"
+      ],
+      "match": {
+        "mac": "02:00:00:00:01:03",
+        "device_id": "wireless:02:00:00:00:01:03"
+      }
+    },
+    "lianli:mac:02:00:00:00:02:01": {
+      "backend": "lianli",
+      "present": true,
+      "name": "Strimer Plus Wireless",
+      "family": "WirelessStrimer",
+      "kind": "strimer",
+      "leds": 174,
+      "match": {
+        "mac": "02:00:00:00:02:01",
+        "device_id": "wireless:02:00:00:00:02:01"
+      }
+    },
+    "lianli:mac:02:00:00:00:02:02": {
+      "backend": "lianli",
+      "present": true,
+      "name": "Strimer Plus Wireless",
+      "family": "WirelessStrimer",
+      "kind": "strimer",
+      "leds": 132,
+      "match": {
+        "mac": "02:00:00:00:02:02",
+        "device_id": "wireless:02:00:00:00:02:02"
+      }
+    },
+    "lianli:serial:0000c0ffee": {
+      "backend": "lianli",
+      "present": true,
+      "name": "HydroShift II OLED Curve LED",
+      "family": "HydroShift2OledCurveLed",
+      "kind": "ring",
+      "leds": 45,
+      "has_pump": true,
+      "seen_id": "hid:0416:8051:8-7.2.3",
+      "match": {
+        "serial": "0000c0ffee",
+        "family": "HydroShift2OledCurveLed"
+      }
+    },
+    "lianli:family:UniversalScreenLighting": {
+      "backend": "lianli",
+      "present": true,
+      "name": "Universal Screen 8.8\" LED Ring",
+      "family": "UniversalScreenLighting",
+      "kind": "ring",
+      "leds": 60,
+      "seen_id": "hid:0416:8050:8-10.2.3",
+      "match": {
+        "family": "UniversalScreenLighting"
+      }
+    },
+    "lianli:family:WiredReceiver#1": {
+      "backend": "lianli",
+      "present": true,
+      "name": "TL Flex LCD Controller",
+      "family": "WiredReceiver",
+      "kind": "duplicate",
+      "duplicate_of": "lianli:mac:02:00:00:00:01:01",
+      "seen_id": "hid:43a8:0102:8-12.2.4",
+      "match": {
+        "family": "WiredReceiver",
+        "device_id": "hid:43a8:0102:8-12.2.4"
+      }
+    },
+    "lianli:family:WiredReceiver#2": {
+      "backend": "lianli",
+      "present": true,
+      "name": "TL Flex LCD Controller",
+      "family": "WiredReceiver",
+      "kind": "duplicate",
+      "duplicate_of": "lianli:mac:02:00:00:00:01:03",
+      "seen_id": "hid:43a8:0102:8-12.4.4",
+      "match": {
+        "family": "WiredReceiver",
+        "device_id": "hid:43a8:0102:8-12.4.4"
+      }
+    },
+    "lianli:lcd:f1f1f1f100000001": {
+      "backend": "lianli",
+      "present": true,
+      "name": "TL Flex LCD",
+      "family": "TlFlexLcd",
+      "kind": "lcd",
+      "panel": [
+        400,
+        400
+      ],
+      "usb": "1cbe:a018",
+      "lcd_group": "lianli:mac:02:00:00:00:01:01",
+      "seen_id": "hid:1cbe:a018:8-12.2.1",
+      "match": {
+        "usb_serial": "f1f1f1f100000001"
+      }
+    },
+    "lianli:lcd:f1f1f1f100000002": {
+      "backend": "lianli",
+      "present": true,
+      "name": "TL Flex LCD",
+      "family": "TlFlexLcd",
+      "kind": "lcd",
+      "panel": [
+        400,
+        400
+      ],
+      "usb": "1cbe:a018",
+      "lcd_group": "lianli:mac:02:00:00:00:01:01",
+      "seen_id": "hid:1cbe:a018:8-12.2.2",
+      "match": {
+        "usb_serial": "f1f1f1f100000002"
+      }
+    },
+    "lianli:lcd:f1f1f1f100000003": {
+      "backend": "lianli",
+      "present": true,
+      "name": "TL Flex LCD",
+      "family": "TlFlexLcd",
+      "kind": "lcd",
+      "panel": [
+        400,
+        400
+      ],
+      "usb": "1cbe:a018",
+      "lcd_group": "lianli:mac:02:00:00:00:01:01",
+      "seen_id": "hid:1cbe:a018:8-12.2.3",
+      "match": {
+        "usb_serial": "f1f1f1f100000003"
+      }
+    },
+    "lianli:lcd:f1f1f1f100000004": {
+      "backend": "lianli",
+      "present": true,
+      "name": "TL Flex LCD",
+      "family": "TlFlexLcd",
+      "kind": "lcd",
+      "panel": [
+        400,
+        400
+      ],
+      "usb": "1cbe:a018",
+      "lcd_group": "lianli:mac:02:00:00:00:01:03",
+      "seen_id": "hid:1cbe:a018:8-12.4.2",
+      "match": {
+        "usb_serial": "f1f1f1f100000004"
+      }
+    },
+    "lianli:lcd:f1f1f1f100000005": {
+      "backend": "lianli",
+      "present": true,
+      "name": "TL Flex LCD",
+      "family": "TlFlexLcd",
+      "kind": "lcd",
+      "panel": [
+        400,
+        400
+      ],
+      "usb": "1cbe:a018",
+      "lcd_group": "lianli:mac:02:00:00:00:01:03",
+      "seen_id": "hid:1cbe:a018:8-12.4.3",
+      "match": {
+        "usb_serial": "f1f1f1f100000005"
+      }
+    },
+    "lianli:lcd:a1a1a1a100000006": {
+      "backend": "lianli",
+      "present": true,
+      "name": "HydroShift II OLED Curve",
+      "family": "HydroShift2OledCurveLcd",
+      "kind": "lcd",
+      "panel": [
+        1080,
+        2288
+      ],
+      "usb": "1cbe:a068",
+      "seen_id": "hid:1cbe:a068:8-7.2.2",
+      "match": {
+        "usb_serial": "a1a1a1a100000006"
+      }
+    },
+    "lianli:lcd:b8b8b8b800000007": {
+      "backend": "lianli",
+      "present": true,
+      "name": "Universal Screen 8.8\"",
+      "family": "UniversalScreen",
+      "kind": "lcd",
+      "panel": [
+        480,
+        1920
+      ],
+      "usb": "1cbe:a088",
+      "seen_id": "hid:1cbe:a088:8-10.2.2",
+      "match": {
+        "usb_serial": "b8b8b8b800000007"
+      }
+    },
+    "openrgb:ENE DRAM#0": {
+      "backend": "openrgb",
+      "present": true,
+      "name": "ENE DRAM",
+      "type": "DRAM",
+      "kind": "ram",
+      "leds": 8,
+      "match": {
+        "name": "ENE DRAM",
+        "location": "I2C: SMBus PIIX4 adapter port 0 at 0b00 (/dev/i2c-15), address 0x71"
+      }
+    },
+    "openrgb:ENE DRAM#1": {
+      "backend": "openrgb",
+      "present": true,
+      "name": "ENE DRAM",
+      "type": "DRAM",
+      "kind": "ram",
+      "leds": 8,
+      "match": {
+        "name": "ENE DRAM",
+        "location": "I2C: SMBus PIIX4 adapter port 0 at 0b00 (/dev/i2c-15), address 0x73"
+      }
+    },
+    "openrgb:ASUS ROG ASTRAL GeForce RTX 5090 OC#0": {
+      "backend": "openrgb",
+      "present": true,
+      "name": "ASUS ROG ASTRAL GeForce RTX 5090 OC",
+      "type": "GPU",
+      "kind": "gpu",
+      "leds": 30,
+      "match": {
+        "name": "ASUS ROG ASTRAL GeForce RTX 5090 OC"
+      }
+    },
+    "openrgb:X870E AORUS MASTER X3D#0": {
+      "backend": "openrgb",
+      "present": true,
+      "name": "X870E AORUS MASTER X3D",
+      "type": "Motherboard",
+      "kind": "board",
+      "zones": [
+        "ARGB_V2_1",
+        "ARGB_V2_2",
+        "ARGB_V2_3",
+        "ARGB_V2_4",
+        "LED_C",
+        "I/O Cover",
+        "Chipset Accent"
+      ],
+      "match": {
+        "name": "X870E AORUS MASTER X3D"
+      }
+    },
+    "openrgb:Razer Deathadder Elite#0": {
+      "backend": "openrgb",
+      "present": true,
+      "name": "Razer Deathadder Elite",
+      "type": "Mouse",
+      "kind": "peripheral",
+      "zones": [
+        "Logo",
+        "Scroll Wheel"
+      ],
+      "match": {
+        "name": "Razer Deathadder Elite"
+      }
+    }
+  },
+  "roles": {
+    "fans.side": {
+      "device": "lianli:mac:02:00:00:00:01:01",
+      "label": "Right 3-fan LCD column",
+      "source": "detect",
+      "confidence": "guess"
+    },
+    "fans.bottom": {
+      "device": "lianli:mac:02:00:00:00:01:02",
+      "label": "3-fan group",
+      "source": "detect",
+      "confidence": "guess"
+    },
+    "fans.top": {
+      "device": "lianli:mac:02:00:00:00:01:03",
+      "label": "2-fan LCD group",
+      "source": "detect",
+      "confidence": "guess"
+    },
+    "strimer.atx24": {
+      "device": "lianli:mac:02:00:00:00:02:01",
+      "label": "24-pin Strimer",
+      "source": "detect",
+      "confidence": "guess"
+    },
+    "strimer.gpu": {
+      "device": "lianli:mac:02:00:00:00:02:02",
+      "label": "GPU Strimer",
+      "source": "detect",
+      "confidence": "guess"
+    },
+    "pump.ring": {
+      "device": "lianli:serial:0000c0ffee",
+      "label": "HydroShift II pump ring",
+      "source": "detect",
+      "confidence": "sure"
+    },
+    "screen.main.ring": {
+      "device": "lianli:family:UniversalScreenLighting",
+      "label": "8.8\" screen ring",
+      "source": "detect",
+      "confidence": "sure"
+    },
+    "screen.fan1": {
+      "device": "lianli:lcd:f1f1f1f100000001",
+      "group": "fans.side",
+      "mount": 180,
+      "label": "3-fan group, screen 1 (rotated 180)",
+      "source": "migrate",
+      "confidence": "sure"
+    },
+    "screen.fan2": {
+      "device": "lianli:lcd:f1f1f1f100000002",
+      "group": "fans.side",
+      "mount": 180,
+      "label": "3-fan group, screen 2",
+      "source": "migrate",
+      "confidence": "sure"
+    },
+    "screen.fan3": {
+      "device": "lianli:lcd:f1f1f1f100000003",
+      "group": "fans.side",
+      "mount": 180,
+      "label": "3-fan group, screen 3",
+      "source": "migrate",
+      "confidence": "sure"
+    },
+    "screen.fan4": {
+      "device": "lianli:lcd:f1f1f1f100000004",
+      "group": "fans.top",
+      "mount": 0,
+      "label": "2-fan group, screen 1",
+      "source": "migrate",
+      "confidence": "sure"
+    },
+    "screen.fan5": {
+      "device": "lianli:lcd:f1f1f1f100000005",
+      "group": "fans.top",
+      "mount": 0,
+      "label": "2-fan group, screen 2",
+      "source": "migrate",
+      "confidence": "sure"
+    },
+    "screen.pump": {
+      "device": "lianli:lcd:a1a1a1a100000006",
+      "mount": 0,
+      "label": "HydroShift II OLED Curve pump",
+      "source": "migrate",
+      "confidence": "sure"
+    },
+    "screen.main": {
+      "device": "lianli:lcd:b8b8b8b800000007",
+      "mount": 0,
+      "label": "8.8\" Universal Screen",
+      "source": "migrate",
+      "confidence": "sure"
+    },
+    "gpu": {
+      "device": "openrgb:ASUS ROG ASTRAL GeForce RTX 5090 OC#0",
+      "leds": 30,
+      "layout": "aura",
+      "source": "detect",
+      "confidence": "sure"
+    },
+    "board": {
+      "device": "openrgb:X870E AORUS MASTER X3D#0",
+      "source": "detect",
+      "confidence": "sure"
+    },
+    "board.argb": {
+      "device": "openrgb:X870E AORUS MASTER X3D#0",
+      "argb": {
+        "zones": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "size": 120
+      },
+      "source": "migrate",
+      "confidence": "sure"
+    },
+    "ram": {
+      "devices": [
+        "openrgb:ENE DRAM#0",
+        "openrgb:ENE DRAM#1"
+      ],
+      "match_name": "ENE DRAM",
+      "leds_per_device": 8,
+      "source": "detect",
+      "confidence": "sure"
+    },
+    "mouse": {
+      "device": "openrgb:Razer Deathadder Elite#0",
+      "managed": false,
+      "source": "detect",
+      "confidence": "sure"
+    },
+    "ignore": {
+      "devices": [
+        "lianli:family:WiredReceiver#1",
+        "lianli:family:WiredReceiver#2"
+      ],
+      "source": "detect",
+      "confidence": "sure"
+    }
+  },
+  "screens": {
+    "expected": 7
+  },
+  "sensors": {
+    "cpu": {
+      "kind": "hwmon",
+      "driver": "k10temp",
+      "input": "temp1_input",
+      "label": "Tctl",
+      "scale": 0.001
+    },
+    "gpu": {
+      "kind": "nvidia-smi",
+      "index": 0,
+      "name": "NVIDIA GeForce RTX 5090"
+    },
+    "gpu_integrated": {
+      "kind": "hwmon",
+      "driver": "amdgpu",
+      "input": "temp1_input",
+      "label": "edge",
+      "scale": 0.001,
+      "integrated": true
+    },
+    "coolant": {
+      "kind": "lianli",
+      "device": "lianli:serial:0000c0ffee",
+      "field": "coolant_temps"
+    },
+    "pump": {
+      "kind": "lianli",
+      "device": "lianli:serial:0000c0ffee",
+      "field": "fan_rpms"
+    },
+    "ram": {
+      "kind": "hwmon",
+      "driver": "spd5118",
+      "input": "temp1_input",
+      "scale": 0.001,
+      "count": 2
+    }
+  },
+  "calibration": {
+    "enabled": true,
+    "note": "photo-learned 2026-09-24 (SKILL.md LED colour lesson); only applied to themes not calibrated_for this machine",
+    "classes": {
+      "tl_fan": {
+        "warm_gr_max": 0.3,
+        "pink_gr_max": 0.4,
+        "pink_br_max": 0.6
+      },
+      "strimer": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "ring": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "gpu": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "ram": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "board": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      }
+    }
+  },
+  "workarounds": {
+    "lianli.fixed_binary": {
+      "present": true,
+      "needed": null,
+      "exec": "%h/.cache/pc-lights/lianli-daemon-fixed",
+      "dropin": "zz-fixed-binary.conf",
+      "daemon_version": "1.1.2",
+      "note": "remove when lianli-linux-git is upgraded (guard version mismatch)"
+    },
+    "lianli.wake_fan_lcds": {
+      "present": true,
+      "needed": true,
+      "dropin": "wake-fan-lcds.conf",
+      "note": "TlFlexLcd present: receivers keep the LCDs off USB after shutdown"
+    },
+    "openrgb.lianli_detectors_off": {
+      "present": true,
+      "needed": true
+    },
+    "openrgb.smbus_lax": {
+      "present": true,
+      "needed": true,
+      "note": "ENE DRAM on AMD needs acpi_enforce_resources=lax"
+    }
+  }
+}

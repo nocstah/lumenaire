@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# The engine as tests/ui/service-smoke.sh sees it: the frozen contract views
+# (tests/fixtures) as canned replies, every call logged to $SMOKE_LOG.
+FX=$(cd "$(dirname "${BASH_SOURCE[0]}")/../fixtures" && pwd)
+LOG=${SMOKE_LOG:?}
+printf '%s\n' "$*" >> "$LOG"
+view() { jq -c --slurpfile s "$FX/screens.sakura.json" '.screens.editable = true | .rev = (.rev // 3) | . + {screens_view: $s[0]}' "$FX/editor.sakura.json"; }
+# The desktop wallpaper (v1.4): one view per theme, kept next to the log so a
+# change sticks (sakura is the desktop's theme; "nope" doesn't exist).
+desk() {
+  local t=sakura f
+  [[ ${1:-} == --theme ]] && t=$2
+  if [[ $t == nope ]]; then echo '{"error":"no theme nope","code":"not-found"}'; exit 2; fi
+  f=${LOG%/*}/desktop-$t.json
+  if [[ ! -f $f ]]; then
+    if [[ $t == sakura ]]; then jq -c . "$FX/desktop.current.json" >"$f"; else jq -c --arg t "$t" '.theme = $t' "$FX/desktop.other.json" >"$f"; fi
+  fi
+  echo "$f"
+}
+case "$1 $2" in
+  "status --json") jq -c '.status | .v_minor = 4 | .profile = {state:"ok", machine:"x", screens: 7, backends:{}, groups:["fans"], pump_device: null} | .drafts = [] | .media = {running:0, jobs:[]}
+                          | .desktop = {available: true, theme: "sakura", settings: {animated: true, pause_while_active: true, resume_after_idle: 5, while_active: "freeze"}, playing: true, at: 1790231170}' "$FX/normal.json" ;;
+  "desktop --theme" | "desktop --json") f=$(desk "${@:2}") || { desk "${@:2}"; exit 2; }; jq -c . "$f" ;;
+  "desktop set")
+    shift 2
+    f=$(desk "$@") || { desk "$@"; exit 2; }
+    [[ $1 == --theme ]] && shift 2
+    case $1 in animated) k=animated ;; pause) k=pause_while_active ;; resume) k=resume_after_idle ;; while) k=while_active ;;
+      *) echo '{"error":"no such setting","code":"usage"}'; exit 2 ;; esac
+    if [[ $2 =~ ^(true|false|[0-9]+)$ ]]; then v=$2; else v="\"$2\""; fi
+    jq -c --arg k "$k" --argjson v "$v" '.settings[$k] = $v | .stored[$k] = $v' "$f" >"$f.new" && mv "$f.new" "$f"
+    jq -c . "$f" ;;
+  "desktop reset")
+    shift 2
+    f=$(desk "$@") || { desk "$@"; exit 2; }
+    jq -c '.settings = .defaults | .stored = {}' "$f" >"$f.new" && mv "$f.new" "$f"
+    jq -c . "$f" ;;
+  "themes --json") echo '[]' ;;
+  "sensors --json") echo '{"v":1,"cpu":null,"gpu":null,"coolant":null,"pump":null}' ;;
+  "theme edit") jq -c '.screens.editable = true' "$FX/editor.sakura.json" ;;
+  "theme show") jq -c '.screens.editable = true' "$FX/editor.sakura.json" ;;
+  "theme screens") jq -c . "$FX/screens.sakura.json" ;;
+  "theme set") if [[ "$*" == *--with-screens* ]]; then view; else jq -c '.screens.editable = true' "$FX/editor.sakura.json"; fi ;;
+  "theme media") view | jq -c '. + {notes: ["Rotation turned off: pictures can'"'"'t take turns."]}' ;;
+  "theme preview") echo '{"ok":true}' ;;
+  "media jobs") jq -c '{v:1, running:1, jobs:[.]}' "$FX/media.job.running.json" ;;
+  "media list") jq -c . "$FX/media.list.library.json" ;;
+  "media frame") jq -c . "$FX/media.frame.json" ;;
+  "media prepare") jq -c '{job: .}' "$FX/media.job.running.json" ;;
+  "media cancel") echo '{"cancelled":true,"id":"x"}' ;;
+  *) echo '{}' ;;
+esac

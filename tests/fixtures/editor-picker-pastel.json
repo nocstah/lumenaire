@@ -1,0 +1,62 @@
+{
+  "description": "Editor: a theme tuned on this PC (no calibration); the 3-fan group's inner ring set to the pastel ffd0e6: washes out, pink with green turns white; fixes offered.",
+  "base": "editor-role-override",
+  "editorPatch": [
+    {
+      "op": "replace",
+      "path": "/calibration/applies",
+      "value": false
+    },
+    {
+      "op": "replace",
+      "path": "/calibration/reason",
+      "value": "stamped"
+    },
+    {
+      "op": "replace",
+      "path": "/calibration/calibrated_for",
+      "value": "example-desktop"
+    },
+    {
+      "op": "add",
+      "path": "/theme/led",
+      "value": {
+        "calibrated_for": "example-desktop"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/theme/roles/fans.bottom",
+      "value": {
+        "inner": "ffd0e6"
+      }
+    }
+  ],
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "expanded": [
+        "@fans",
+        "fans.bottom"
+      ],
+      "picker": "field:fans.bottom:inner",
+      "pickerOriginal": "ff4a9a",
+      "more": [
+        "@fans"
+      ]
+    }
+  },
+  "editorLocal": [
+    {
+      "op": "add",
+      "path": "/roles/fans.bottom",
+      "value": {
+        "inner": "ffd0e6"
+      }
+    }
+  ],
+  "service": {
+    "editPending": true,
+    "previewCountdown": 0.4
+  }
+}

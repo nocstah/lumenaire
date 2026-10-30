@@ -1,0 +1,15 @@
+{
+  "description": "Back from the editor after saving Hellfire (not on the case): \"Saved Hellfire. Use it now?\" with Use.",
+  "base": "normal-editor",
+  "service": {
+    "notice": "Saved Hellfire.",
+    "noticeLevel": "info",
+    "noticeActions": [],
+    "noticeKey": "saved"
+  },
+  "ui": {
+    "savedOffer": {
+      "name": "hellfire"
+    }
+  }
+}

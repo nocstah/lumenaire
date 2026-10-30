@@ -1,0 +1,16 @@
+[Unit]
+Description=Motion Wallpaper follows monitor changes (a theme's portrait clip on portrait monitors)
+# Hyprland's event socket only exists in the graphical session.
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+# A sync now, then one per monitor hot-plug or config reload
+# (lumenaire desktop watch, through the shim). It exits when Hyprland's
+# event stream ends; the restart follows the new instance.
+ExecStart=%h/.local/bin/motion-wallpaper-theme watch
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target

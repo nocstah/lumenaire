@@ -1,0 +1,28 @@
+{
+  "description": "Main page, contract v1.4: the Wallpaper row under the night theme. Sakura's wallpaper has an animated version; animated, pauses while you work.",
+  "base": "normal-editor",
+  "statusPatch": [
+    {
+      "op": "replace",
+      "path": "/v_minor",
+      "value": 4
+    },
+    {
+      "op": "add",
+      "path": "/desktop",
+      "value": {
+        "available": true,
+        "theme": "sakura",
+        "settings": {
+          "animated": true,
+          "pause_while_active": true,
+          "resume_after_idle": 5,
+          "while_active": "freeze"
+        },
+        "playing": false,
+        "at": 1790231170
+      }
+    }
+  ],
+  "desktopCurrentFile": "desktop.current.json"
+}

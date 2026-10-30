@@ -1,0 +1,37 @@
+{
+  "_about": "Calibration presets for profile.calibration (plan §5). A profile picks one with \"preset\": \"<name>\"; its own \"classes\" are merged over the preset's per class and field. Classes: tl_fan fan strimer ring gpu board ram peripheral. A missing class or field is the identity. Only themes whose led.calibrated_for differs from profile.machine.name are calibrated.",
+  "identity": {
+    "note": "no correction: colours go to the LEDs as written",
+    "classes": {}
+  },
+  "lianli-photo": {
+    "note": "learned from photos of Lian Li TL V3 fans, Strimer Plus, HydroShift II and 8.8\" rings (2026-09-24): warm hues and pinks read too white/yellow unless green is cut hard, most of all on TL fans",
+    "classes": {
+      "tl_fan": {
+        "warm_gr_max": 0.3,
+        "pink_gr_max": 0.4,
+        "pink_br_max": 0.6
+      },
+      "strimer": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "ring": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "gpu": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "ram": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      },
+      "board": {
+        "warm_gr_max": 0.6,
+        "pink_gr_max": 0.4
+      }
+    }
+  }
+}

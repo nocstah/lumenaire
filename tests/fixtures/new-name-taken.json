@@ -1,0 +1,14 @@
+{
+  "description": "New theme, step 2: a name that exists; one line says so and offers the next free one.",
+  "base": "editor-card-menu",
+  "ui": {
+    "page": "new",
+    "wizard": {
+      "step": 2,
+      "start": "copy",
+      "copyFrom": "hellfire",
+      "name": "Sakura",
+      "fromMenu": false
+    }
+  }
+}

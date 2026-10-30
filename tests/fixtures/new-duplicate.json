@@ -1,0 +1,12 @@
+{
+  "description": "Duplicate from a card menu: straight to naming the copy (Hellfire copy).",
+  "base": "editor-card-menu",
+  "ui": {
+    "page": "new",
+    "wizard": {
+      "step": 2,
+      "start": "copy",
+      "copyFrom": "hellfire"
+    }
+  }
+}

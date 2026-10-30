@@ -1,0 +1,12 @@
+{
+  "description": "Editor: the engine refused the preview (code unmeasured): live preview needs the one-time hardware check; editing and saving still work.",
+  "base": "editor-role-override",
+  "preview": null,
+  "service": {
+    "previewUnmeasured": true,
+    "previewCheckCommand": "lumenaire theme preview --measure"
+  },
+  "ui": {
+    "page": "editor"
+  }
+}

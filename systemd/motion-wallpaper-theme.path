@@ -1,0 +1,10 @@
+[Unit]
+Description=Watch the current Omarchy wallpaper for Motion Wallpaper
+
+[Path]
+# omarchy theme bg set replaces the background symlink with ln -nsf, which a
+# watch on the link itself misses; a change inside the folder is caught.
+PathModified=%h/.local/state/omarchy/current
+
+[Install]
+WantedBy=default.target

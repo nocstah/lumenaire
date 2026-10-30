@@ -1,0 +1,5 @@
+#!/bin/sh
+# fake-openrgb — first in PATH in tests/preview: the real openrgb is never run.
+echo "$*" >>"$HOME/openrgb-real-calls.log"
+echo "tests/preview: blocked: openrgb $*" >&2
+exit 99

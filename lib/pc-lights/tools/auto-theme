@@ -1,0 +1,1172 @@
+#!/usr/bin/env python3
+"""auto-theme <omarchy-slug> [--force] [--schema 2|3] [--no-media] — build a pc-lights
+theme from an Omarchy theme.
+
+Reads ~/.config/omarchy/themes/<slug>/ (or /usr/share/omarchy/themes/<slug>/):
+colors.toml for the palette, and for the art the wallpaper Omarchy shows now when
+<slug> is the current theme (~/.local/state/omarchy/current/background), else the
+first readable file in backgrounds/ (then ~/.config/omarchy/backgrounds/<slug>/).
+Writes the self-contained theme folder ~/.config/pc-lights/themes/omarchy-<slug>/:
+
+  theme.json   a v3 theme (docs/THEMES.md): a palette plus explicit lighting roles
+               made LED-friendly (hues kept, saturation and value pushed up; light
+               themes use the accent family, never the pale background), and screens
+               keyed by role (screen.fan, screen.pump, screen.main), never by serial,
+               so the same folder works on any PC; pc-lights maps them through the
+               hardware profile and calibrates the colours for this machine's LEDs
+  media/       fan-a.mp4, fan-b.mp4 (400x400 seamless 12 s Ken Burns loops of the
+               two most detailed wallpaper regions, vignetted to black),
+               pump.mp4 (2288x1080 seamless 12 s slow pan); bright art (light
+               themes, or mean luma > 0.5) is toned down (gain/gamma) so no screen glares
+  us88/        us88-omarchy-<slug>.template.json (time, date, CPU temp, RAM usage),
+               background.png (1920x480 wallpaper crop with smoked scrims under
+               the text), agencygothicct-condensed.otf
+  src/         source.json (wallpaper, palette, picked colours, regions, grades, and
+               the source fingerprint + theme.json hash used for staleness),
+               contact.jpg (frames of every screen, for a quick look)
+
+--no-media writes the palette and lighting only (no media/, us88/ or screens). It is
+the default when the hardware profile (~/.config/pc-lights/profile.json) exists and
+lists no LCD screens, so a PC without Lian Li screens never renders videos.
+
+--schema 2 (or PCL_AUTO_THEME_SCHEMA=2) writes the legacy v2 layout instead: lighting
+keys at the top level and screens[] keyed by USB serial, for an engine that has not
+been migrated yet. The serials come from the hardware profile's screen roles; the
+orientation of each screen is copied from an existing v2 theme that has the same
+serial (so a mounted-upside-down fan stays right), else it is the model's default
+plus the role's "mount". v2 output needs a profile (run `pc-lights detect`).
+
+Kept unless --force when complete and up to date. It is rebuilt when colors.toml or a
+wallpaper changed (mtime/size), when the theme's schema differs from the one asked
+for, or, while <slug> is the current Omarchy theme, a different wallpaper is
+selected; a theme.json edited by hand is never overwritten without --force. Fast
+path (skip) takes ~20 ms.
+
+Safety: a per-slug flock (.omarchy-<slug>.lock, never deleted) is taken BEFORE
+re-executing under pcl-heavy (capped 12 GB cgroup, 2 jobs machine-wide; the fd is
+inherited), so a waiting duplicate never holds a heavy slot; pcl-heavy gives up after
+PCL_HEAVY_WAIT (default here 900 s). The folder is built in a hidden
+.omarchy-<slug>.tmp-PID next to it and renamed into place, so a half-built theme is
+never listed; SIGTERM/SIGHUP clean it up, and leftovers of a SIGKILL are removed by
+the next run. Frames are streamed one at a time into ffmpeg; wallpapers over 120 Mpx
+are skipped undecoded. Called by `pc-lights omarchy <slug>` (the theme-set hook);
+a build takes ~6-10 s. Never touches hardware or live state (it does not run pc-lights).
+Exit 0 on success or skip, 1 on failure, 2 on bad usage.
+"""
+import colorsys
+import datetime
+import fcntl
+import hashlib
+import json
+import math
+import os
+import re
+import shutil
+import signal
+import subprocess
+import sys
+import time
+
+HOME = os.path.expanduser("~")
+STATE = os.path.join(HOME, ".config/pc-lights")
+THEMES = os.path.join(STATE, "themes")
+PROFILE = os.path.join(STATE, "profile.json")
+OMARCHY_DIRS = [os.path.join(HOME, ".config/omarchy/themes"), "/usr/share/omarchy/themes"]
+# The 8.8" template font: the one the hand-made themes ship if there is one, else the
+# closest condensed bold sans fontconfig finds (copied under the same name).
+FONT_SRC = os.path.join(THEMES, "cyberpunk/us88/agencygothicct-condensed.otf")
+OMARCHY_STATE = os.path.join(HOME, ".local/state/omarchy/current")   # theme.name + background link
+OMARCHY_USER_BG = os.path.join(HOME, ".config/omarchy/backgrounds")   # user-added wallpapers per theme
+GENERATOR = "auto-theme v3"
+MAX_PIXELS = 120_000_000   # bigger wallpapers are skipped, never decoded (12 GB cgroup cap)
+HEAVY_WAIT = "900"         # seconds to wait for a pcl-heavy slot before failing cleanly
+FPS, SECS = 24, 12
+NFRAMES = FPS * SECS
+
+# What each generated file was made for (the v3 "model" of a screen entry; the engine
+# only puts media on a screen of the same aspect class, see lib/pc-lights/models.json).
+FAN_MODEL, PUMP_MODEL, MAIN_MODEL = "TlFlexLcd", "HydroShift2OledCurveLcd", "UniversalScreen"
+FAN_MEDIA = ["media/fan-a.mp4", "media/fan-b.mp4"]   # cycled over screen.fan1..n
+PUMP_MEDIA = "media/pump.mp4"
+# Default orientation per LCD family when models.json can't be read (v2 output only).
+MODEL_ORIENTATION = {"TlFlexLcd": 0, "TlLcd": 0, "Tlv2Lcd": 0, "SlInfFlexLcd": 0,
+                     "HydroShift2OledCurveLcd": 90, "UniversalScreen": 90,
+                     "HydroShiftLcd": 0, "Galahad2Lcd": 0}
+
+
+def die(msg, code=1):
+    print(f"auto-theme: {msg}", file=sys.stderr)
+    sys.exit(code)
+
+
+def log(msg):
+    print(f"auto-theme: {msg}", file=sys.stderr, flush=True)
+
+
+# ---------------------------------------------------------------- hardware profile
+
+def load_profile():
+    """The hardware profile written by `pc-lights detect`, or None."""
+    try:
+        with open(PROFILE) as f:
+            prof = json.load(f)
+        return prof if isinstance(prof, dict) else None
+    except (OSError, ValueError):
+        return None
+
+
+def screen_roles(prof):
+    """-> [(role, binding)] for the profile's LCD roles in theme order:
+    screen.fan1..n, screen.pump, screen.main, screen.aux1..n (never the *.ring roles)."""
+    roles = (prof or {}).get("roles") or {}
+    rank = {"fan": 0, "pump": 1, "main": 2, "aux": 3}
+    out = []
+    for r, b in roles.items():
+        m = re.fullmatch(r"screen\.(fan|pump|main|aux)(\d*)", r)
+        if m and isinstance(b, dict) and b.get("managed", True) is not False:
+            out.append(((rank[m.group(1)], int(m.group(2) or 0)), r, b))
+    return [(r, b) for _, r, b in sorted(out)]
+
+
+def model_orientation(family):
+    """Default orientation of an LCD family: lib/pc-lights/models.json, else a built-in table."""
+    here = os.path.dirname(os.path.realpath(__file__))
+    try:
+        with open(os.path.join(here, "..", "models.json")) as f:
+            m = json.load(f)
+        for tbl in (m, m.get("lcd"), m.get("lcds"), m.get("models")):
+            e = tbl.get(family) if isinstance(tbl, dict) else None
+            if isinstance(e, dict) and isinstance(e.get("orientation"), int):
+                return e["orientation"]
+    except (OSError, ValueError, AttributeError):
+        pass
+    return MODEL_ORIENTATION.get(family, 0)
+
+
+def v2_reference():
+    """serial -> {orientation, _where} from the existing v2 themes (first one wins), so a
+    v2 build keeps the physical rotation the hand-made themes were tuned with."""
+    ref = {}
+    try:
+        names = sorted(n for n in os.listdir(THEMES) if not n.startswith("."))
+    except OSError:
+        return ref
+    for n in names:
+        try:
+            with open(os.path.join(THEMES, n, "theme.json")) as f:
+                t = json.load(f)
+        except (OSError, ValueError):
+            continue
+        if not isinstance(t, dict) or t.get("v", 2) != 2 or not isinstance(t.get("screens"), list):
+            continue
+        for e in t["screens"]:
+            if isinstance(e, dict) and e.get("serial") and e["serial"] not in ref and "orientation" in e:
+                ref[e["serial"]] = {"orientation": e["orientation"], "_where": e.get("_where")}
+    return ref
+
+
+def v2_screens(prof, tid):
+    """The legacy screens[] (keyed by USB serial) for this machine's profile."""
+    devs = prof.get("devices") or {}
+    ref = v2_reference()
+    out, fan_i = [], 0
+    for role, b in screen_roles(prof):
+        dev = devs.get(b.get("device") or "") or {}
+        serial = (dev.get("match") or {}).get("usb_serial")
+        fam = dev.get("family") or ""
+        if not serial:
+            log(f"{role}: the profile has no USB serial for it; left out")
+            continue
+        if role.startswith("screen.fan"):
+            entry = {"type": "video", "path": FAN_MEDIA[fan_i % len(FAN_MEDIA)]}
+            fan_i += 1
+        elif role == "screen.pump" and fam == PUMP_MODEL:
+            entry = {"type": "video", "path": PUMP_MEDIA}
+        elif role == "screen.main" and fam.startswith(MAIN_MODEL):
+            entry = {"type": "custom", "template_id": tid}
+        else:
+            log(f"{role} ({fam or 'unknown model'}): no media made for it; left out")
+            continue
+        r = ref.get(serial, {})
+        orient = r.get("orientation", (model_orientation(fam) + int(b.get("mount") or 0)) % 360)
+        out.append({"_where": r.get("_where") or b.get("label") or role, "serial": serial,
+                    **entry, "orientation": orient})
+    return out
+
+
+def v3_screens(tid):
+    """Screens keyed by role; the engine binds them through the profile, cycles the fan
+    list over screen.fan1..n and skips a screen whose model doesn't fit the media."""
+    return {
+        "screen.fan": [{"type": "video", "path": p, "model": FAN_MODEL} for p in FAN_MEDIA],
+        "screen.pump": {"type": "video", "path": PUMP_MEDIA, "model": PUMP_MODEL},
+        "screen.main": {"type": "custom", "template_id": tid, "model": MAIN_MODEL},
+    }
+
+
+def cpu_sensor():
+    """The 8.8" CPU-temperature widget's hwmon source: the profile's cpu sensor, else the
+    first of zenpower / k10temp / coretemp found in sysfs; None when there is none."""
+    drivers = ["zenpower", "k10temp", "coretemp"]
+    inp = "temp1_input"
+    cpu = ((load_profile() or {}).get("sensors") or {}).get("cpu") or {}
+    if cpu.get("kind") == "hwmon" and cpu.get("driver"):
+        drivers, inp = [cpu["driver"]], cpu.get("input") or inp
+    found = {}
+    try:
+        for h in sorted(os.listdir("/sys/class/hwmon")):
+            try:
+                with open(f"/sys/class/hwmon/{h}/name") as f:
+                    found.setdefault(f.read().strip(), h)
+            except OSError:
+                continue
+    except OSError:
+        pass
+    for d in drivers:
+        if d in found:
+            dev = os.path.realpath(f"/sys/class/hwmon/{found[d]}/device")
+            src = {"type": "hwmon", "name": d, "label": inp.replace("_input", "")}
+            if os.path.isdir(dev):
+                src["device_path"] = os.path.basename(dev)
+            return src
+    return None
+
+
+# ---------------------------------------------------------------- completeness
+
+def screen_entries(t):
+    """Every screen entry of a v2 (list) or v3 (role -> entry | [entries]) theme."""
+    scr = t.get("screens") or []
+    if isinstance(scr, dict):
+        out = []
+        for v in scr.values():
+            out += v if isinstance(v, list) else [v]
+        return out
+    return scr
+
+
+def theme_complete(d, media=True):
+    """True when theme.json parses and every file it (and its template) names exists.
+    With media, it must also carry the screens and the 8.8" template."""
+    try:
+        with open(os.path.join(d, "theme.json")) as f:
+            t = json.load(f)
+        entries = screen_entries(t)
+        need = [s["path"] for s in entries if s.get("type") in ("image", "video")]
+        if media and not any(s.get("type") == "custom" for s in entries):
+            return False
+        if not media and not (t.get("palette") or t.get("fans")):
+            return False
+        for tp in t.get("templates") or []:
+            need.append(tp)
+            with open(os.path.join(d, tp)) as f:
+                tj = json.load(f)
+            need.append(tj["background"]["path"])
+            need += [w["kind"]["font"]["path"] for w in tj["widgets"]
+                     if isinstance(w["kind"].get("font"), dict) and w["kind"]["font"].get("path")]
+        return all(os.path.getsize(os.path.join(d, p)) > 0 for p in need)
+    except Exception:
+        return False
+
+
+def theme_schema(d):
+    try:
+        with open(os.path.join(d, "theme.json")) as f:
+            return json.load(f).get("v", 2)
+    except (OSError, ValueError, AttributeError):
+        return None
+
+
+def current_background(slug, dirs):
+    """The wallpaper Omarchy shows now, as a path in one of dirs, when <slug> is the current theme.
+
+    The link points into ~/.local/state/omarchy/current/theme/backgrounds/ (a copy of the
+    theme) or into ~/.config/omarchy/backgrounds/<slug>/, so it is matched by file name."""
+    try:
+        with open(os.path.join(OMARCHY_STATE, "theme.name")) as f:
+            if f.read().strip() != slug:
+                return None
+        link = os.path.realpath(os.path.join(OMARCHY_STATE, "background"))
+    except OSError:
+        return None
+    base = os.path.basename(link)
+    for d in dirs:
+        if os.path.dirname(link) == os.path.realpath(d) and os.path.isfile(os.path.join(d, base)):
+            return os.path.join(d, base)
+    return next((os.path.join(d, base) for d in dirs if os.path.isfile(os.path.join(d, base))), None)
+
+
+def wallpaper_candidates(src_dir, slug):
+    """-> (files in the order to try, the currently shown one or None)."""
+    dirs = [os.path.join(src_dir, "backgrounds"), os.path.join(OMARCHY_USER_BG, slug)]
+    files = []
+    for d in dirs:
+        if os.path.isdir(d):
+            files += [os.path.join(d, f) for f in sorted(os.listdir(d)) if os.path.isfile(os.path.join(d, f))]
+    cur = current_background(slug, dirs)
+    if cur in files:
+        files.remove(cur)
+        files.insert(0, cur)
+    else:
+        cur = None
+    return files, cur
+
+
+def fingerprint(src_dir, files):
+    """mtime/size of colors.toml and every candidate wallpaper; a change means rebuild."""
+    def st(p):
+        try:
+            s = os.stat(p)
+            return [s.st_mtime_ns, s.st_size]
+        except OSError:
+            return None
+    return {"colors.toml": st(os.path.join(src_dir, "colors.toml")),
+            "backgrounds": sorted([p] + (st(p) or []) for p in files)}
+
+
+def sha256(path):
+    with open(path, "rb") as f:
+        return hashlib.sha256(f.read()).hexdigest()
+
+
+def up_to_date(final, src_dir, slug, schema=3, media=True):
+    """-> (keep, why). Keep a complete theme unless its Omarchy source changed since it was
+    built, or it has another schema than the one asked for.
+
+    A theme.json edited by hand (hash differs from the one written) is always kept."""
+    if not theme_complete(final, media):
+        return False, "missing or incomplete"
+    try:
+        with open(os.path.join(final, "src/source.json")) as f:
+            rec = json.load(f)
+        if sha256(os.path.join(final, "theme.json")) != rec["theme_json_sha256"]:
+            return True, "theme.json was edited by hand; kept (use --force to rebuild)"
+        if theme_schema(final) != schema:
+            return False, f"it is a v{theme_schema(final)} theme and v{schema} was asked for"
+        files, cur = wallpaper_candidates(src_dir, slug)
+        if fingerprint(src_dir, files) != rec["source_fingerprint"]:
+            return False, "the Omarchy theme's colors.toml or wallpapers changed"
+        if cur and cur not in (rec.get("wallpaper"), rec.get("wallpaper_preferred")):
+            return False, f"the selected wallpaper is now {os.path.basename(cur)}"
+    except (OSError, KeyError, ValueError, TypeError):
+        return False, "built by an older auto-theme (no source record)"
+    return True, "complete and up to date"
+
+
+def leftovers(slug):
+    pat = re.compile(rf"\.?omarchy-{re.escape(slug)}\.(tmp|old)-\d+")
+    try:
+        return [n for n in os.listdir(THEMES) if pat.fullmatch(n)]
+    except OSError:
+        return []
+
+
+def clean_stale(slug):
+    """Remove build leftovers of this slug (a SIGKILLed run can leave them). Only called
+    under the per-slug lock, so no other build of this slug is running."""
+    for n in leftovers(slug):
+        log(f"removing leftover {n}")
+        shutil.rmtree(os.path.join(THEMES, n), ignore_errors=True)
+
+
+# ---------------------------------------------------------------- palette
+
+def parse_colors(path):
+    txt = open(path, encoding="utf-8", errors="replace").read()
+    pal, mode = {}, None
+    try:
+        import tomllib
+        data = tomllib.loads(txt)
+        items = data.items()
+    except Exception:
+        items = re.findall(r'^\s*([A-Za-z0-9_]+)\s*=\s*"?([^"\n#]*#?[^"\n]*)"?', txt, re.M)
+    for k, v in items:
+        if not isinstance(v, str):
+            continue
+        if k == "mode":
+            mode = v.strip().lower()
+            continue
+        m = re.fullmatch(r"\s*#?([0-9a-fA-F]{6})(?:[0-9a-fA-F]{2})?\s*", v)
+        if m:
+            pal[k] = m.group(1).lower()
+    return pal, mode
+
+
+def h2rgb(h):
+    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+
+
+def rgb2h(c):
+    return "".join(f"{max(0, min(255, int(round(x)))):02x}" for x in c)
+
+
+def hsv(h):
+    r, g, b = (x / 255 for x in h2rgb(h))
+    return colorsys.rgb_to_hsv(r, g, b)
+
+
+def from_hsv(hh, s, v):
+    return rgb2h(tuple(x * 255 for x in colorsys.hsv_to_rgb(hh % 1.0, max(0, min(1, s)), max(0, min(1, v)))))
+
+
+def lum(h):
+    r, g, b = (x / 255 for x in h2rgb(h))
+    f = lambda c: c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
+
+
+def hue_dist(a, b):
+    d = abs(a - b) % 1.0
+    return min(d, 1 - d) * 360
+
+
+def led(hh, s=None):
+    """LED-friendly version of a hue: saturated and at full value."""
+    return from_hsv(hh, 1.0 if s is None else s, 1.0)
+
+
+def pick_colours(pal, wall_hues, light=False):
+    """-> dict of LED colours. wall_hues: 36-bin share of saturated wallpaper pixels."""
+    def wshare(hh):
+        c = int(hh * 36) % 36
+        return sum(wall_hues[(c + k) % 36] for k in (-1, 0, 1))
+
+    keys = ["accent", "red", "green", "yellow", "blue", "magenta", "cyan", "orange",
+            "bright_red", "bright_green", "bright_yellow", "bright_blue", "bright_magenta",
+            "bright_cyan", "selection", "cursor", "bright_foreground"]
+    cands = []
+    for k in keys:
+        if k in pal:
+            hh, s, v = hsv(pal[k])
+            if s >= 0.15 and v >= 0.15:
+                cands.append((k, hh, s, v))
+
+    # primary: the accent when it has a hue, else the most characterful colour
+    acc = next((c for c in cands if c[0] == "accent"), None)
+    if acc:
+        prim, prim_src = acc[1], ("accent", pal["accent"])
+    elif cands:
+        best = max(cands, key=lambda c: c[2] ** 0.7 * c[3] ** 0.3 * (0.6 + 2 * wshare(c[1])))
+        prim, prim_src = best[1], (best[0], pal[best[0]])
+    elif max(wall_hues) > 0.02 and sum(wall_hues) > 0.05:
+        prim = (wall_hues.index(max(wall_hues)) + 0.5) / 36
+        prim_src = ("wallpaper hue", None)
+    else:
+        prim = None
+
+    if prim is None:  # monochrome palette and wallpaper: cool white family
+        p, s2 = "ffffff", "9fb4ff"
+        return dict(primary=p, secondary=s2, mono=True, prim_h=None, sec_h=None,
+                    prim_src=("none (monochrome)", None), sec_src=("none (monochrome)", None))
+
+    # secondary: a distinct palette hue, favouring hues the wallpaper actually shows;
+    # light themes stay in the accent family (pale palettes' far hues look random on LEDs)
+    def sec_score(c):
+        sc = c[2] ** 0.7 * c[3] ** 0.3 * (0.4 + 4 * wshare(c[1]))
+        if light and hue_dist(c[1], prim) > 60:
+            sc *= 0.3
+        return sc
+
+    distinct = [c for c in cands if hue_dist(c[1], prim) >= 15]
+    if distinct:
+        bs = max(distinct, key=sec_score)
+        sec, sec_src = bs[1], (bs[0], pal[bs[0]])
+    else:
+        wd = [((i + 0.5) / 36, w) for i, w in enumerate(wall_hues) if hue_dist((i + 0.5) / 36, prim) >= 15]
+        best = max(wd, key=lambda x: x[1]) if wd else None
+        if best and best[1] > 0.04:
+            sec, sec_src = best[0], ("wallpaper hue", None)
+        else:
+            sec, sec_src = (prim + 30 / 360) % 1.0, ("primary hue +30 deg", None)
+    return dict(primary=led(prim), secondary=led(sec), mono=False, prim_h=prim, sec_h=sec,
+                prim_src=prim_src, sec_src=sec_src)
+
+
+def alert_colour(ph, sh):
+    options = [("ff0000", 25), ("ff6a00", 0), ("ffd000", 0), ("00ff40", -10),
+               ("00d0ff", 5), ("2040ff", 0), ("ff00c0", 0)]
+    if ph is None:
+        return "ff0000"
+    best = None
+    for hx, bias in options:
+        hh = hsv(hx)[0]
+        score = min(hue_dist(hh, ph), hue_dist(hh, sh)) + bias
+        if best is None or score > best[0]:
+            best = (score, hx)
+    return best[1]
+
+
+def lighting(c):
+    p, s = c["primary"], c["secondary"]
+    if c["mono"]:
+        strim = [p, s, "d8e0ff", p, s, "b8c4ff"]
+        mode = "Wave"
+    else:
+        ph, sh = c["prim_h"], c["sec_h"]
+        d = ((sh - ph + 0.5) % 1.0) - 0.5          # signed hue step primary -> secondary
+        mid = led(ph + d / 2) if abs(d) * 360 <= 110 else led(ph, 0.55)
+        strim = [p, s, mid, led(ph - 8 / 360, 0.7), led(sh + 10 / 360),
+                 led(ph + d / 4, 0.85) if abs(d) * 360 <= 110 else led(sh, 0.6)]
+        mode = "Drizzling" if hue_dist(ph, sh) >= 40 else "Wave"
+    out = {
+        "fans": {"top": p, "bottom": s,
+                 "_note": "top = inner octagon edges (LEDs 0-12), bottom = outer bars (13-25)"},
+        "strimers": {"mode": mode, "colors": strim, "speed": 2, "direction": "CounterClockwise"},
+        "rings": p,
+        "gpu": {"gradient": [p, s]},
+        "board": p,
+        "ram": {"gradient": [p, s], "span": "across"},
+        "alert": {"color": alert_colour(c["prim_h"], c["sec_h"])},
+    }
+    return out
+
+
+# ---------------------------------------------------------------- wallpaper
+
+def load_wallpaper(files):
+    """First readable file -> (RGB image at most 3840 px, path). Files over MAX_PIXELS are
+    skipped before decoding; the downscale happens before any alpha flattening."""
+    import warnings
+    from PIL import Image, ImageOps
+    Image.MAX_IMAGE_PIXELS = MAX_PIXELS
+    for p in files:
+        try:
+            with warnings.catch_warnings():
+                warnings.simplefilter("error", Image.DecompressionBombWarning)
+                im = Image.open(p)
+                if im.format == "JPEG":
+                    im.draft("RGB", (3840, 3840))
+                im = ImageOps.exif_transpose(im)
+                if im.mode in ("P", "PA", "LA"):
+                    im = im.convert("RGBA")
+                if max(im.size) > 3840:
+                    im.thumbnail((3840, 3840), Image.LANCZOS)
+                if im.mode == "RGBA":
+                    bg = Image.new("RGBA", im.size, (0, 0, 0, 255))
+                    im = Image.alpha_composite(bg, im)
+                im = im.convert("RGB")
+            if min(im.size) < 16:
+                continue
+            return im, p
+        except Exception as e:
+            log(f"skipping unreadable wallpaper {p}: {e}")
+    return None, None
+
+
+def synth_wallpaper(c):
+    """No usable wallpaper: a soft two-colour nebula from the LED colours."""
+    import numpy as np
+    from PIL import Image
+    w, h = 2560, 1440
+    y, x = np.mgrid[0:h, 0:w].astype(np.float32)
+    a = np.exp(-(((x - 0.3 * w) / (0.35 * w)) ** 2 + ((y - 0.4 * h) / (0.45 * h)) ** 2))
+    b = np.exp(-(((x - 0.72 * w) / (0.3 * w)) ** 2 + ((y - 0.65 * h) / (0.4 * h)) ** 2))
+    ca = np.array(h2rgb(c["primary"]), np.float32) * 0.55
+    cb = np.array(h2rgb(c["secondary"]), np.float32) * 0.5
+    img = a[..., None] * ca + b[..., None] * cb
+    return Image.fromarray(np.clip(img, 0, 255).astype(np.uint8)), None
+
+
+def analyse(im):
+    """Small saliency map + wallpaper hue histogram."""
+    import numpy as np
+    from PIL import Image
+    small = im.copy()
+    small.thumbnail((320, 320), Image.BILINEAR)
+    a = np.asarray(small, dtype=np.float32) / 255.0
+    hsvim = np.asarray(small.convert("HSV"), dtype=np.float32) / 255.0
+    L = a @ np.array([0.299, 0.587, 0.114], np.float32)
+    gx = np.abs(np.diff(L, axis=1, prepend=L[:, :1]))
+    gy = np.abs(np.diff(L, axis=0, prepend=L[:1, :]))
+    grad = gx + gy
+    k = 5  # box-smooth
+    ii = np.pad(grad, ((k, k), (k, k)), mode="edge").cumsum(0).cumsum(1)
+    sm = (ii[2 * k:, 2 * k:] - ii[:-2 * k, 2 * k:] - ii[2 * k:, :-2 * k] + ii[:-2 * k, :-2 * k]) / (4 * k * k)
+    sm = sm[:L.shape[0], :L.shape[1]]
+    sal = sm * (0.35 + hsvim[..., 1]) * (0.2 + np.sqrt(L))
+    sal = sal / (sal.max() + 1e-6) + 0.02
+    hh, ss, vv = hsvim[..., 0], hsvim[..., 1], hsvim[..., 2]
+    mask = (ss > 0.3) & (vv > 0.25)
+    hist = np.bincount((hh[mask] * 36).astype(int) % 36, minlength=36).astype(float) / max(1, L.size)
+    return sal, [float(x) for x in hist], small.size
+
+
+def box_sum(ii, y0, x0, y1, x1):
+    return ii[y1, x1] - ii[y0, x1] - ii[y1, x0] + ii[y0, x0]
+
+
+def pick_fan_regions(sal, full_size):
+    """Two square regions (centre x, centre y, side) in full-res coords."""
+    import numpy as np
+    h, w = sal.shape
+    side = max(8, int(0.42 * min(h, w)))
+    inner = max(4, int(side * 0.7))
+    ii = np.zeros((h + 1, w + 1)); ii[1:, 1:] = sal.cumsum(0).cumsum(1)
+    step = max(1, side // 8)
+    cands = []
+    for cy in range(side // 2, h - side // 2 + 1, step):
+        for cx in range(side // 2, w - side // 2 + 1, step):
+            y0, x0 = cy - inner // 2, cx - inner // 2
+            sc = box_sum(ii, max(0, y0), max(0, x0), min(h, y0 + inner), min(w, x0 + inner))
+            cands.append((sc, cx, cy))
+    if not cands:
+        cands = [(1.0, w // 2, h // 2)]
+    cands.sort(reverse=True)
+    a = cands[0]
+    b = next((c for c in cands if math.hypot(c[1] - a[1], c[2] - a[2]) >= 0.65 * side), None)
+    if b is None:
+        b = next((c for c in cands if math.hypot(c[1] - a[1], c[2] - a[2]) >= 0.3 * side), cands[-1])
+    k = full_size[0] / w
+    return [(c[1] * k, c[2] * k, side * k) for c in (a, b)]
+
+
+def band_offset(sal, axis_len_small, want_small, axis):
+    """Best offset (in small px) of a band of length want along axis (0=y, 1=x)."""
+    import numpy as np
+    prof = sal.sum(axis=1 - axis)
+    if axis == 0:  # rows: weigh the right two thirds more (the left is under the scrim)
+        w = sal.shape[1]
+        prof = sal[:, : w // 3].sum(1) * 0.4 + sal[:, w // 3:].sum(1)
+    n = len(prof)
+    want = max(1, min(n, int(round(want_small))))
+    if want >= n:
+        return 0.0
+    cs = np.concatenate([[0], np.cumsum(prof)])
+    best, bo = -1, 0
+    for o in range(0, n - want + 1):
+        centre = (o + want / 2) / n
+        sc = (cs[o + want] - cs[o]) * (1 - 0.35 * abs(centre - 0.5))
+        if sc > best:
+            best, bo = sc, o
+    return float(bo)
+
+
+# ---------------------------------------------------------------- video
+
+def ffmpeg_proc(w, h, out):
+    cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+           "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{w}x{h}", "-r", str(FPS), "-i", "-",
+           "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
+           "-threads", "8", "-movflags", "+faststart", out]
+    return subprocess.Popen(cmd, stdin=subprocess.PIPE)
+
+
+def finish(proc, out):
+    proc.stdin.close()
+    if proc.wait() != 0 or not os.path.getsize(out):
+        raise RuntimeError(f"ffmpeg failed for {out}")
+
+
+def grade(img, light):
+    """Tone for a glowing LCD next to LEDs: bright art (light themes, or mean luma > 0.5)
+    gets gain 0.8-0.65 and gamma 1.2-1.8, both deepening with brightness, so screens
+    never glare.
+    -> (graded image, params)."""
+    import numpy as np
+    m = float(np.asarray(img.convert("L").reduce(4), dtype=np.float32).mean()) / 255
+    if not (light or m > 0.5):
+        return img, {"mean_luma": round(m, 3), "bright": False, "gain": 1.0, "gamma": 1.0}
+    t = min(1.0, max(0.0, (m - 0.5) / 0.3))    # 0 at mean luma 0.5 .. 1 at 0.8+
+    gamma = 1.2 + 0.6 * t
+    gain = round(0.8 - 0.15 * t, 3)
+    lut = [round(255 * gain * (i / 255) ** gamma) for i in range(256)]
+    return img.point(lut * 3), {"mean_luma": round(m, 3), "bright": True, "gain": gain, "gamma": round(gamma, 2)}
+
+
+def render_fan(im, region, out, phase, keep, light):
+    """Seamless 12 s Ken Burns loop: zoom 1.00-1.10 and a slow elliptical drift, graded and
+    vignetted towards black at the rim (to 0.7, or 0.35 for bright art)."""
+    import numpy as np
+    from PIL import Image
+    cx, cy, side = region
+    view = 480  # region side in working px; frames are downsampled to 400 px (sharp)
+    work = int(view * 1.34)
+    k = view / side
+    half = work / 2 / k
+    W, H = im.size
+    # keep the working square inside the image where possible
+    cx = min(max(cx, half), W - half) if W > 2 * half else W / 2
+    cy = min(max(cy, half), H - half) if H > 2 * half else H / 2
+    src = im.crop((int(cx - half), int(cy - half), int(cx - half) + int(2 * half), int(cy - half) + int(2 * half)))
+    src = src.resize((work, work), Image.LANCZOS)
+    src, g = grade(src, light)
+    rim = 0.35 if g["bright"] else 0.7
+    yy, xx = np.mgrid[0:400, 0:400].astype(np.float32)
+    r = np.hypot(xx - 199.5, yy - 199.5)
+    m = np.clip((200 - r) / 34, 0, 1)
+    fall = 1 - (1 - rim) * np.clip(r / 200, 0, 1) ** 2
+    mask = Image.fromarray(np.clip(255 * (0.5 - 0.5 * np.cos(np.pi * m)) * fall, 0, 255).astype(np.uint8))
+    g["rim"] = rim
+    black = Image.new("RGB", (400, 400))
+    proc = ffmpeg_proc(400, 400, out)
+    try:
+        for i in range(NFRAMES):
+            th = 2 * math.pi * i / NFRAMES
+            z = 1.0 + 0.10 * (0.5 - 0.5 * math.cos(th + phase))
+            v = view / z
+            dx = 0.055 * view * math.sin(th + phase)
+            dy = 0.04 * view * math.sin(th + phase + 1.3)
+            x0 = work / 2 + dx - v / 2
+            y0 = work / 2 + dy - v / 2
+            fr = src.resize((400, 400), Image.BICUBIC, box=(x0, y0, x0 + v, y0 + v))
+            fr = Image.composite(fr, black, mask)
+            proc.stdin.write(fr.tobytes())
+            if i in keep:
+                keep[i] = fr.copy()
+    finally:
+        finish(proc, out)
+    return g
+
+
+def render_pump(im, sal, out, keep, light):
+    """Seamless 12 s slow pan of a 2288x1080 window over the wallpaper (graded like the fans)."""
+    from PIL import Image
+    OW, OH = 2288, 1080
+    W, H = im.size
+    over = 1.12
+    s = max(OW * over / W, OH * over / H)
+    ww, wh = int(round(W * s)), int(round(H * s))
+    sh, sw = sal.shape
+    # base window (the over-sized one) placed on the most detailed band
+    bw, bh = OW * over, OH * over
+    if wh - bh > 2:
+        oy = band_offset(sal, sh, bh / wh * sh, 0) / sh * wh
+    else:
+        oy = (wh - bh) / 2
+    if ww - bw > 2:
+        import numpy as np
+        colp = sal.sum(0)
+        cs = np.concatenate([[0], np.cumsum(colp)])
+        n, want = len(colp), max(1, int(round(bw / ww * sw)))
+        best, bo = -1, 0
+        for o in range(0, n - want + 1):
+            sc = (cs[o + want] - cs[o]) * (1 - 0.35 * abs((o + want / 2) / n - 0.5))
+            if sc > best:
+                best, bo = sc, o
+        ox = bo / sw * ww
+    else:
+        ox = (ww - bw) / 2
+    # crop the base window from the original, resized to working px
+    src = im.crop((int(ox / s), int(oy / s), int((ox + bw) / s), int((oy + bh) / s))).resize(
+        (int(bw), int(bh)), Image.LANCZOS)
+    src, g = grade(src, light)
+    ax = (bw - OW) / 2 * 0.85
+    ay = (bh - OH) / 2 * 0.6
+    proc = ffmpeg_proc(OW, OH, out)
+    try:
+        for i in range(NFRAMES):
+            th = 2 * math.pi * i / NFRAMES
+            x0 = (bw - OW) / 2 + ax * math.sin(th)
+            y0 = (bh - OH) / 2 + ay * math.sin(th + 1.2)
+            fr = src.resize((OW, OH), Image.BICUBIC, box=(x0, y0, x0 + OW, y0 + OH))
+            proc.stdin.write(fr.tobytes())
+            if i in keep:
+                keep[i] = fr.resize((OW // 4, OH // 4), Image.BILINEAR)
+            del fr
+    finally:
+        finish(proc, out)
+    return g
+
+
+# ---------------------------------------------------------------- 8.8" banner
+
+PANEL = (1392, 26, 1894, 266)          # top-right stats panel (x0, y0, x1, y1)
+TEXT_LEFT = (40, 40, 700, 420)          # time/date area
+LUM_MAX = 0.22                          # 90th-percentile luma allowed under text
+
+
+def render_banner(im, sal, out, tint_hex, outline_hex, light):
+    import numpy as np
+    from PIL import Image, ImageDraw, ImageFilter
+    OW, OH = 1920, 480
+    W, H = im.size
+    s = max(OW / W, OH / H)
+    ww, wh = W * s, H * s
+    sh, sw = sal.shape
+    oy = band_offset(sal, sh, OH / wh * sh, 0) / sh * wh if wh - OH > 2 else (wh - OH) / 2
+    ox = (ww - OW) / 2
+    ban = im.crop((int(ox / s), int(oy / s), int((ox + OW) / s), int((oy + OH) / s))).resize((OW, OH), Image.LANCZOS)
+    ban, gr = grade(ban, light)
+    blur = ban.filter(ImageFilter.GaussianBlur(10))
+    a = np.asarray(ban, dtype=np.float32) / 255
+    b = np.asarray(blur, dtype=np.float32) / 255
+    tint = np.array(h2rgb(tint_hex), np.float32) / 255
+
+    x = np.arange(OW, dtype=np.float32)
+    t = np.clip((x - 560) / (1000 - 560), 0, 1)
+    left = (1 - t * t * (3 - 2 * t))[None, :].repeat(OH, 0)             # 1 over the left third
+    x0, y0, x1, y1 = PANEL
+    pm = Image.new("L", (OW, OH), 0)
+    ImageDraw.Draw(pm).rounded_rectangle((x0, y0, x1, y1), radius=26, fill=255)
+    pm = np.asarray(pm.filter(ImageFilter.GaussianBlur(9)), dtype=np.float32) / 255
+
+    def compose(al, ap):
+        soft = np.maximum(left, pm)[..., None]
+        base = a * (1 - soft) + b * soft                                  # blur under all text
+        dark = np.maximum(left * al, pm * ap)[..., None]
+        return base * (1 - dark) + tint * dark
+
+    def region_lum(img, box):
+        x0, y0, x1, y1 = box
+        r = img[y0:y1, x0:x1] @ np.array([0.2126, 0.7152, 0.0722], np.float32)
+        return float(np.percentile(r, 90))
+
+    al, ap = 0.66, 0.6
+    for _ in range(8):  # darken until the brightest text areas are dim enough
+        img = compose(al, ap)
+        ll, lp = region_lum(img, TEXT_LEFT), region_lum(img, PANEL)
+        if ll <= LUM_MAX and lp <= LUM_MAX:
+            break
+        if ll > LUM_MAX:
+            al = min(0.92, al + 0.06)
+        if lp > LUM_MAX:
+            ap = min(0.92, ap + 0.06)
+    out_img = Image.fromarray(np.clip(img * 255, 0, 255).astype(np.uint8))
+    d = ImageDraw.Draw(out_img, "RGBA")
+    r, g, bb = h2rgb(outline_hex)
+    d.rounded_rectangle(PANEL, radius=26, outline=(r, g, bb, 110), width=2)
+    out_img.save(out, optimize=False, compress_level=6)
+    return out_img, al, ap, gr
+
+
+def template(slug, name, text_hex, label_hex):
+    tid = f"us88-omarchy-{slug}"
+    font = {"path": "us88/agencygothicct-condensed.otf"}
+    tc = list(h2rgb(text_hex)) + [255]
+    lc = list(h2rgb(label_hex)) + [255]
+
+    def label(i, text, x, y, w, h, size, align="left"):
+        return {"id": i, "x": x, "y": y, "width": w, "height": h,
+                "kind": {"type": "label", "text": text, "font": font, "font_size": size,
+                         "color": lc, "align": align, "letter_spacing": 0.0}}
+
+    def value(i, src, fmt, vmax, x, y, w, h, size):
+        return {"id": i, "x": x, "y": y, "width": w, "height": h, "update_interval_ms": 1000,
+                "kind": {"type": "value_text", "source": src, "format": fmt, "unit": "", "font": font,
+                         "font_size": size, "color": tc, "align": "right", "value_min": 0.0,
+                         "value_max": vmax, "ranges": [], "letter_spacing": 0.0}}
+
+    def clock(i, fmt, x, y, w, h, size):
+        return {"id": i, "x": x, "y": y, "width": w, "height": h,
+                "kind": {"type": "clock_digital", "format": fmt, "font": font, "font_size": size,
+                         "color": tc, "align": "left", "letter_spacing": 0.0}}
+
+    L = 64  # left text edge
+    widgets = [
+        label("Time Label", "TIME", L + 150, 84, 300, 56, 42),
+        clock("Time", "%H:%M", L + 330, 206, 660, 196, 156),
+        clock("Date", "%a %d %b %Y", L + 300, 366, 600, 78, 58),
+    ]
+    cpu = cpu_sensor()   # no CPU temperature sensor found: show the CPU load instead
+    widgets += [
+        label("CPU Label", "CPU TEMP" if cpu else "CPU LOAD", 1432 + 120, 86, 240, 40, 30),
+        value("CPU Temp", cpu or {"type": "cpu_usage"}, "{:.0}", 110.0 if cpu else 100.0,
+              1790 - 110, 96, 220, 96, 80),
+        label("CPU Unit", "°C" if cpu else "%", 1798 + 40, 112, 80, 48, 36),
+        label("RAM Label", "RAM USAGE", 1432 + 120, 196, 240, 40, 30),
+        value("RAM Load", {"type": "mem_usage"}, "{:.0}", 100.0, 1790 - 110, 206, 220, 96, 80),
+        label("RAM Unit", "%", 1798 + 40, 222, 80, 48, 36),
+    ]
+    return tid, {"id": tid, "name": name, "base_width": 1920, "base_height": 480,
+                 "background": {"type": "image", "path": "us88/background.png"},
+                 "widgets": widgets, "rotated": True,
+                 "target_device": "Universal Screen 8.8\" (480×1920)"}
+
+
+def text_colours(pal, c):
+    """Main text: the palette's light end (it sits on a dark scrim); labels: accent LED colour lifted."""
+    lights = [pal.get(k) for k in ("foreground", "bright_foreground", "light_foreground",
+                                   "background", "lighter_background", "white", "bright_white")]
+    lights = [x for x in lights if x and lum(x) >= 0.55]
+    text = max(lights, key=lum) if lights else "f2f2f2"
+    if c["mono"]:
+        label = "b8c4ff"
+    else:
+        hh = c["prim_h"]
+        label = from_hsv(hh, 0.62, 1.0)   # a lighter tint of the accent reads better as small text
+    return text, label
+
+
+# ---------------------------------------------------------------- main
+
+def contact_sheet(keep_a, keep_b, keep_p, banner, out):
+    from PIL import Image
+    fa = [keep_a[i] for i in sorted(keep_a)]
+    fb = [keep_b[i] for i in sorted(keep_b)]
+    pw = keep_p[min(keep_p)]
+    sheet = Image.new("RGB", (1600, 400 * 2 + pw.size[1] * 2 + 16 + 200 + 16), (20, 20, 20))
+    for j, f in enumerate(fa[:4]):
+        sheet.paste(f, (j * 400, 0))
+    for j, f in enumerate(fb[:4]):
+        sheet.paste(f, (j * 400, 400))
+    y = 800
+    for j, i in enumerate(sorted(keep_p)[:2]):
+        sheet.paste(keep_p[i], (j * (pw.size[0] + 16), y))
+    y += pw.size[1] + 16
+    sheet.paste(banner.resize((800, 200)), (0, y))
+    sheet = sheet.crop((0, 0, 1600, y + 200))
+    sheet.save(out, quality=85)
+
+
+def v3_theme(light, c, about):
+    """The v3 layout (docs/THEMES.md): a palette plus the same lighting as explicit roles,
+    so the look doesn't depend on the engine's palette derivation."""
+    roles = {k: v for k, v in light.items() if k != "alert"}
+    roles["fans"] = {"inner": light["fans"]["top"], "outer": light["fans"]["bottom"],
+                     "_note": "inner = the inner edges of a fan frame, outer = its outer bars"}
+    return {
+        "v": 3,
+        "_about": about,
+        "_generator": GENERATOR,
+        "palette": {"primary": c["primary"], "secondary": c["secondary"], "accent": c["primary"],
+                    "alert": light["alert"]["color"]},
+        "motion": {k: light["strimers"][k] for k in ("mode", "speed", "direction")},
+        "roles": roles,
+        "alert": light["alert"],
+    }
+
+
+def build(slug, src_dir, final, schema=3, media=True, prof=None):
+    """Build into a hidden temp dir next to final and swap it in. Caller holds the slug lock."""
+    import numpy as np  # noqa: F401 (fail early if missing)
+    t0 = time.time()
+    clean_stale(slug)
+    files, cur_bg = wallpaper_candidates(src_dir, slug)
+    fp = fingerprint(src_dir, files)
+    colors = os.path.join(src_dir, "colors.toml")
+    pal, mode = parse_colors(colors) if os.path.isfile(colors) else ({}, None)
+    if not pal:
+        log(f"no usable colours in {colors}; using wallpaper colours only")
+    if mode not in ("light", "dark"):
+        bg = pal.get("background")
+        mode = "light" if bg and lum(bg) > 0.4 else "dark"
+
+    im, wall = load_wallpaper(files)
+    if im is not None:
+        sal, hues, _ = analyse(im)
+    else:
+        hues = [0.0] * 36
+    c = pick_colours(pal, hues, mode == "light")
+    if im is None:
+        log("no readable wallpaper; synthesising one from the palette")
+        im, _ = synth_wallpaper(c)
+        sal, hues, _ = analyse(im)
+
+    # hidden names: never listed as a theme, even if a SIGKILL leaves them behind
+    tmp = os.path.join(THEMES, f".omarchy-{slug}.tmp-{os.getpid()}")
+    shutil.rmtree(tmp, ignore_errors=True)
+    for sub in ("media", "us88", "src") if media else ("src",):
+        os.makedirs(os.path.join(tmp, sub))
+    try:
+        regions, grades, tid, banner = [], {}, None, None
+        al = ap = 0.0
+        ka = {0: None, 72: None, 144: None, 216: None}
+        kb = dict(ka)
+        kp = {0: None, 144: None}
+        text_hex, label_hex = text_colours(pal, c)
+        pretty = slug.replace("-", " ").title()
+        if media:
+            regions = pick_fan_regions(sal, im.size)
+            light_mode = mode == "light"
+            grades["fan-a"] = render_fan(im, regions[0], os.path.join(tmp, "media/fan-a.mp4"), 0.0, ka, light_mode)
+            log(f"fan-a done ({time.time() - t0:.0f} s)")
+            grades["fan-b"] = render_fan(im, regions[1], os.path.join(tmp, "media/fan-b.mp4"), math.pi, kb, light_mode)
+            log(f"fan-b done ({time.time() - t0:.0f} s)")
+            grades["pump"] = render_pump(im, sal, os.path.join(tmp, PUMP_MEDIA), kp, light_mode)
+            log(f"pump done ({time.time() - t0:.0f} s)")
+
+            font_dst = os.path.join(tmp, "us88/agencygothicct-condensed.otf")
+            if os.path.isfile(FONT_SRC):
+                shutil.copyfile(FONT_SRC, font_dst)
+            else:
+                fb = subprocess.run(["fc-match", "-f", "%{file}", "sans:condensed:bold"],
+                                    capture_output=True, text=True).stdout
+                if not fb or not os.path.isfile(fb):
+                    raise RuntimeError(f"font {FONT_SRC} missing and no fallback found")
+                shutil.copyfile(fb, font_dst)
+                log(f"font {FONT_SRC} missing; copied {fb} under the same name")
+
+            outline = c["primary"] if not c["mono"] else "8090c0"
+            darks = [pal[k] for k in ("darker_background", "dark_background", "background", "black")
+                     if k in pal and lum(pal[k]) < 0.05]
+            scrim = min(darks, key=lum) if darks else rgb2h(x * 0.10 for x in h2rgb(outline))
+            banner, al, ap, grades["us88"] = render_banner(im, sal, os.path.join(tmp, "us88/background.png"),
+                                                           scrim, outline, light_mode)
+            tid, tpl = template(slug, f"Omarchy {pretty}", text_hex, label_hex)
+            with open(os.path.join(tmp, f"us88/{tid}.template.json"), "w") as f:
+                json.dump(tpl, f, indent=2, ensure_ascii=False)
+
+        today = subprocess.run(["date", "-I"], capture_output=True, text=True).stdout.strip() or \
+            datetime.date.today().isoformat()
+        light = lighting(c)
+        wall_name = os.path.basename(wall) if wall else "a palette-synthesised nebula (no readable wallpaper)"
+
+        def origin(src, ledhex):
+            k, v = src
+            return f"{k} #{v} -> {ledhex}" if v else f"{k} -> {ledhex}"
+        dimmed = [k for k, g in grades.items() if g["bright"]]
+        about = (f"Omarchy {pretty}: generated by auto-theme on {today} from the Omarchy theme "
+                 f"'{slug}' ({mode}; {src_dir}). "
+                 + (f"LEDs: a cool-white family #{c['primary']} / #{c['secondary']} (no hue in the palette "
+                    f"or wallpaper). " if c["mono"] else
+                    f"LEDs: primary from {origin(c['prim_src'], c['primary'])}, secondary from "
+                    f"{origin(c['sec_src'], c['secondary'])} (hue kept, saturation/value maxed for the LEDs). ")
+                 + (f"The fan screens are slow seamless 12 s Ken Burns loops of two detailed "
+                    f"regions of {wall_name}, vignetted to black, the pump a slow pan across it"
+                    + (f" (bright art, so {', '.join(dimmed)} are toned down: gain/gamma in src/source.json)"
+                       if dimmed else "")
+                    + ", and the 8.8\" screen a banner crop with smoked scrims under the time, date, "
+                    "CPU temp and RAM usage. " if media else
+                    "Lighting only: no screen media (this PC has no LCD screens in its profile). ")
+                 + f"Rebuilt automatically when the Omarchy theme's colors or "
+                 f"wallpapers change (unless theme.json is edited by hand); force with: "
+                 f"auto-theme {slug} --force.")
+        if schema == 2:
+            theme = {"_about": about, "_generator": GENERATOR, **light}
+            if media:
+                theme["screens"] = v2_screens(prof or {}, tid)
+                theme["templates"] = [f"us88/{tid}.template.json"]
+        else:
+            theme = v3_theme(light, c, about)
+            if media:
+                theme["screens"] = v3_screens(tid)
+                theme["templates"] = [f"us88/{tid}.template.json"]
+        with open(os.path.join(tmp, "theme.json"), "w") as f:
+            json.dump(theme, f, indent=2)
+            f.write("\n")
+        with open(os.path.join(tmp, "src/source.json"), "w") as f:
+            json.dump({"generator": GENERATOR, "schema": schema, "media": media, "date": today,
+                       "omarchy_theme": src_dir, "mode": mode,
+                       "wallpaper": wall, "wallpaper_preferred": cur_bg or (files[0] if files else None),
+                       "wallpaper_size": list(im.size), "source_fingerprint": fp,
+                       "theme_json_sha256": sha256(os.path.join(tmp, "theme.json")),
+                       "screen_grade": grades, "palette": pal,
+                       "picked": {k: v for k, v in c.items()}, "wallpaper_hue_share": [round(h, 4) for h in hues],
+                       "fan_regions_cx_cy_side": [[round(v) for v in r] for r in regions],
+                       "banner_scrim_alpha": {"left": round(al, 2), "panel": round(ap, 2)},
+                       "text": text_hex, "label": label_hex}, f, indent=2)
+        if media:
+            contact_sheet(ka, kb, kp, banner, os.path.join(tmp, "src/contact.jpg"))
+        if not theme_complete(tmp, media):
+            raise RuntimeError("built theme failed its completeness check")
+        old = None
+        if os.path.exists(final):
+            old = os.path.join(THEMES, f".omarchy-{slug}.old-{os.getpid()}")
+            os.rename(final, old)
+        os.rename(tmp, final)
+        if old:
+            shutil.rmtree(old, ignore_errors=True)
+    except BaseException:
+        shutil.rmtree(tmp, ignore_errors=True)
+        raise
+    log(f"built {final} (v{schema}{'' if media else ', no media'}) in {time.time() - t0:.0f} s")
+
+
+def on_signal(sig, _frame):
+    raise SystemExit(128 + sig)   # so build()'s cleanup of the temp dir runs
+
+
+def take_lock(slug, wait=True):
+    """Per-slug build lock, taken before any wait for a pcl-heavy slot. The file is never
+    deleted (deleting a held lock file lets two runs lock different inodes).
+    -> fd, or None when wait=False and another run holds it."""
+    os.makedirs(THEMES, exist_ok=True)
+    fd = os.open(os.path.join(THEMES, f".omarchy-{slug}.lock"), os.O_RDWR | os.O_CREAT | os.O_CLOEXEC, 0o644)
+    if fd == 9:  # pcl-heavy uses fd 9 for its slot lock
+        fd2 = os.dup(fd)
+        os.close(fd)
+        fd = fd2
+    try:  # a second run for the same theme waits here, then re-checks
+        fcntl.flock(fd, fcntl.LOCK_EX if wait else fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        os.close(fd)
+        return None
+    return fd
+
+
+def main():
+    usage = "usage: auto-theme <omarchy-slug> [--force] [--schema 2|3] [--no-media]"
+    args, force, no_media = [], False, False
+    schema = os.environ.get("PCL_AUTO_THEME_SCHEMA", "3")
+    argv = sys.argv[1:]
+    while argv:
+        a = argv.pop(0)
+        if a == "--force":
+            force = True
+        elif a == "--no-media":
+            no_media = True
+        elif a == "--schema" and argv:
+            schema = argv.pop(0)
+        elif a.startswith("--schema="):
+            schema = a.split("=", 1)[1]
+        else:
+            args.append(a)
+    if len(args) != 1 or args[0].startswith("-") or schema not in ("2", "3"):
+        die(usage, 2)
+    schema = int(schema)
+    slug = args[0]
+    # Screens: made unless asked not to, or the profile says this PC has none. v2 output
+    # is keyed by serial, so it needs the profile's screen roles.
+    prof = load_profile()
+    media = not no_media and (prof is None or bool(screen_roles(prof)))
+    if schema == 2 and media and prof is None:
+        die("--schema 2 needs the hardware profile for the screen serials; run `pc-lights detect`", 2)
+    if not re.fullmatch(r"[A-Za-z0-9._-]+", slug) or slug in (".", ".."):
+        die(f"invalid theme slug '{slug}'", 2)
+    src_dir = next((os.path.join(d, slug) for d in OMARCHY_DIRS if os.path.isdir(os.path.join(d, slug))), None)
+    if not src_dir:
+        die(f"Omarchy theme '{slug}' not found in {' or '.join(OMARCHY_DIRS)}")
+    final = os.path.join(THEMES, f"omarchy-{slug}")
+    for sig in (signal.SIGTERM, signal.SIGHUP):
+        signal.signal(sig, on_signal)
+
+    inner = os.environ.get("AUTO_THEME_INNER") == "1"
+    lockfd = -1
+    if inner:  # re-executed under pcl-heavy: the lock came along as an inherited fd
+        try:
+            lockfd = int(os.environ.get("AUTO_THEME_LOCKFD", "-1"))
+            os.fstat(lockfd)
+        except (ValueError, OSError):
+            lockfd = -1
+    if lockfd < 0:
+        if not force:
+            keep, why = up_to_date(final, src_dir, slug, schema, media)
+            if keep:
+                log(f"{final}: {why}; skipping")
+                if leftovers(slug):  # a killed build's temp dir; tidy it if nobody is building
+                    fd = take_lock(slug, wait=False)
+                    if fd is not None:
+                        clean_stale(slug)
+                        os.close(fd)
+                return 0
+        lockfd = take_lock(slug)
+        if not force:
+            keep, why = up_to_date(final, src_dir, slug, schema, media)
+            if keep:
+                log(f"{final}: {why} (another run just built it); skipping")
+                return 0
+            log(f"{final}: {why}; building")
+
+    if not inner:
+        heavy = shutil.which("pcl-heavy") or os.path.join(HOME, ".local/bin/pcl-heavy")
+        if not os.access(heavy, os.X_OK):
+            die("pcl-heavy not found; refusing to render outside a capped cgroup")
+        os.set_inheritable(lockfd, True)
+        env = dict(os.environ, AUTO_THEME_INNER="1", AUTO_THEME_LOCKFD=str(lockfd))
+        env.setdefault("PCL_HEAVY_WAIT", HEAVY_WAIT)
+        os.execve(heavy, [heavy, sys.executable, os.path.abspath(__file__), *sys.argv[1:]], env)
+
+    for tool in ("ffmpeg",) if media else ():
+        if not shutil.which(tool):
+            die(f"{tool} not found")
+    try:
+        build(slug, src_dir, final, schema, media, prof)
+    except Exception as e:
+        die(f"failed to build omarchy-{slug}: {e}")
+    finally:
+        os.close(lockfd)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

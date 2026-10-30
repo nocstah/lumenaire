@@ -1,0 +1,89 @@
+{
+  "v": 1,
+  "id": "p-1790000400123",
+  "theme": "sakura-2",
+  "draft": "/home/you/.config/pc-lights/drafts/sakura-2.json",
+  "state": "live",
+  "worker": true,
+  "method": "rgbconfig",
+  "want_rev": 14,
+  "applied_rev": 14,
+  "lianli": {
+    "state": "ok",
+    "sent": 0,
+    "failed": [],
+    "at": 1790000401,
+    "ms": 410
+  },
+  "openrgb": {
+    "state": "ok",
+    "rev": 14,
+    "at": 1790000395,
+    "ms": 8400
+  },
+  "screens": {
+    "state": "live",
+    "reason": null,
+    "sent": 3,
+    "at": 1790000401,
+    "ms": 640,
+    "roles": {
+      "screen.fan1": {
+        "state": "ready",
+        "what": "brightness",
+        "error": null,
+        "reason": null,
+        "gen0": 30,
+        "since": 1790000401
+      },
+      "screen.fan2": {
+        "state": "failed",
+        "what": "media",
+        "error": "Media preparation failed: could not decode the video",
+        "reason": null,
+        "gen0": 30,
+        "since": 1790000401
+      },
+      "screen.fan3": {
+        "state": "ready",
+        "what": "media",
+        "error": null,
+        "reason": null,
+        "gen0": 30,
+        "since": 1790000401
+      },
+      "screen.pump": {
+        "state": "preparing",
+        "what": "media",
+        "error": null,
+        "reason": null,
+        "gen0": 30,
+        "since": 1790000401
+      },
+      "screen.main": {
+        "state": "skipped",
+        "what": "media",
+        "error": null,
+        "reason": "template-missing",
+        "gen0": null,
+        "since": 1790000401
+      }
+    },
+    "failed": [
+      {
+        "role": "screen.fan2",
+        "error": "Media preparation failed: could not decode the video"
+      }
+    ]
+  },
+  "blocked_by": null,
+  "started": 1790000300,
+  "touched": 1790000400,
+  "edited": 1790000400,
+  "heartbeat_ttl": 90,
+  "idle_ttl": 600,
+  "idle_ends": 1790001000,
+  "ending": null,
+  "ended": null,
+  "error": null
+}

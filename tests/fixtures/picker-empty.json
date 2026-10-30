@@ -1,0 +1,25 @@
+{
+  "description": "Picker, This theme, for a theme with no media yet: \"Nothing here yet\".",
+  "base": "screen-fan",
+  "mediaListFile": "media.list.theme.json",
+  "mediaListPatch": [
+    {
+      "op": "replace",
+      "path": "/items",
+      "value": []
+    },
+    {
+      "op": "replace",
+      "path": "/total",
+      "value": 0
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3",
+      "step": "pick",
+      "tab": "theme"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "description": "Screen page: a third clip is being prepared (42 %); it waits in the list where it will land, with Cancel.",
+  "base": "editor-screens-preparing",
+  "jobThumbs": {
+    "j-1790000400123-4821": "../ui/thumbs/synthwave-pump.webp"
+  },
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.pump"
+    }
+  }
+}

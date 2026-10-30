@@ -1,0 +1,99 @@
+{
+  "description": "Editor with screens (contract v1.3): Sakura 2's case map under Parts, every screen at its place (the 2-fan row on top, the right 3-fan column, the pump, the 8.8\" screen), nothing changed, the preview off. Thumbnails are the committed theme previews cut up (tests/ui/make-thumbs.py).",
+  "base": "editor-duplicate",
+  "statusPatch": [
+    {
+      "op": "replace",
+      "path": "/v_minor",
+      "value": 3
+    }
+  ],
+  "editorPatch": [
+    {
+      "op": "add",
+      "path": "/screens/editable",
+      "value": true
+    }
+  ],
+  "screensFile": "screens.sakura.json",
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/0/media/thumb",
+      "value": "../ui/thumbs/sakura-fan1.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/1/media/thumb",
+      "value": "../ui/thumbs/sakura-fan2.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/thumb",
+      "value": "../ui/thumbs/sakura-fan3.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/title",
+      "value": "fan e"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/rel",
+      "value": "media/fan-e.mp4"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/where",
+      "value": "root"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/media/probe/duration",
+      "value": 12
+    },
+    {
+      "op": "replace",
+      "path": "/screens/2/changed",
+      "value": false
+    },
+    {
+      "op": "replace",
+      "path": "/screens/3/media/thumb",
+      "value": "../ui/thumbs/sakura-fan4.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/4/media/thumb",
+      "value": "../ui/thumbs/sakura-fan5.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/5/media/thumb",
+      "value": "../ui/thumbs/sakura-pump.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/5/clips/items/0/thumb",
+      "value": "../ui/thumbs/sakura-pump.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/5/clips/items/1/thumb",
+      "value": "../ui/thumbs/gilded-noir-pump.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/screens/5/pending",
+      "value": null
+    },
+    {
+      "op": "replace",
+      "path": "/screens/6/template/thumb",
+      "value": "../ui/thumbs/sakura-strip.webp"
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

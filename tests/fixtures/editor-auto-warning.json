@@ -1,0 +1,46 @@
+{
+  "description": "Editor: a generated omarchy-* theme; saving stops auto-refresh, Duplicate recommended.",
+  "base": "editor-role-override",
+  "editorPatch": [
+    {
+      "op": "replace",
+      "path": "/name",
+      "value": "omarchy-oxblood-parchment"
+    },
+    {
+      "op": "replace",
+      "path": "/auto",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/saved/auto",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/saved/active",
+      "value": false
+    },
+    {
+      "op": "replace",
+      "path": "/saved/day",
+      "value": false
+    },
+    {
+      "op": "replace",
+      "path": "/saved/mapped_slugs",
+      "value": [
+        "oxblood-parchment"
+      ]
+    },
+    {
+      "op": "replace",
+      "path": "/dirty",
+      "value": false
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

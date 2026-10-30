@@ -1,0 +1,47 @@
+{
+  "description": "Editor: a clip for the pump is being prepared (the frozen view's pending job, 42 %): the pump tile dims with its percentage, the line says so, Save waits.",
+  "base": "editor-screens-changed",
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/5/pending",
+      "value": {
+        "job": "j-1790000400123-4821",
+        "state": "encoding",
+        "progress": 0.42,
+        "then": "clip-add",
+        "error": null
+      }
+    }
+  ],
+  "jobs": [
+    {
+      "file": "media.job.running.json",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/role",
+          "value": "screen.pump"
+        },
+        {
+          "op": "replace",
+          "path": "/then",
+          "value": "clip-add"
+        },
+        {
+          "op": "replace",
+          "path": "/at",
+          "value": 2
+        },
+        {
+          "op": "replace",
+          "path": "/model",
+          "value": "HydroShift2OledCurveLcd"
+        }
+      ]
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

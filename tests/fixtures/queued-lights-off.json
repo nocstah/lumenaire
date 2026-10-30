@@ -1,0 +1,179 @@
+{
+  "description": "Lights off queued (no busy run yet) while an earlier Hellfire pick sits failed.",
+  "status": {
+    "v": 1,
+    "ts": 1790231180,
+    "theme": "sakura",
+    "day_theme": "sakura",
+    "screens_show": "sakura",
+    "lights": "on",
+    "screens": "on",
+    "clips": {
+      "state": "on",
+      "paused_at": null
+    },
+    "busy": null,
+    "pending": [
+      {
+        "op": "off",
+        "target": "lights",
+        "theme": null,
+        "unit": "pc-lights-ui-off-1790231166000000000",
+        "source": "ui",
+        "slug": null,
+        "queued": 1790231166,
+        "due": null
+      }
+    ],
+    "ui_requested": "hellfire 1790231166000000000",
+    "last_run": {
+      "v": 1,
+      "op": "pick",
+      "target": null,
+      "theme": "sakura",
+      "unit": "pc-lights-ui-pick-1790224900000000000",
+      "rc": 0,
+      "started": 1790224900,
+      "ended": 1790224921,
+      "error": null,
+      "fallback": false,
+      "skipped": false,
+      "missed_devices": []
+    },
+    "daemon_unit": "active",
+    "screens_on_usb": {
+      "have": 7,
+      "want": 7
+    },
+    "alert": {
+      "cpu": {
+        "enabled": true,
+        "threshold": 90
+      },
+      "gpu": {
+        "enabled": true,
+        "threshold": 85
+      }
+    },
+    "schedule": {
+      "enabled": true,
+      "night_theme": "stealth",
+      "night_start": "00:00",
+      "night_end": "07:00",
+      "period": "day",
+      "last_boundary": "2026-09-24T07:00",
+      "handled": true,
+      "next_boundary": "2026-09-25T00:00",
+      "override": false,
+      "timer": "active"
+    },
+    "omarchy": {
+      "current": "sakura",
+      "requested": "sakura",
+      "maps_to": "sakura",
+      "mapping": "explicit",
+      "paired": true,
+      "generating": false
+    },
+    "rotation": [
+      {
+        "serial": "a1a1a1a100000006",
+        "where": "HydroShift II OLED Curve pump",
+        "count": 6,
+        "rotate": 300,
+        "shuffle": false,
+        "index": 1,
+        "clip": "pump-2.mp4",
+        "since": 1790231124,
+        "next_in": 244,
+        "paused": false
+      }
+    ],
+    "previews_building": false
+  },
+  "service": {
+    "ready": true,
+    "engineError": "",
+    "engine": "queued",
+    "busyElapsed": 0,
+    "ops": {
+      "theme": {
+        "desired": "hellfire",
+        "phase": "failed",
+        "unit": "pc-lights-ui-pick-1790231100000000000",
+        "requestedAt": 1790231100,
+        "error": "exit 1"
+      },
+      "lights": {
+        "desired": false,
+        "phase": "queued",
+        "unit": "pc-lights-ui-off-1790231166000000000",
+        "requestedAt": 1790231166,
+        "error": null
+      },
+      "screens": null,
+      "clips": null,
+      "schedule": null
+    },
+    "failureUnseen": false,
+    "daemonState": "online",
+    "daemonVersion": "1.1.2",
+    "transport": "socket",
+    "pumpRpm": 2548,
+    "coolantC": 33.0,
+    "coolantAgeS": 1,
+    "coolantStale": false,
+    "cpuC": 51.1,
+    "gpuC": 37,
+    "gpuUtil": 5,
+    "gpuW": 21.5,
+    "fans": [
+      {
+        "id": "wireless:02:00:00:00:01:01",
+        "label": "Right 3-fan LCD column",
+        "rpms": [
+          1058,
+          1076,
+          1076
+        ],
+        "avg": 1070
+      },
+      {
+        "id": "wireless:02:00:00:00:01:02",
+        "label": "3-fan group",
+        "rpms": [
+          1001,
+          1010,
+          1008
+        ],
+        "avg": 1006
+      },
+      {
+        "id": "wireless:02:00:00:00:01:03",
+        "label": "2-fan LCD group",
+        "rpms": [
+          1046,
+          1084
+        ],
+        "avg": 1065
+      }
+    ],
+    "missingDevices": [],
+    "nowPlaying": {
+      "a1a1a1a100000006": "pump-2.mp4"
+    },
+    "notice": "",
+    "noticeLevel": "",
+    "noticeActions": [],
+    "previewRev": 0,
+    "settings": {
+      "show": "coolant",
+      "coolantWarn": 40,
+      "showGpu": true,
+      "rightClick": "panel",
+      "showDot": true
+    },
+    "blockedKinds": [],
+    "lights": "off"
+  }
+}

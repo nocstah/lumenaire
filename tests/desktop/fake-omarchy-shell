@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# fake-omarchy-shell — stands in for omarchy-shell in tests/desktop: the
+# Motion Wallpaper plugin's IPC target "motion-wallpaper" (status, play,
+# playAll, stop, the pause setters, and the per-monitor calls playOn,
+# clearScreen, screens and setOutput, with the plugin's rules) against
+# $HOME/mw/status.json, which the calls change. The connected monitors are
+# $HOME/monitors.json (the fake hyprctl's; DP-3 alone without it): status
+# reports them in "screens" and "activeScreens" as the plugin resolves them. Every call is
+# recorded in $HOME/mw/calls.log: "q" (with -q) or "-", then the arguments,
+# tab-separated.
+#
+# Like the real omarchy-shell, -q is quiet and best effort: it prints nothing
+# and exits 0 whatever happens. Without -q a failure goes to stderr with exit
+# 1, the real messages: "omarchy-shell is not running", "Target not found.",
+# "Function not found.".
+#
+# $HOME/mw/mode: up (default), down (no shell), noplugin (the shell runs
+# without the plugin), old (a plugin without the pause settings: the setters
+# are "Function not found."; give it a status.json without them), noscreens
+# (a plugin without per-monitor clips: playOn and clearScreen are "Function
+# not found.", status has no screenVideos).
+# shellcheck disable=SC2016  # jq filters are single-quoted on purpose
+set -uo pipefail
+q=0
+if [[ ${1:-} == -q ]]; then q=1; shift; fi
+d=$HOME/mw st=$HOME/mw/status.json
+mkdir -p "$d"
+# FAKE_NOLOG=1: a test reading the status for itself, not recorded.
+if [[ -z ${FAKE_NOLOG:-} ]]; then
+  { if (( q )); then printf q; else printf -- -; fi; printf '\t%s' "$@"; printf '\n'; } >>"$d/calls.log"
+fi
+fail() { (( q )) && exit 0; echo "$1" >&2; exit 1; }
+mode=$(cat "$d/mode" 2>/dev/null || echo up)
+case $mode in
+  down) fail "omarchy-shell is not running" ;;
+  noplugin) [[ ${1:-} != motion-wallpaper ]] || fail "Target not found." ;;
+esac
+(( $# >= 2 )) || fail "Usage: omarchy-shell <target> <method> [args...]"
+[[ $1 == motion-wallpaper ]] || fail "Target not found."
+if [[ ! -f $st ]]; then
+  echo '{"enabled": false, "videoPath": "", "videoFileExists": false, "output": "all", "pauseWhileActive": true,
+    "resumeAfterIdle": 5, "whileActive": "freeze", "userActive": false, "screenVideos": {}}' >"$st"
+fi
+upd() { jq "$@" "$st" >"$st.tmp" && mv "$st.tmp" "$st"; }
+mons=$(cat "$HOME/monitors.json" 2>/dev/null || echo '[{"name": "DP-3", "transform": 0}]')
+# What each monitor shows, as the plugin's pathForScreen resolves it.
+view() {
+  jq -c --argjson mons "$mons" --arg mode "$mode" '
+    (.screenVideos // {}) as $sv | . as $s
+    | [$mons[] | .name as $n
+       | (if ($sv | has($n)) then $sv[$n] elif ($s.output // "all") == "all" or $s.output == $n then ($s.videoPath // "") else "" end) as $v
+       | {name: $n, video: (if $s.enabled then $v else "" end), source: (if ($sv | has($n)) then "screen" elif $v == "" then "none" else "default" end)}] as $scr
+    | . + {screens: $scr, activeScreens: [$scr[] | select(.video != "") | .name]}
+    | if $mode == "noscreens" then del(.screenVideos, .screens, .activeScreens) else . end' "$st"
+}
+case $2 in
+  status) out=$(view) ;;
+  play) upd --arg p "${3:-}" '(if $p != "" then .videoPath = $p else . end) | .enabled = true'; out=$(view) ;;
+  playAll)
+    upd --arg p "${3:-}" '(if $p != "" then .videoPath = $p else . end) | .enabled = true | .output = "all" | .screenVideos = {}'
+    out=$(view) ;;
+  stop) upd '.enabled = false'; out=stopped ;;
+  playOn | clearScreen | screens)
+    [[ $mode != noscreens ]] || fail "Function not found."
+    case $2 in
+      playOn)
+        if [[ ${3:-} == "" || ${3:-} == all ]]; then
+          upd --arg p "${4:-}" '(if $p != "" then .videoPath = $p else . end) | .enabled = true | .output = "all" | .screenVideos = {}'
+        else
+          upd --arg n "$3" --arg p "${4:-}" '.screenVideos = ((.screenVideos // {}) + {($n): $p}) | if $p != "" then .enabled = true else . end'
+        fi
+        out=$(view) ;;
+      clearScreen)
+        if [[ ${3:-} == "" || ${3:-} == all ]]; then upd '.screenVideos = {}'
+        else upd --arg n "$3" '.screenVideos = ((.screenVideos // {}) | del(.[$n]))'; fi
+        out=$(view) ;;
+      screens) out=$(view | jq -c .screens) ;;
+    esac ;;
+  setOutput) upd --arg n "${3:-all}" '.output = (if $n == "" then "all" else $n end)'; out=$(view) ;;
+  setPauseWhileActive | setResumeAfterIdle | setWhileActive)
+    [[ $mode != old ]] || fail "Function not found."
+    case $2 in
+      setPauseWhileActive) upd --arg v "${3:-}" '.pauseWhileActive = ($v == "true" or $v == "on" or $v == "1")' ;;
+      setResumeAfterIdle) upd --arg v "${3:-}" '.resumeAfterIdle = ((($v | tonumber?) // 5) | round | [., 1] | max | [., 600] | min)' ;;
+      setWhileActive) upd --arg v "${3:-}" '.whileActive = (if $v == "still" then "still" else "freeze" end)' ;;
+    esac
+    out=$(jq -c . "$st") ;;
+  *) fail "Function not found." ;;
+esac
+(( q )) || printf '%s\n' "$out"
+exit 0

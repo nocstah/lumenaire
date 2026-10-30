@@ -1,0 +1,22 @@
+{
+  "description": "Screen page: the disk is nearly full (the view's disk.warn): one calm notice before anything new is prepared.",
+  "base": "screen-fan",
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/disk/warn",
+      "value": "low"
+    },
+    {
+      "op": "replace",
+      "path": "/disk/free_bytes",
+      "value": 1800000000
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3"
+    }
+  }
+}

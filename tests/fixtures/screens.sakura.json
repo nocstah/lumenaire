@@ -1,0 +1,596 @@
+{
+  "v": 1,
+  "name": "sakura-2",
+  "rev": 14,
+  "draft": true,
+  "mode": "duplicate",
+  "sig": "e4de3b4a021dea5c",
+  "editable": true,
+  "media_root": "/home/you/.config/pc-lights/themes/sakura",
+  "stage": "/home/you/.config/pc-lights/drafts/sakura-2.media",
+  "map": {
+    "groups": [
+      {
+        "group": "fans.top",
+        "label": "2-fan LCD group",
+        "place": "top",
+        "axis": "row",
+        "roles": [
+          "screen.fan4",
+          "screen.fan5"
+        ]
+      },
+      {
+        "group": "fans.side",
+        "label": "Right 3-fan LCD column",
+        "place": "right",
+        "axis": "column",
+        "roles": [
+          "screen.fan1",
+          "screen.fan2",
+          "screen.fan3"
+        ]
+      }
+    ],
+    "order": [
+      "screen.fan4",
+      "screen.fan5",
+      "screen.pump",
+      "screen.fan1",
+      "screen.fan2",
+      "screen.fan3",
+      "screen.main"
+    ]
+  },
+  "screens": [
+    {
+      "role": "screen.fan1",
+      "short": "Fan 1",
+      "label": "3-fan group, screen 1 (rotated 180)",
+      "kind": "fan",
+      "group": "fans.side",
+      "place": "right",
+      "wide": false,
+      "index": 0,
+      "of": 3,
+      "device": "lianli:lcd:f1f1f1f100000001",
+      "present": true,
+      "managed": true,
+      "model": "TlFlexLcd",
+      "shape": "square",
+      "media_size": [
+        400,
+        400
+      ],
+      "orientation": 180,
+      "source": "theme",
+      "unfit": null,
+      "target": {
+        "kind": "list",
+        "key": "screen.fan",
+        "index": 0,
+        "path": "/screens/screen.fan/0",
+        "expand": []
+      },
+      "shared_with": [],
+      "changed": false,
+      "entry": {
+        "type": "video",
+        "path": "media/fan-a.mp4",
+        "model": "TlFlexLcd"
+      },
+      "media": {
+        "type": "video",
+        "rel": "media/fan-a.mp4",
+        "where": "root",
+        "abs": "/home/you/.config/pc-lights/themes/sakura/media/fan-a.mp4",
+        "title": "fan a",
+        "thumb": "/home/you/.cache/pc-lights/thumbs/a3/a3814b8cdee52529250f77cca1dbf57995e6a0f7.webp",
+        "thumb_state": "ready",
+        "probe": {
+          "kind": "video",
+          "w": 400,
+          "h": 400,
+          "duration": 12,
+          "fps": 24,
+          "bytes": 2929166
+        },
+        "fit": {
+          "state": "exact",
+          "keep": 1,
+          "scale": 1,
+          "score": 1,
+          "note": null
+        }
+      },
+      "brightness": {
+        "path": "/screens/@screen.fan1/brightness",
+        "value": null,
+        "effective": 100
+      },
+      "clips": null,
+      "template": null,
+      "modes": null,
+      "pending": null,
+      "problems": []
+    },
+    {
+      "role": "screen.fan2",
+      "short": "Fan 2",
+      "label": "3-fan group, screen 2",
+      "kind": "fan",
+      "group": "fans.side",
+      "place": "right",
+      "wide": false,
+      "index": 1,
+      "of": 3,
+      "device": "lianli:lcd:f1f1f1f100000002",
+      "present": true,
+      "managed": true,
+      "model": "TlFlexLcd",
+      "shape": "square",
+      "media_size": [
+        400,
+        400
+      ],
+      "orientation": 180,
+      "source": "theme",
+      "unfit": null,
+      "target": {
+        "kind": "list",
+        "key": "screen.fan",
+        "index": 1,
+        "path": "/screens/screen.fan/1",
+        "expand": []
+      },
+      "shared_with": [],
+      "changed": false,
+      "entry": {
+        "type": "video",
+        "path": "media/fan-c.mp4",
+        "model": "TlFlexLcd"
+      },
+      "media": {
+        "type": "video",
+        "rel": "media/fan-c.mp4",
+        "where": "root",
+        "abs": "/home/you/.config/pc-lights/themes/sakura/media/fan-c.mp4",
+        "title": "fan c",
+        "thumb": "/home/you/.cache/pc-lights/thumbs/3c/3cd417523b97a0db15186f949e302f5bf0a23ba3.webp",
+        "thumb_state": "ready",
+        "probe": {
+          "kind": "video",
+          "w": 400,
+          "h": 400,
+          "duration": 12,
+          "fps": 24,
+          "bytes": 3010442
+        },
+        "fit": {
+          "state": "exact",
+          "keep": 1,
+          "scale": 1,
+          "score": 1,
+          "note": null
+        }
+      },
+      "brightness": {
+        "path": "/screens/@screen.fan2/brightness",
+        "value": null,
+        "effective": 100
+      },
+      "clips": null,
+      "template": null,
+      "modes": null,
+      "pending": null,
+      "problems": []
+    },
+    {
+      "role": "screen.fan3",
+      "short": "Fan 3",
+      "label": "3-fan group, screen 3",
+      "kind": "fan",
+      "group": "fans.side",
+      "place": "right",
+      "wide": false,
+      "index": 2,
+      "of": 3,
+      "device": "lianli:lcd:f1f1f1f100000003",
+      "present": true,
+      "managed": true,
+      "model": "TlFlexLcd",
+      "shape": "square",
+      "media_size": [
+        400,
+        400
+      ],
+      "orientation": 180,
+      "source": "theme",
+      "unfit": null,
+      "target": {
+        "kind": "list",
+        "key": "screen.fan",
+        "index": 2,
+        "path": "/screens/screen.fan/2",
+        "expand": []
+      },
+      "shared_with": [],
+      "changed": true,
+      "entry": {
+        "type": "video",
+        "path": "media/planet37-3fa9c2d1.mp4",
+        "model": "TlFlexLcd"
+      },
+      "media": {
+        "type": "video",
+        "rel": "media/planet37-3fa9c2d1.mp4",
+        "where": "stage",
+        "abs": "/home/you/.config/pc-lights/drafts/sakura-2.media/media/planet37-3fa9c2d1.mp4",
+        "title": "planet 37",
+        "thumb": "/home/you/.cache/pc-lights/thumbs/f5/f5f8fb7ebda63aaf72610d9cea0bd14671069560.webp",
+        "thumb_state": "ready",
+        "probe": {
+          "kind": "video",
+          "w": 400,
+          "h": 400,
+          "duration": 42,
+          "fps": 30,
+          "bytes": 3100000
+        },
+        "fit": {
+          "state": "exact",
+          "keep": 1,
+          "scale": 1,
+          "score": 1,
+          "note": null
+        }
+      },
+      "brightness": {
+        "path": "/screens/@screen.fan3/brightness",
+        "value": null,
+        "effective": 100
+      },
+      "clips": null,
+      "template": null,
+      "modes": null,
+      "pending": null,
+      "problems": []
+    },
+    {
+      "role": "screen.fan4",
+      "short": "Fan 4",
+      "label": "2-fan group, screen 1",
+      "kind": "fan",
+      "group": "fans.top",
+      "place": "top",
+      "wide": false,
+      "index": 0,
+      "of": 2,
+      "device": "lianli:lcd:f1f1f1f100000004",
+      "present": true,
+      "managed": true,
+      "model": "TlFlexLcd",
+      "shape": "square",
+      "media_size": [
+        400,
+        400
+      ],
+      "orientation": 0,
+      "source": "theme",
+      "unfit": null,
+      "target": {
+        "kind": "list",
+        "key": "screen.fan",
+        "index": 3,
+        "path": "/screens/screen.fan/3",
+        "expand": []
+      },
+      "shared_with": [],
+      "changed": false,
+      "entry": {
+        "type": "video",
+        "path": "media/fan-b.mp4",
+        "model": "TlFlexLcd"
+      },
+      "media": {
+        "type": "video",
+        "rel": "media/fan-b.mp4",
+        "where": "root",
+        "abs": "/home/you/.config/pc-lights/themes/sakura/media/fan-b.mp4",
+        "title": "fan b",
+        "thumb": "/home/you/.cache/pc-lights/thumbs/80/80b1e0401541c9d1ca1df54344ea4fabcb06b9c8.webp",
+        "thumb_state": "ready",
+        "probe": {
+          "kind": "video",
+          "w": 400,
+          "h": 400,
+          "duration": 12,
+          "fps": 24,
+          "bytes": 2871203
+        },
+        "fit": {
+          "state": "exact",
+          "keep": 1,
+          "scale": 1,
+          "score": 1,
+          "note": null
+        }
+      },
+      "brightness": {
+        "path": "/screens/@screen.fan4/brightness",
+        "value": null,
+        "effective": 100
+      },
+      "clips": null,
+      "template": null,
+      "modes": null,
+      "pending": null,
+      "problems": []
+    },
+    {
+      "role": "screen.fan5",
+      "short": "Fan 5",
+      "label": "2-fan group, screen 2",
+      "kind": "fan",
+      "group": "fans.top",
+      "place": "top",
+      "wide": false,
+      "index": 1,
+      "of": 2,
+      "device": "lianli:lcd:f1f1f1f100000005",
+      "present": true,
+      "managed": true,
+      "model": "TlFlexLcd",
+      "shape": "square",
+      "media_size": [
+        400,
+        400
+      ],
+      "orientation": 0,
+      "source": "theme",
+      "unfit": null,
+      "target": {
+        "kind": "list",
+        "key": "screen.fan",
+        "index": 4,
+        "path": "/screens/screen.fan/4",
+        "expand": []
+      },
+      "shared_with": [],
+      "changed": false,
+      "entry": {
+        "type": "video",
+        "path": "media/fan-d.mp4",
+        "model": "TlFlexLcd"
+      },
+      "media": {
+        "type": "video",
+        "rel": "media/fan-d.mp4",
+        "where": "root",
+        "abs": "/home/you/.config/pc-lights/themes/sakura/media/fan-d.mp4",
+        "title": "fan d",
+        "thumb": "/home/you/.cache/pc-lights/thumbs/c8/c83f2b02be993772dfa36d6c677b07eda9d11caf.webp",
+        "thumb_state": "ready",
+        "probe": {
+          "kind": "video",
+          "w": 400,
+          "h": 400,
+          "duration": 12,
+          "fps": 24,
+          "bytes": 2790518
+        },
+        "fit": {
+          "state": "exact",
+          "keep": 1,
+          "scale": 1,
+          "score": 1,
+          "note": null
+        }
+      },
+      "brightness": {
+        "path": "/screens/@screen.fan5/brightness",
+        "value": null,
+        "effective": 100
+      },
+      "clips": null,
+      "template": null,
+      "modes": null,
+      "pending": null,
+      "problems": []
+    },
+    {
+      "role": "screen.pump",
+      "short": "Pump",
+      "label": "HydroShift II OLED Curve pump",
+      "kind": "pump",
+      "group": null,
+      "place": "centre",
+      "wide": false,
+      "index": null,
+      "of": null,
+      "device": "lianli:lcd:a1a1a1a100000006",
+      "present": true,
+      "managed": true,
+      "model": "HydroShift2OledCurveLcd",
+      "shape": "wide-curve",
+      "media_size": [
+        2288,
+        1080
+      ],
+      "orientation": 90,
+      "source": "theme",
+      "unfit": null,
+      "target": {
+        "kind": "role",
+        "key": "screen.pump",
+        "index": null,
+        "path": "/screens/screen.pump",
+        "expand": []
+      },
+      "shared_with": [],
+      "changed": false,
+      "entry": {
+        "type": "video",
+        "path": "media/pump.mp4",
+        "clips": [
+          "media/pump"
+        ],
+        "rotate": 300,
+        "model": "HydroShift2OledCurveLcd"
+      },
+      "media": {
+        "type": "video",
+        "rel": "media/pump.mp4",
+        "where": "root",
+        "abs": "/home/you/.config/pc-lights/themes/sakura/media/pump.mp4",
+        "title": "pump",
+        "thumb": "/home/you/.cache/pc-lights/thumbs/f5/f5a543c2a489d08197dd591ca793264071317882.webp",
+        "thumb_state": "ready",
+        "probe": {
+          "kind": "video",
+          "w": 2288,
+          "h": 1080,
+          "duration": 12,
+          "fps": 24,
+          "bytes": 11697230
+        },
+        "fit": {
+          "state": "exact",
+          "keep": 1,
+          "scale": 1,
+          "score": 1,
+          "note": null
+        }
+      },
+      "brightness": {
+        "path": "/screens/@screen.pump/brightness",
+        "value": null,
+        "effective": 100
+      },
+      "clips": {
+        "rotate": 300,
+        "shuffle": false,
+        "folder_form": true,
+        "max": 64,
+        "items": [
+          {
+            "i": 0,
+            "rel": "media/pump.mp4",
+            "from": "path",
+            "where": "root",
+            "title": "pump",
+            "thumb": "/home/you/.cache/pc-lights/thumbs/f5/f5a543c2a489d08197dd591ca793264071317882.webp",
+            "thumb_state": "ready",
+            "duration": 12
+          },
+          {
+            "i": 1,
+            "rel": "media/pump/pump-2.mp4",
+            "from": "folder",
+            "where": "root",
+            "title": "pump 2",
+            "thumb": "/home/you/.cache/pc-lights/thumbs/4c/4c0b5f4ecc595d952df1d6b9ade6dce6bc116de9.webp",
+            "thumb_state": "ready",
+            "duration": 10
+          }
+        ]
+      },
+      "template": null,
+      "modes": null,
+      "pending": {
+        "job": "j-1790000400123-4821",
+        "state": "encoding",
+        "progress": 0.42,
+        "then": "clip-add",
+        "error": null
+      },
+      "problems": []
+    },
+    {
+      "role": "screen.main",
+      "short": "8.8\" screen",
+      "label": "8.8\" Universal Screen",
+      "kind": "main",
+      "group": null,
+      "place": "bottom",
+      "wide": true,
+      "index": null,
+      "of": null,
+      "device": "lianli:lcd:b8b8b8b800000007",
+      "present": true,
+      "managed": true,
+      "model": "UniversalScreen",
+      "shape": "strip",
+      "media_size": [
+        1920,
+        480
+      ],
+      "orientation": 90,
+      "source": "theme",
+      "unfit": null,
+      "target": {
+        "kind": "role",
+        "key": "screen.main",
+        "index": null,
+        "path": "/screens/screen.main",
+        "expand": []
+      },
+      "shared_with": [],
+      "changed": false,
+      "entry": {
+        "type": "custom",
+        "template_id": "us88-sakura",
+        "model": "UniversalScreen"
+      },
+      "media": null,
+      "brightness": {
+        "path": "/screens/@screen.main/brightness",
+        "value": null,
+        "effective": 100
+      },
+      "clips": null,
+      "template": {
+        "id": "us88-sakura",
+        "rel": "us88/us88-sakura.template.json",
+        "installed": true,
+        "thumb": "/home/you/.config/pc-lights/themes/sakura/src/preview-us88.jpg"
+      },
+      "modes": {
+        "current": "template",
+        "can": [
+          "template",
+          "media"
+        ]
+      },
+      "pending": null,
+      "problems": []
+    }
+  ],
+  "coverage": {
+    "summary": "full",
+    "missing": []
+  },
+  "disk": {
+    "stage_bytes": 3100000,
+    "free_bytes": 3400000000000,
+    "warn": null
+  },
+  "limits": {
+    "brightness": [
+      0,
+      100
+    ],
+    "rotate": [
+      30,
+      86400
+    ],
+    "rotate_choices": [
+      60,
+      300,
+      900,
+      3600
+    ],
+    "clips_max": 64
+  },
+  "problems": []
+}

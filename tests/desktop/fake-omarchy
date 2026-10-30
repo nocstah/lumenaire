@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# fake-omarchy — stands in for the omarchy command in tests/desktop: every
+# call ("omarchy osd -i <glyph> -m <message> ...") is recorded in
+# $HOME/osd.log, one line, the arguments tab-separated. Nothing is shown.
+{ printf '%s' "${1:-}"; shift; printf '\t%s' "$@"; printf '\n'; } >>"$HOME/osd.log"
+exit 0

@@ -1,0 +1,25 @@
+{
+  "description": "Editor: two problems stop a save (Save disabled, its tooltip gives the first).",
+  "base": "editor-role-override",
+  "editorPatch": [
+    {
+      "op": "replace",
+      "path": "/problems",
+      "value": [
+        {
+          "path": "/roles/strimers/colors",
+          "level": "error",
+          "message": "roles.strimers.colors must be exactly 6 hex colours"
+        },
+        {
+          "path": "/palette/accent",
+          "level": "error",
+          "message": "palette.accent must be 6 hex digits"
+        }
+      ]
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

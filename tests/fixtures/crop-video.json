@@ -1,0 +1,24 @@
+{
+  "description": "Crop: a 16:9 video from My files framed for Fan 3 (square), the moment at 0:14 of 0:42; it keeps 56 % of the picture.",
+  "base": "picker-files-indexing",
+  "frameFile": "media.frame.json",
+  "framePatch": [
+    {
+      "op": "replace",
+      "path": "/path",
+      "value": "../ui/thumbs/frame-wide-arctic.jpg"
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3",
+      "step": "crop",
+      "tab": "files",
+      "cropIndex": 0,
+      "crop": {
+        "time": 14
+      }
+    }
+  }
+}

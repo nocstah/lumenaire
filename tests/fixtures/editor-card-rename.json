@@ -1,0 +1,11 @@
+{
+  "description": "Theme list: renaming Hellfire to a taken name.",
+  "base": "editor-card-menu",
+  "ui": {
+    "confirm": {
+      "kind": "rename",
+      "name": "hellfire"
+    },
+    "renameTo": "stealth"
+  }
+}

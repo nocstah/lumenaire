@@ -1,0 +1,14 @@
+{
+  "description": "Editor without a hardware profile (detect never ran here): editing, screens included, waits for one; the page says so with Detect hardware.",
+  "base": "editor-screens",
+  "statusPatch": [
+    {
+      "op": "replace",
+      "path": "/profile/state",
+      "value": "missing"
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "description": "Contract v1.1, first run on another PC: no profile yet, two Lian Li fan groups, no pump, no LCDs; the Detect notice.",
+  "status": {
+    "v": 1,
+    "ts": 1790231180,
+    "theme": null,
+    "day_theme": null,
+    "screens_show": null,
+    "lights": "on",
+    "screens": "on",
+    "clips": {
+      "state": "on",
+      "paused_at": null
+    },
+    "busy": null,
+    "pending": [],
+    "ui_requested": null,
+    "last_run": null,
+    "daemon_unit": "active",
+    "screens_on_usb": {
+      "have": 0,
+      "want": 0
+    },
+    "alert": {
+      "cpu": {
+        "enabled": true,
+        "threshold": 90
+      },
+      "gpu": {
+        "enabled": true,
+        "threshold": 85
+      }
+    },
+    "schedule": {
+      "enabled": false,
+      "night_theme": "glacier",
+      "night_start": "00:00",
+      "night_end": "07:00",
+      "period": "day",
+      "last_boundary": null,
+      "handled": true,
+      "next_boundary": "2026-09-25T00:00",
+      "override": false,
+      "timer": "inactive"
+    },
+    "omarchy": {
+      "current": "tokyo-night",
+      "requested": null,
+      "maps_to": null,
+      "mapping": "none",
+      "paired": false,
+      "generating": false
+    },
+    "rotation": [],
+    "previews_building": false,
+    "v_minor": 1,
+    "profile": {
+      "state": "missing",
+      "machine": null,
+      "detected_at": null,
+      "screens": null,
+      "backends": {},
+      "new_devices": [],
+      "missing_devices": [],
+      "sensors": {},
+      "pump_device": null,
+      "groups": []
+    },
+    "labels": {}
+  },
+  "service": {
+    "ready": true,
+    "engineError": "",
+    "engine": "idle",
+    "busyElapsed": 0,
+    "ops": {
+      "theme": null,
+      "lights": null,
+      "screens": null,
+      "clips": null,
+      "schedule": null
+    },
+    "failureUnseen": false,
+    "daemonState": "online",
+    "daemonVersion": "1.1.2",
+    "transport": "socket",
+    "pumpRpm": null,
+    "coolantC": null,
+    "coolantAgeS": null,
+    "coolantStale": false,
+    "cpuC": 47.3,
+    "gpuC": 41,
+    "gpuUtil": null,
+    "gpuW": null,
+    "fans": [
+      {
+        "id": "wireless:02:00:00:00:01:01",
+        "label": "3-fan group",
+        "rpms": [
+          912,
+          918,
+          905
+        ],
+        "avg": 912
+      },
+      {
+        "id": "wireless:02:00:00:00:01:02",
+        "label": "3-fan group 2",
+        "rpms": [
+          1204,
+          1198,
+          1210
+        ],
+        "avg": 1204
+      }
+    ],
+    "missingDevices": [],
+    "nowPlaying": {},
+    "previewRev": 0,
+    "settings": {
+      "show": "auto",
+      "coolantWarn": 40,
+      "showGpu": true,
+      "rightClick": "panel",
+      "showDot": true
+    },
+    "blockedKinds": [],
+    "screensOnUsb": {
+      "have": 0,
+      "want": 0
+    },
+    "daemonDevices": [
+      {
+        "device_id": "wireless:02:00:00:00:01:01",
+        "family": "SlInfLed",
+        "name": "UNI FAN SL-INF Wireless",
+        "has_fan": true,
+        "has_rgb": true,
+        "has_pump": false,
+        "has_lcd": false,
+        "fan_count": 3
+      },
+      {
+        "device_id": "wireless:02:00:00:00:01:02",
+        "family": "SlInfLed",
+        "name": "UNI FAN SL-INF Wireless",
+        "has_fan": true,
+        "has_rgb": true,
+        "has_pump": false,
+        "has_lcd": false,
+        "fan_count": 3
+      }
+    ]
+  },
+  "themesFile": "themes-other.json",
+  "themes": {
+    "noCoverage": true
+  },
+  "sensors": {
+    "v": 1,
+    "source": "detected",
+    "cpu": {
+      "kind": "hwmon",
+      "driver": "coretemp",
+      "label": "Package id 0",
+      "input": "/sys/class/hwmon/hwmon4/temp1_input",
+      "scale": 0.001,
+      "available": true
+    },
+    "gpu": {
+      "kind": "hwmon",
+      "driver": "amdgpu",
+      "label": "edge",
+      "integrated": false,
+      "input": "/sys/class/hwmon/hwmon5/temp1_input",
+      "scale": 0.001,
+      "available": true
+    },
+    "gpus": [],
+    "coolant": {
+      "kind": "lianli",
+      "device_id": null,
+      "field": "coolant_temps"
+    },
+    "pump": {
+      "kind": "lianli",
+      "device_id": null,
+      "field": "fan_rpms"
+    },
+    "ram": []
+  }
+}

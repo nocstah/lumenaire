@@ -1,0 +1,8 @@
+[Unit]
+Description=pc-lights day/night theme switch (acts only at a boundary)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/pc-lights schedule tick
+# An apply at a boundary restarts lianli-daemon (1-3 min); never cut it short.
+TimeoutStartSec=15min

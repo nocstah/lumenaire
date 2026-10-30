@@ -1,0 +1,12 @@
+{
+  "description": "Editor: Discard changes asks once, with Discard as the danger action.",
+  "base": "editor-role-override",
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "confirm": {
+        "kind": "discard"
+      }
+    }
+  }
+}

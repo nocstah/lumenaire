@@ -1,0 +1,34 @@
+{
+  "v": 1,
+  "id": "p-1790000400123",
+  "theme": "sakura-2",
+  "draft": "/home/user/.config/pc-lights/drafts/sakura-2.json",
+  "state": "live",
+  "worker": true,
+  "method": "effect",
+  "want_rev": 14,
+  "applied_rev": 14,
+  "lianli": {
+    "state": "ok",
+    "sent": 7,
+    "failed": [],
+    "at": 1790000401,
+    "ms": 420
+  },
+  "openrgb": {
+    "state": "pending",
+    "rev": 14,
+    "at": 1790000395,
+    "ms": 8400
+  },
+  "blocked_by": null,
+  "started": 1790000300,
+  "touched": 1790000400,
+  "edited": 1790000400,
+  "heartbeat_ttl": 90,
+  "idle_ttl": 600,
+  "idle_ends": 1790001000,
+  "ending": null,
+  "ended": null,
+  "error": null
+}

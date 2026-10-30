@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# pc-lights-feeds — cache live numbers for the Lian Li 8.8" screen templates.
+#
+# Template `command` widgets get only 1 s per run and are polled every
+# refresh, so they must never touch the network: they `cat` these files.
+# Runs every 60 s from pc-lights-feeds.timer. Each value is written atomically
+# and only when the fetch looks like a number, so a failed fetch keeps the
+# last good value.
+#
+#   ~/.cache/pc-lights/feeds/btc        BTC/USD spot (Coinbase, CoinGecko fallback)
+#   ~/.cache/pc-lights/feeds/eth        ETH/USD spot
+#   ~/.cache/pc-lights/feeds/weather_c  outside temperature, °C (every 10 min)
+#   ~/.cache/btc-price                  same as btc; the cyberpunk template reads it
+set -uo pipefail
+
+dir=${XDG_CACHE_HOME:-$HOME/.cache}/pc-lights/feeds
+mkdir -p "$dir"
+ok=0
+
+put() {
+  local val=$1 file
+  [[ $val =~ ^-?[0-9]+(\.[0-9]+)?$ ]] || return 1
+  shift
+  for file; do
+    printf '%s\n' "$val" >"$file.tmp.$$" && mv -f "$file.tmp.$$" "$file"
+  done
+}
+
+get() { curl -sf --max-time 10 "$@"; }
+
+spot() { # $1 = BTC|ETH, $2 = coingecko id
+  get "https://api.coinbase.com/v2/prices/$1-USD/spot" | jq -er '.data.amount' ||
+    get "https://api.coingecko.com/api/v3/simple/price?ids=$2&vs_currencies=usd" | jq -er ".\"$2\".usd"
+}
+
+put "$(spot BTC bitcoin)" "$dir/btc" "${XDG_CACHE_HOME:-$HOME/.cache}/btc-price" && ok=1
+put "$(spot ETH ethereum)" "$dir/eth" && ok=1
+
+# Weather changes slowly and wttr.in rate-limits, so refresh every 10 min.
+w=$dir/weather_c
+if [[ ! -s $w || -n $(find "$w" -mmin +9 2>/dev/null) ]]; then
+  # wttr.in locates by IP; "&m" = metric, %t prints e.g. "+27°C".
+  t=$(get 'https://wttr.in/?format=%t&m' | sed -n 's/^\([+-]\?[0-9]\+\(\.[0-9]\+\)\?\)°C$/\1/p' | tr -d +)
+  if [[ -z $t ]]; then
+    loc=$(get https://ipinfo.io/json | jq -er '.loc' ||
+      get http://ip-api.com/json | jq -er '"\(.lat),\(.lon)"')
+    [[ -n $loc ]] && t=$(get "https://api.open-meteo.com/v1/forecast?latitude=${loc%,*}&longitude=${loc#*,}&current=temperature_2m" |
+      jq -er '.current.temperature_2m | round')
+  fi
+  put "$t" "$w" && ok=1
+fi
+
+(( ok )) || { echo "pc-lights-feeds: every fetch failed" >&2; exit 1; }

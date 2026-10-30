@@ -1,0 +1,13 @@
+{
+  "description": "Editor: the Strimers open (effect, speed Slow to Fast, direction, six colours); keyboard on Speed.",
+  "base": "editor-role-override",
+  "ui": {
+    "page": "editor",
+    "editor": {
+      "expanded": [
+        "@strimers"
+      ],
+      "cursor": "field:@strimers:speed"
+    }
+  }
+}

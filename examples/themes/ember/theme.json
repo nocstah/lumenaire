@@ -1,0 +1,7 @@
+{
+  "v": 3,
+  "_about": "Ember: a banked fire. Deep orange on the inner edges, red on the outer bars, amber sparks falling down the cables, and an icy blue heat warning that stands out against the warm case. Palette only, so it works on any PC.",
+  "_led_note": "Warm colours keep green low (G/R 0.3 or less): on these LEDs gold and amber with more green read lemon-yellow, and pale tints read white.",
+  "palette": {"primary": "ff4a00", "secondary": "ff1400", "accent": "ff6a0a", "alert": "00b4ff"},
+  "motion": {"mode": "Meteor", "speed": 2, "direction": "Clockwise"}
+}

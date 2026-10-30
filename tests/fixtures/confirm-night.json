@@ -1,0 +1,161 @@
+{
+  "description": "Night override; the user clicked Abyss and gets the night confirm.",
+  "status": {
+    "v": 1,
+    "ts": 1790194200,
+    "theme": "hellfire",
+    "day_theme": "hellfire",
+    "screens_show": "hellfire",
+    "lights": "on",
+    "screens": "on",
+    "clips": {
+      "state": "on",
+      "paused_at": null
+    },
+    "busy": null,
+    "pending": [],
+    "ui_requested": null,
+    "last_run": {
+      "v": 1,
+      "op": "pick",
+      "target": null,
+      "theme": "hellfire",
+      "unit": "pc-lights-ui-pick-1790231166000000000",
+      "rc": 0,
+      "started": 1790193600,
+      "ended": 1790193621,
+      "error": null,
+      "fallback": false,
+      "skipped": false,
+      "missed_devices": []
+    },
+    "daemon_unit": "active",
+    "screens_on_usb": {
+      "have": 7,
+      "want": 7
+    },
+    "alert": {
+      "cpu": {
+        "enabled": true,
+        "threshold": 90
+      },
+      "gpu": {
+        "enabled": true,
+        "threshold": 85
+      }
+    },
+    "schedule": {
+      "enabled": true,
+      "night_theme": "stealth",
+      "night_start": "00:00",
+      "night_end": "07:00",
+      "period": "night",
+      "last_boundary": "2026-09-24T00:00",
+      "handled": true,
+      "next_boundary": "2026-09-24T07:00",
+      "override": true,
+      "timer": "active"
+    },
+    "omarchy": {
+      "current": "sakura",
+      "requested": "sakura",
+      "maps_to": "sakura",
+      "mapping": "explicit",
+      "paired": false,
+      "generating": false
+    },
+    "rotation": [
+      {
+        "serial": "a1a1a1a100000006",
+        "where": "HydroShift II OLED Curve pump",
+        "count": 6,
+        "rotate": 300,
+        "shuffle": false,
+        "index": 3,
+        "clip": "pump-4.mp4",
+        "since": 1790194080,
+        "next_in": 180,
+        "paused": false
+      }
+    ],
+    "previews_building": false
+  },
+  "service": {
+    "ready": true,
+    "engineError": "",
+    "engine": "idle",
+    "busyElapsed": 0,
+    "ops": {
+      "theme": null,
+      "lights": null,
+      "screens": null,
+      "clips": null,
+      "schedule": null
+    },
+    "failureUnseen": false,
+    "daemonState": "online",
+    "daemonVersion": "1.1.2",
+    "transport": "socket",
+    "pumpRpm": 2548,
+    "coolantC": 31.5,
+    "coolantAgeS": 1,
+    "coolantStale": false,
+    "cpuC": 44.0,
+    "gpuC": 33,
+    "gpuUtil": 2,
+    "gpuW": 21.5,
+    "fans": [
+      {
+        "id": "wireless:02:00:00:00:01:01",
+        "label": "Right 3-fan LCD column",
+        "rpms": [
+          1058,
+          1076,
+          1076
+        ],
+        "avg": 1070
+      },
+      {
+        "id": "wireless:02:00:00:00:01:02",
+        "label": "3-fan group",
+        "rpms": [
+          1001,
+          1010,
+          1008
+        ],
+        "avg": 1006
+      },
+      {
+        "id": "wireless:02:00:00:00:01:03",
+        "label": "2-fan LCD group",
+        "rpms": [
+          1046,
+          1084
+        ],
+        "avg": 1065
+      }
+    ],
+    "missingDevices": [],
+    "nowPlaying": {
+      "a1a1a1a100000006": "pump-4.mp4"
+    },
+    "notice": "",
+    "noticeLevel": "",
+    "noticeActions": [],
+    "previewRev": 0,
+    "settings": {
+      "show": "coolant",
+      "coolantWarn": 40,
+      "showGpu": true,
+      "rightClick": "panel",
+      "showDot": true
+    },
+    "blockedKinds": []
+  },
+  "ui": {
+    "confirm": {
+      "kind": "night",
+      "name": "abyss"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "description": "Editor: the preview waits for a real apply (Hellfire) holding the lock.",
+  "base": "editor-role-override",
+  "previewFile": "preview.live.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/theme",
+      "value": "sakura"
+    },
+    {
+      "op": "replace",
+      "path": "/state",
+      "value": "blocked"
+    },
+    {
+      "op": "replace",
+      "path": "/blocked_by",
+      "value": {
+        "op": "pick",
+        "theme": "hellfire",
+        "unit": "pc-lights-ui-pick-1790231170000000000"
+      }
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

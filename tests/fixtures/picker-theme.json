@@ -1,0 +1,60 @@
+{
+  "description": "Picker, This theme, for Fan 3: the theme's own media, best fits first (its new video has the accent outline: on this screen now); the pump clips and the 8.8\" background don't fit a fan and show whole on the plate.",
+  "base": "screen-fan",
+  "mediaListFile": "media.list.theme.json",
+  "mediaListPatch": [
+    {
+      "op": "replace",
+      "path": "/items/0/thumb",
+      "value": "../ui/thumbs/arctic-fan3.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/items/1/thumb",
+      "value": "../ui/thumbs/sakura-fan1.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/items/2/thumb",
+      "value": "../ui/thumbs/sakura-fan2.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/items/3/thumb",
+      "value": "../ui/thumbs/sakura-fan3.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/items/4/thumb",
+      "value": "../ui/thumbs/sakura-fan4.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/items/5/thumb",
+      "value": "../ui/thumbs/sakura-fan5.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/items/6/thumb",
+      "value": "../ui/thumbs/sakura-pump.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/items/7/thumb",
+      "value": "../ui/thumbs/gilded-noir-pump.webp"
+    },
+    {
+      "op": "replace",
+      "path": "/items/8/thumb",
+      "value": "../ui/thumbs/sakura-strip.webp"
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3",
+      "step": "pick",
+      "tab": "theme"
+    }
+  }
+}

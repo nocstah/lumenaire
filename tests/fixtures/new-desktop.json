@@ -1,0 +1,10 @@
+{
+  "description": "New theme: Match my desktop, the palette made from the Omarchy theme's colours.",
+  "base": "editor-card-menu",
+  "ui": {
+    "page": "new",
+    "wizard": {
+      "start": "desktop"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "status": "ok",
+  "data": [
+    {
+      "id": "us88-calm",
+      "name": "Calm clock",
+      "background": {
+        "type": "color",
+        "color": [
+          0,
+          0,
+          0
+        ]
+      },
+      "widgets": []
+    }
+  ]
+}

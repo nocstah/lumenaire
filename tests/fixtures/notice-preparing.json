@@ -1,0 +1,39 @@
+{
+  "description": "Main page: a pump video for Sakura 2 is being prepared and no editor is open for it: one calm notice with its progress.",
+  "base": "normal-editor",
+  "statusPatch": [
+    {
+      "op": "replace",
+      "path": "/v_minor",
+      "value": 3
+    },
+    {
+      "op": "add",
+      "path": "/media",
+      "value": {
+        "running": 1,
+        "jobs": [
+          {
+            "id": "j-1790000400123-4821",
+            "draft": "sakura-2",
+            "role": "screen.pump",
+            "state": "encoding",
+            "progress": 0.42,
+            "error": null,
+            "then": "clip-add",
+            "applied": null,
+            "started": 1790000400,
+            "ended": null
+          }
+        ]
+      }
+    }
+  ],
+  "service": {
+    "notice": "Preparing Sakura 2’s pump video… 42 %",
+    "noticeLevel": "info",
+    "noticeActions": [],
+    "noticeKey": "media-run"
+  },
+  "ui": {}
+}

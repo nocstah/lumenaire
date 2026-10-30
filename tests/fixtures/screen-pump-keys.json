@@ -1,0 +1,27 @@
+{
+  "description": "Screen page keys: clip 3 picked up with Enter and carried up one place with k (shown at once); the cursor stays on it.",
+  "base": "screen-pump-clips",
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.pump",
+      "keys": [
+        {
+          "text": "j"
+        },
+        {
+          "text": "j"
+        },
+        {
+          "text": "j"
+        },
+        {
+          "key": 16777220
+        },
+        {
+          "text": "k"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "description": "Editor: the preview waits while the daemon's heat alert drives the RGB.",
+  "base": "editor-role-override",
+  "previewFile": "preview.live.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/theme",
+      "value": "sakura"
+    },
+    {
+      "op": "replace",
+      "path": "/state",
+      "value": "blocked"
+    },
+    {
+      "op": "replace",
+      "path": "/blocked_by",
+      "value": "heat-alert"
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

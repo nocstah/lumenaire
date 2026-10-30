@@ -1,0 +1,36 @@
+{
+  "description": "Crop: a 64 px picture for Fan 3: \"Low resolution; it may look soft\" (zoom can't go further).",
+  "base": "screen-fan",
+  "frame": {
+    "path": "../ui/thumbs/frame-tiny-abyss.jpg",
+    "time": 0,
+    "w": 64,
+    "h": 64,
+    "src_w": 64,
+    "src_h": 64,
+    "duration": null,
+    "kind": "image"
+  },
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3",
+      "step": "crop",
+      "cropItem": {
+        "path": "/home/you/Pictures/icons/abyss-mark.png",
+        "kind": "image",
+        "w": 64,
+        "h": 64,
+        "thumb": "../ui/thumbs/photo-tiny-abyss.webp",
+        "title": "abyss mark",
+        "fit": {
+          "state": "scaled",
+          "keep": 1,
+          "scale": 6.25,
+          "score": 0.4,
+          "note": "low-res"
+        }
+      }
+    }
+  }
+}

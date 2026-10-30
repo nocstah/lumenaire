@@ -1,0 +1,68 @@
+{
+  "description": "Screen page: the 8.8\" screen shows a picture instead of its layout (Shows: Picture or video); the layout is kept for later.",
+  "base": "editor-screens",
+  "screensPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/6/modes",
+      "value": {
+        "current": "media",
+        "can": [
+          "template",
+          "media"
+        ]
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/screens/6/changed",
+      "value": true
+    },
+    {
+      "op": "replace",
+      "path": "/screens/6/entry",
+      "value": {
+        "type": "image",
+        "path": "media/night-sky-7c1e2a90.jpg",
+        "model": "UniversalScreen",
+        "_prev": {
+          "template_id": "us88-sakura"
+        }
+      }
+    },
+    {
+      "op": "replace",
+      "path": "/screens/6/media",
+      "value": {
+        "type": "image",
+        "rel": "media/night-sky-7c1e2a90.jpg",
+        "where": "stage",
+        "abs": "/home/you/.config/pc-lights/drafts/sakura-2.media/media/night-sky-7c1e2a90.jpg",
+        "title": "night sky",
+        "thumb": "../ui/thumbs/synthwave-strip.webp",
+        "thumb_state": "ready",
+        "probe": {
+          "kind": "image",
+          "w": 1920,
+          "h": 480,
+          "duration": null,
+          "fps": null,
+          "bytes": 402000
+        },
+        "fit": {
+          "state": "exact",
+          "keep": 1,
+          "scale": 1,
+          "score": 1,
+          "note": null
+        }
+      }
+    }
+  ],
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.main"
+    }
+  }
+}

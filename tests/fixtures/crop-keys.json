@@ -1,0 +1,31 @@
+{
+  "description": "Crop keys: zoomed in twice (+ +) and moved right 10 % (Shift+→) and up 1 % (k): Reset framing appears.",
+  "base": "crop-video",
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.fan3",
+      "step": "crop",
+      "tab": "files",
+      "cropIndex": 0,
+      "crop": {
+        "time": 14
+      },
+      "keys": [
+        {
+          "text": "+"
+        },
+        {
+          "text": "+"
+        },
+        {
+          "key": 16777236,
+          "modifiers": 33554432
+        },
+        {
+          "text": "k"
+        }
+      ]
+    }
+  }
+}

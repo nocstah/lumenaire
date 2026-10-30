@@ -1,0 +1,28 @@
+{
+  "description": "Theme list before the cut-over (no profile, old themes): New is disabled with the reason, no pencils.",
+  "base": "no-profile",
+  "statusPatch": [
+    {
+      "op": "add",
+      "path": "/v_minor",
+      "value": 2
+    },
+    {
+      "op": "add",
+      "path": "/drafts",
+      "value": []
+    },
+    {
+      "op": "add",
+      "path": "/preview",
+      "value": null
+    }
+  ],
+  "themeEdits": {
+    "*": {
+      "editable": false,
+      "edit_block": "no-profile",
+      "draft": null
+    }
+  }
+}

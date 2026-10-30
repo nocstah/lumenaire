@@ -1,0 +1,44 @@
+{
+  "description": "Crop: a 4:3 picture framed for the pump (about 2.1:1), moved up a little; no moment slider for a picture.",
+  "base": "screen-pump-clips",
+  "frame": {
+    "path": "../ui/thumbs/frame-43-toxic.jpg",
+    "time": 0,
+    "w": 640,
+    "h": 480,
+    "src_w": 4000,
+    "src_h": 3000,
+    "duration": null,
+    "kind": "image"
+  },
+  "ui": {
+    "page": "screen",
+    "screen": {
+      "role": "screen.pump",
+      "step": "crop",
+      "adding": {
+        "then": "clip-add",
+        "at": 3
+      },
+      "cropItem": {
+        "path": "/home/you/Pictures/toxic-forest.png",
+        "kind": "image",
+        "w": 4000,
+        "h": 3000,
+        "thumb": "../ui/thumbs/photo-43-toxic.webp",
+        "title": "toxic forest",
+        "fit": {
+          "state": "poor",
+          "keep": 0.472,
+          "scale": 1,
+          "score": 0.32,
+          "note": null
+        }
+      },
+      "crop": {
+        "cx": 0.5,
+        "cy": 0.4
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "description": "Editor: the preview failed; edits kept, Preview again.",
+  "base": "editor-role-override",
+  "previewFile": "preview.live.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/theme",
+      "value": "sakura"
+    },
+    {
+      "op": "replace",
+      "path": "/state",
+      "value": "failed"
+    },
+    {
+      "op": "replace",
+      "path": "/error",
+      "value": "the daemon refused SetRgbEffect for 2 devices"
+    },
+    {
+      "op": "replace",
+      "path": "/ended",
+      "value": {
+        "at": 1790231170,
+        "reason": "failed",
+        "by": null,
+        "reverted": true
+      }
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

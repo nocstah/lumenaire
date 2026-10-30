@@ -1,0 +1,15 @@
+{
+  "description": "Editor: the preview sent Fan 2 a video its screen couldn't play (preview.screens.json): the dot and \"Fan 2: the screen couldn't play it\" with Choose another. The other screens are unaffected.",
+  "base": "editor-screens-changed",
+  "previewFile": "preview.screens.json",
+  "previewPatch": [
+    {
+      "op": "replace",
+      "path": "/screens/roles/screen.pump/state",
+      "value": "ready"
+    }
+  ],
+  "ui": {
+    "page": "editor"
+  }
+}

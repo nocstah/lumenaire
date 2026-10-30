@@ -1,0 +1,6 @@
+# pc-lights workaround (installed by `pc-lights install --workarounds`):
+# wake the TL fan LCDs before lianli-daemon starts, so it finds them on USB.
+# Remove this file (and daemon-reload) if lian-li-linux learns to do it itself.
+[Service]
+ExecStartPre=-@WAKE_BIN@
+TimeoutStartSec=60

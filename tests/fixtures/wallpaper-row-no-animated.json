@@ -1,0 +1,5 @@
+{
+  "description": "Main page: the wallpaper on the desktop has no animated version (the switch is off and dimmed, its tooltip says why).",
+  "base": "wallpaper-row",
+  "desktopCurrentFile": "desktop.no-animated.json"
+}
