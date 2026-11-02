@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Screens and lighting follow a renumbered USB bus
+
+- A reboot can renumber the USB bus, and the Lian Li config names devices by
+  it. The old names matched nothing: the screens kept their old theme and
+  ignored on and off, and lights on waited about a minute and a half for
+  devices that never came, blaming weak RF. Each apply now renames them by
+  model and port, and drops a stale lighting entry beside its new name.
+
 ### RAM drift: a gradient that moves
 
 - A theme's RAM gradient can drift: `"ram": {"gradient": [...], "drift":

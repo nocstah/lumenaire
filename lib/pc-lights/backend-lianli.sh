@@ -8,7 +8,7 @@
 #
 # Owner: WP4 (backends)
 # Public: be_lianli_{probe,detect,validate,build,render,apply,screens,kinds} be_lianli_bind
-#         lianli_lights lianli_screens write_lianli_rgb screens_config fetch_caps build_lianli apply_live_or_restart apply_lianli live_install daemon_call daemon_guarded push_lcd_brightness nudge_new_image_lcds usb_serial_map thermal_alert_json apply_scheme_screens rewrite_config start_daemon_checked daemon_stop daemon_start missed_devices
+#         lianli_lights lianli_screens write_lianli_rgb screens_config fetch_caps build_lianli apply_live_or_restart apply_lianli live_install daemon_call daemon_guarded push_lcd_brightness nudge_new_image_lcds usb_serial_map thermal_alert_json apply_scheme_screens follow_usb_moves rewrite_config start_daemon_checked daemon_stop daemon_start missed_devices
 #         lianli_effect_plan lianli_effect_requests lianli_screen_plan daemon_guarded_batch daemon_guard_json (the theme preview);
 #         constants rgb_jq brightness_jq LIANLI_RGB_JQ LIANLI_EFFECT_REQ_JQ DAEMON_BATCH_TIMEOUT; state LIVE_ERR SCREENS_RESET
 # The whole engine is checked from bin/pc-lights; checked alone, a module
@@ -260,6 +260,7 @@ build_lianli() {
   cp "$TMP/built-from.json" "$TMP/work-config.json"
   cp "$TMP/built-from-tpl.json" "$TMP/work-tpl.json"
   CFG=$TMP/work-config.json TPL_FILE=$TMP/work-tpl.json
+  follow_usb_moves
   "$@"
   CFG=$CFG_LIVE TPL_FILE=$TPL_LIVE
 }
@@ -333,6 +334,43 @@ usb_serial_map() {
     done
   } | jq -s 'map({(.serial): .path}) | add // {}' >"$TMP/usbmap.json"
   echo "$TMP/usbmap.json"
+}
+
+# The daemon names a USB device hid:<vid>:<pid>:<bus>-<port>, and a reboot can
+# renumber the bus (2026-11-01: 8 to 6). The old names then match nothing: every
+# screen is left as it is, and each stale lighting entry costs a wait for a
+# device that never comes and a "missed its lighting" retry. usb_moved($now) is
+# the name in $now of the same model on the same port, when there is exactly one.
+USB_MOVED_JQ='
+  def usb_key: capture("^hid:(?<m>[0-9a-f]{4}:[0-9a-f]{4}):[0-9]+-(?<p>.+)$") | "\(.m):\(.p)";
+  def usb_moved($now):
+    . as $id
+    | if type != "string" or ($now | index($id)) or (test("^hid:") | not) then $id
+      else (try usb_key catch null) as $k
+        | [$now[] | strings | select(($k != null) and ((try usb_key catch null) == $k))]
+        | if length == 1 then .[0] else $id end
+      end;'
+
+# Rename what moved in $CFG (the build's scratch copy): the screens by the USB
+# serial map, the lighting by the capabilities when fetch_caps got them. An
+# entry whose new name already has one is stale: lighting drops it, and a screen
+# keeps it (rewrite_config refuses to lose a screen).
+follow_usb_moves() {
+  local map caps=$TMP/caps.json
+  map=$(usb_serial_map)
+  [[ -s $caps ]] || caps=/dev/null
+  rewrite_config --slurpfile m "$map" --slurpfile c "$caps" "$USB_MOVED_JQ"'
+    ([($m[0] // {})[]] + [($c[0] // {}) | (.data // .) | .[]? | objects | .device_id? | strings]) as $now
+    | ([.lcds[].serial]) as $lcds
+    | .lcds |= map(.serial as $old | ($old | usb_moved($now)) as $new
+        | if $new == $old or ($lcds | index($new)) then . else .serial = $new end)
+    | if .rgb.devices then
+        ([.rgb.devices[].device_id]) as $rgb
+        | .rgb.devices |= map(.device_id as $old | ($old | usb_moved($now)) as $new
+            | if $new == $old then . elif ($rgb | index($new)) then empty else .device_id = $new end)
+      else . end'
+  # By content: the daemon's file and jq's differ in layout alone.
+  [[ $(jq -cS . "$CFG") == "$(jq -cS . "$TMP/built-from.json")" ]] || log "USB devices moved to another bus: following them"
 }
 
 # Screen brightness: 0 while the user has the screens off (pc-lights off
@@ -427,8 +465,8 @@ fetch_caps() {
   want=$(jq '[.rgb.devices[]?.device_id] | length' "$CFG")
   for i in $(seq 1 "$tries"); do
     daemon_call '{"method":"GetRgbCapabilities"}' >"$TMP/caps.json" || true
-    have=$(jq --slurpfile cfg "$CFG" '[(.data // .)[].device_id] as $ids
-      | [$cfg[0].rgb.devices[]?.device_id | select(. as $d | $ids | index($d))] | length' "$TMP/caps.json" 2>/dev/null || echo 0)
+    have=$(jq --slurpfile cfg "$CFG" "$USB_MOVED_JQ"'[(.data // .)[].device_id] as $ids
+      | [$cfg[0].rgb.devices[]?.device_id | usb_moved($ids) | select(. as $d | $ids | index($d))] | length' "$TMP/caps.json" 2>/dev/null || echo 0)
     [[ $have -ge $want ]] && break
     (( i < tries )) && sleep 5
   done
